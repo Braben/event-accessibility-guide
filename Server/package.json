@@ -1,0 +1,14 @@
+{
+  "name": "Server",
+  "version": "1.0.0",
+  "description": "Event Accessibility Guide",
+  "main": "server.js",
+  "license": "MIT",
+  "author": "",
+  "dependencies": {
+    "cors": "^2.8.5",
+    "dotenv": "^16.4.7",
+    "express": "^4.21.2",
+    "nodemon": "^3.1.9"
+  }
+}
