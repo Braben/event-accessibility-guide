@@ -2,7 +2,7 @@
 
 ## Problem Statement
 
-# People with disabilities often struggle to fi nd detailed, reliable information on venue accessibility. Many event organizers do not provide comprehensive accessibility details, leading to inconvenience and exclusion. This project aims to create an accessibility guide where users can check, review, and share information about venues' accessibility features.
+# People with disabilities often struggle to find detailed, reliable information on venue accessibility. Many event organizers do not provide comprehensive accessibility details, leading to inconvenience and exclusion. This project aims to create an accessibility guide where users can check, review, and share information about venues' accessibility features.
 
 =========================================================================
 
