@@ -7,17 +7,13 @@
 =========================================================================
 
 ## Project Overview
-
 ### Requirements
 
 ● Frontend: Accessibility venue listings, user reviews, filter options, ratings.
 ● Backend: Database for venue details, user authentication, review system, image uploads.
 =========================================================================
 
-=========================================================================
-
 ## Expected Deliverables
-
 # Designer:
 
 ● UX research on accessibility needs.
@@ -25,13 +21,13 @@
 ● Visual design with inclusive, accessibility-focused UI elements.
 =========================================================================
 
-=========================================================================
+
 
 ## Developers:
 
-● User authentication and profi le management.
+● User authentication and profile management.
 ● Review and rating system implementation.
-● Search and fi lter functionality for venue listings.
+● Search and filter functionality for venue listings.
 ● Media upload for user-submitted accessibility images.
 ● Moderation tools for review approvals.
 =========================================================================
@@ -41,11 +37,10 @@
 ● Project Management: Each team should maintain a Linear board to track tasks, deadlines, and responsibilities.
 ● Version Control: All developers must use GitHub for proper code collaboration.
 ● Communication: Teams should actively use Slack or Discord to ensure seamless discussions.
-● Documentation: Each project must include clear readme fi les, API documentation, and user guides to improve usability and maintainability.
+● Documentation: Each project must include clear readme files, API documentation, and user guides to improve usability and maintainability.
 
-# By the end of the program, teams should deliver a functional MVP (Minimum Viable Product) that demonstrates core features, with additional refi nements based on usability testing and feedback.
+# By the end of the program, teams should deliver a functional MVP (Minimum Viable Product) that demonstrates core features, with additional refinements based on usability testing and feedback.
 
-# $
 
 ## Final Steps
 
