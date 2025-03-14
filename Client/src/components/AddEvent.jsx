@@ -8,6 +8,7 @@ const AddEvent = () => {
 
   const [eventDate, setEventDate] = useState(null);
   const [venueCapacity, setVenueCapacity] = useState("");
+  const [fileExtCheck, setFileExtCheck] = useState(" ");
 
   const accessibilityOptions = [
     "Balanced sound",
@@ -25,6 +26,8 @@ const AddEvent = () => {
   ];
 
   const [accessibilityFeatures, setAccessibilityFeatures] = useState([]);
+
+
 
   const handleAccessibilityChange = (option) => {
     setAccessibilityFeatures(
@@ -82,12 +85,11 @@ const AddEvent = () => {
                       value={eventName}
                       onChange={(e) => setEventName(e.target.value)}
                     />
-
                     <input
                       type="file"
-                      placeholder="Upload Image"
                       className="file-input file-input-primary w-full"
                       required
+                      accept="image/jpeg, image/jpg"
                       onChange={(e) => setEventImage(e.target.files[0])}
                     />
 
