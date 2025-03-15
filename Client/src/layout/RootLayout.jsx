@@ -4,7 +4,7 @@ import Footer from "../components/Footer";
 
 const RootLayout = () => {
   return (
-    <div className="flex flex-col min-h-screen">
+    <div className="">
       {/* Navbar Stays at the Top */}
       <Navbar />
 
@@ -14,7 +14,7 @@ const RootLayout = () => {
       </main>
 
       {/* Footer Stays at the Bottom */}
-      <Footer />
+      {/* <Footer /> */}
     </div>
   );
 };
