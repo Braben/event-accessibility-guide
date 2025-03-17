@@ -1,5 +1,6 @@
 const { PrismaClient } = require("@prisma/client");
 const prisma = new PrismaClient();
+const bcrypt = require("bcryptjs");
 
 const createUser = async (req, res) => {
   const {
@@ -15,11 +16,20 @@ const createUser = async (req, res) => {
   } = req.body;
   try {
     // const { name, email,password,ro } = req.body;
+
+    // Check if user already exists
+    const existingUser = await prisma.user.findUnique({ where: { email } });
+    if (existingUser) {
+      return res.status(400).json({ message: "User already exists" });
+    }
+    // Hash the password
+    const hashedPassword = await bcrypt.hash(password, 10);
+    // Create new user
     const newUser = await prisma.user.create({
       data: {
         name,
         email,
-        password,
+        password: hashedPassword,
         role,
         profileInfo,
         disabilities,
@@ -142,4 +152,5 @@ const deleteUser = async (req, res) => {
   }
 };
 
+// Export the controller functions
 module.exports = { createUser, getUsers, updateUser, deleteUser };
