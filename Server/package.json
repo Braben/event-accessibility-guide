@@ -5,6 +5,9 @@
   "main": "server.js",
   "license": "MIT",
   "author": "",
+  "scripts": {
+    "start": "nodemon server.js"
+  },
   "dependencies": {
     "@prisma/client": "^6.5.0",
     "cors": "^2.8.5",
