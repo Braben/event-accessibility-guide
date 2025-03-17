@@ -11,4 +11,11 @@ const venueSchema = z.object({
   routeDirection: z.string().optional(),
 });
 
-module.exports = { venueSchema };
+// Review Validation Schema
+const reviewSchema = z.object({
+  venueId: z.string().min(1, "Venue ID is required"),
+  rating: z.number().min(1, "Rating must be at least 1").max(5, "Rating must be at most 5"),
+  comments: z.string().optional(),
+});
+
+module.exports = { venueSchema, reviewSchema };

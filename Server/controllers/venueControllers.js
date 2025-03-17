@@ -72,7 +72,7 @@ const updateVenue = async (req, res) => {
 const deleteVenue = async (req, res) => {
   try {
     await prisma.venue.delete({ where: { id: req.params.id } });
-    res.status(204).send();
+    res.status(200).json({ message: "Venue deleted successfully"});
   } catch (error) {
     console.error("Error deleting venue:", error);
     res.status(500).json({ error: "Internal Server Error" });
