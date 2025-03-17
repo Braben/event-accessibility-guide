@@ -5,10 +5,12 @@ const {
   getUsers,
   updateUser,
   deleteUser,
+  getUsersById,
 } = require("../Controllers/UserController");
 
 Router.post("/register", createUser);
-Router.get("/users/:id?", getUsers);
+Router.get("/users", getUsers);
+Router.get("/users/:id", getUsersById);
 Router.patch("/user/:id", updateUser);
 Router.delete("/user/:id", deleteUser);
 
