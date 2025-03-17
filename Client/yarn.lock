@@ -1360,6 +1360,11 @@ hex-rgb@5.0.0:
   resolved "https://registry.yarnpkg.com/hex-rgb/-/hex-rgb-5.0.0.tgz#e2c9eb6a37498d66c5a350a221ed4c2c7d1a92d6"
   integrity sha512-NQO+lgVUCtHxZ792FodgW0zflK+ozS9X9dwGp9XvvmPlH7pyxd588cn24TD3rmPm/N0AIRXF10Otah8yKqGw4w==
 
+iconoir-react@^7.10.1:
+  version "7.10.1"
+  resolved "https://registry.yarnpkg.com/iconoir-react/-/iconoir-react-7.10.1.tgz#3898d758a0ff3c0fc3d4b6c18c4f51664b8f6ae8"
+  integrity sha512-Zqxwx+cUfXSrHWn82DNVWCPLq5RKUcDLevUvl37GdYaB73EJ+eNGdpdifGzhIWZ21U7/z0KVcdOJZp5BNyXzBw==
+
 ignore@^5.2.0:
   version "5.3.2"
   resolved "https://registry.yarnpkg.com/ignore/-/ignore-5.3.2.tgz#3cd40e729f3643fd87cb04e50bf0eb722bc596f5"

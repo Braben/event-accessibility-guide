@@ -14,7 +14,11 @@ export default {
   ],
 
   theme: {
-    extend: {},
+    extend: {
+      placeholderColor: {
+        black: "#000000", // Custom placeholder color
+      },
+    },
   },
 
   plugins: [mtConfig, require("daisyui"), flowbite.plugin()],
