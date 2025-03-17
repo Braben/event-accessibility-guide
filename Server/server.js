@@ -5,8 +5,7 @@ const { PrismaClient } = require("@prisma/client");
 const prisma = new PrismaClient();
 
 const userRoute = require("./Routes/userRoutes");
-
-// Connect to Prisma
+const loginRoute = require("./Routes/loginRoutes");
 
 // Create Express app
 const app = express();
@@ -16,6 +15,7 @@ app.use(express.json());
 
 // Routes
 app.use(userRoute);
+app.use(loginRoute);
 
 // Start server
 const PORT = process.env.PORT || 5000;
