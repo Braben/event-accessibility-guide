@@ -19,12 +19,8 @@ const Events = () => {
       return;
     }
     try {
-      const queryParams = new URLSearchParams();
-      if (filters.location) queryParams.append("location", filters.location);
-      if (filters.accessibility) queryParams.append("accessibility", filters.accessibility);
-
       // fetch api from backend
-      const response = await fetch(`https://event-accessibility-guide-production.up.railway.app/api/venues/search?query=${queryParams.toString()}`);
+      const response = await fetch(`https://event-accessibility-guide-production.up.railway.app/api/venues/search?query=${filters.location}&accessibility=${filters.accessibility}`);
       const data = await response.json();
       console.log(data);
       // store filtered data
@@ -59,7 +55,7 @@ const Events = () => {
             onKeyDown={(e) => {
               if (e.key === "Enter") {
                 e.preventDefault(); // Prevent default form submission
-                handleSearch(); // Call search function
+                handleSearch(e); // Call search function
               }
             }}
             style={{
