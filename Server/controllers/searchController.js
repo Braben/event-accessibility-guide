@@ -20,8 +20,15 @@ const searchVenues = async (req, res) => {
       ],
     }));
 
+    const filters = { AND: words }
+    if (location) filters.address = { contains: location, mode: "insensitive" }
+    if (accessibility) {
+      filters.accessibilityFeatures = { some: { category: accessibility } };
+    }
+
     const venues = await prisma.venue.findMany({
-      where: { AND: words }, // Match any word in any field
+      where: filters,
+      include: { accessibilityFeatures: true, reviews: true }
     });
 
     if (venues.length === 0) {
