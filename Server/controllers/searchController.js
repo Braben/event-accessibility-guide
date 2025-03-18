@@ -4,30 +4,36 @@ const prisma = new PrismaClient();
 
 const searchVenues = async (req, res) => {
   try {
-    const { query } = req.query; // Single query field for all searches
+    const { query, location, accessibility } = req.query; 
 
-    if (!query) {
+    if (!query && !location) {
       return res.status(400).json({ message: "Please provide a search query." });
     }
+    let filters = [];
 
     // Split query into individual words
-    const words = query.split(" ").map((word) => ({
-      OR: [
-        { name: { contains: word, mode: "insensitive" } },
-        { description: { contains: word, mode: "insensitive" } },
-        { address: { contains: word, mode: "insensitive" } },
-        { accessibilityFeatures: { some: { category: { contains: word, mode: "insensitive" } } } },
-      ],
-    }));
+    if (query) {
+      const words = query.split(" ").map((word) => ({
+        OR: [
+          { name: { contains: word, mode: "insensitive" } },
+          { description: { contains: word, mode: "insensitive" } },
+          { address: { contains: word, mode: "insensitive" } },
+          { accessibilityFeatures: { some: { category: { contains: word, mode: "insensitive" } } } },
+        ],
+      }));
+      filters.push({ AND: words });
+    }
 
-    const filters = { AND: words }
-    if (location) filters.address = { contains: location, mode: "insensitive" }
+    if (location) {
+      filters.push({ address: { contains: location, mode: "insensitive" } });
+    }
+
     if (accessibility) {
-      filters.accessibilityFeatures = { some: { category: accessibility } };
+      filters.push({ accessibilityFeatures: { some: { category: { contains: accessibility, mode: "insensitive" } } } });
     }
 
     const venues = await prisma.venue.findMany({
-      where: filters,
+      where: { AND: filters},
       include: { accessibilityFeatures: true, reviews: true }
     });
 
