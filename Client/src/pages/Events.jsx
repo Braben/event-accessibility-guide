@@ -14,12 +14,21 @@ const Events = () => {
   //function to handle search/filter
   const handleSearch = async (e) => {
     e.preventDefault();
+    if (!filters.location) {
+      console.error("Please enter a location/ event.");
+      return;
+    }
     try {
+      const queryParams = new URLSearchParams();
+      if (filters.location) queryParams.append("location", filters.location);
+      if (filters.accessibility) queryParams.append("accessibility", filters.accessibility);
+
       // fetch api from backend
-      const response = await fetch();
+      const response = await fetch(`https://event-accessibility-guide-production.up.railway.app/api/venues/search?query=${queryParams.toString()}`);
       const data = await response.json();
+      console.log(data);
       // store filtered data
-      setVenues(data.venue);
+      setVenues(data);
     } catch (error) {
       console.error("Error fetching data:", error);
     }
