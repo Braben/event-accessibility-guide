@@ -1,7 +1,6 @@
 const { PrismaClient } = require("@prisma/client");
 const prisma = new PrismaClient();
 const bcrypt = require("bcryptjs");
-const jwt = require("jsonwebtoken");
 const env = require("dotenv");
 env.config();
 
@@ -18,8 +17,6 @@ const createUser = async (req, res) => {
     notification,
   } = req.body;
   try {
-    // const { name, email,password,ro } = req.body;
-
     // Check if user already exists
     const existingUser = await prisma.user.findUnique({ where: { email } });
     if (existingUser) {
@@ -82,6 +79,7 @@ const getUsersById = async (req, res) => {
   }
 };
 
+//update user function
 const updateUser = async (req, res) => {
   const { id } = req.params;
   const {
@@ -127,7 +125,7 @@ const updateUser = async (req, res) => {
   }
 };
 
-//delete user
+//delete user function
 const deleteUser = async (req, res) => {
   const { id } = req.params;
   try {
@@ -148,7 +146,7 @@ const deleteUser = async (req, res) => {
     console.log("Deleted user:", deletedUser);
   } catch (error) {
     console.error("Error deleting user:", error);
-    res.status(500).json({ message: "Internal Server Error" });
+    res.status(500).json({ message: error.message });
   }
 };
 
