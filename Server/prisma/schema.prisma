@@ -65,7 +65,7 @@ model Review {
   accessibilityRatings Json 
   dateCreated          DateTime @default(now())
   dateUpdated          DateTime @updatedAt
-  user                 User   @relation(fields: [userId], references: [id])
+  user                 User   @relation(fields: [userId], references: [id], onDelete: Cascade)
   venue                Venue  @relation(fields: [venueId], references: [id])
 }
 
