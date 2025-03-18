@@ -1,4 +1,3 @@
-
 generator client {
   provider = "prisma-client-js"
 }
@@ -6,6 +5,67 @@ generator client {
 datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
+}
+
+model User {
+  id                String           @id @default(cuid())
+  name              String?
+  email             String           @unique
+  password          String
+  role              UserRole         @default(USER)
+  profileInfo       String?
+  disabilities      DisabilityType[] @default([])
+  notificationToken String?
+  createdAt         DateTime         @default(now())
+  notifications     Notification[]
+  reviews           Review[]
+}
+
+model Venue {
+  id                    String                 @id @default(cuid())
+  name                  String
+  address               String
+  contactInformation    String
+  description           String?
+  photos                String[]
+  routeDirection        String?
+  createdAt             DateTime               @default(now())
+  accessibilityFeatures AccessibilityFeature[]
+  reviews               Review[]
+}
+
+model AccessibilityFeature {
+  id                 String  @id @default(cuid())
+  category           String
+  description        String?
+  availabilityStatus Boolean @default(true)
+  venueId            String?
+  venue              Venue?  @relation(fields: [venueId], references: [id])
+}
+
+model Review {
+  id                   String   @id @default(cuid())
+  venueId              String
+  userId               String
+  rating               Int
+  comments             String?
+  accessibilityRatings Json
+  dateCreated          DateTime @default(now())
+  dateUpdated          DateTime @updatedAt
+  user                 User     @relation(fields: [userId], references: [id])
+  venue                Venue    @relation(fields: [venueId], references: [id])
+  user                 User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+  venue                Venue  @relation(fields: [venueId], references: [id])
+}
+
+model Notification {
+  id        String   @id @default(cuid())
+  userId    String
+  type      String
+  message   String
+  isRead    Boolean  @default(false)
+  createdAt DateTime @default(now())
+  user      User     @relation(fields: [userId], references: [id])
 }
 
 enum UserRole {
@@ -18,63 +78,4 @@ enum DisabilityType {
   VISUAL
   HEARING
   OTHER
-}
-
-model User {
-  id                String   @id @default(cuid())
-  name              String?
-  email             String   @unique
-  password          String  
-  role              UserRole @default(USER)
-  profileInfo       String?
-  disabilities      DisabilityType[] @default([]) 
-  notificationToken String?
-  reviews           Review[]
-  notifications     Notification[]
-  createdAt         DateTime @default(now())
-}
-
-model Venue {
-  id                    String   @id @default(cuid())
-  name                  String
-  address               String
-  contactInformation    String
-  description           String?
-  photos                String[]
-  accessibilityFeatures AccessibilityFeature[]
-  routeDirection        String? 
-  reviews               Review[]
-  createdAt             DateTime @default(now())
-}
-
-model AccessibilityFeature {
-  id                String  @id @default(cuid())
-  category         String 
-  description      String?
-  availabilityStatus Boolean @default(true)
-  venue            Venue?   @relation(fields: [venueId], references: [id])
-  venueId          String?
-}
-
-model Review {
-  id                   String   @id @default(cuid())
-  venueId              String
-  userId               String
-  rating               Int
-  comments             String?
-  accessibilityRatings Json 
-  dateCreated          DateTime @default(now())
-  dateUpdated          DateTime @updatedAt
-  user                 User   @relation(fields: [userId], references: [id], onDelete: Cascade)
-  venue                Venue  @relation(fields: [venueId], references: [id])
-}
-
-model Notification {
-  id        String   @id @default(cuid())
-  userId    String
-  type      String 
-  message   String
-  isRead    Boolean  @default(false)
-  createdAt DateTime @default(now())
-  user      User     @relation(fields: [userId], references: [id])
 }
