@@ -76,9 +76,8 @@ const deleteUserProfile = async (req, res) => {
   const { id } = req.params;
   try {
     // Check if user exists
-    const existingUser = await prisma.user
-      .findUnique({ where: { id } })
-      .profileInfo();
+    const existingUser = await prisma.user.findUnique({ where: { id } });
+    // .profileInfo();
     if (!existingUser) {
       return res.status(404).json({ message: "User not found" });
     }
@@ -86,14 +85,14 @@ const deleteUserProfile = async (req, res) => {
     const deletedUser = await prisma.user.delete({
       where: { id },
       include: {
-        profileInfo: true,
+        // profileInfo: true,
         disabilities: true,
         reviews: true,
       },
       data: {
-        profileInfo: {
-          delete: true,
-        },
+        // profileInfo: {
+        //   delete: true,
+        // },
         disabilities: {
           deleteMany: true,
         },
@@ -110,7 +109,7 @@ const deleteUserProfile = async (req, res) => {
     });
     res.json(deletedUser);
   } catch (error) {
-    console.error("Error deleting user profile  :", error);
+    console.error("Error deleting user profile  :", error.message);
     res.status(500).json({ message: "Internal Server Error" });
   }
 };

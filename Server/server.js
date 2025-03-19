@@ -11,12 +11,14 @@ const cors = require("cors");
 const venueRoutes = require("./routes/venueRoutes");
 const reviewRoutes = require("./routes/reviewRoutes");
 const searchRoutes = require("./routes/searchRoutes");
-const prisma = require("./prisma");
+const cookieParser = require("cookie-parser");
+// const prisma = require("./prisma");
 
 // Create Express app
 const app = express();
 
 // Middleware
+app.use(cookieParser());
 app.use(cors());
 app.use(express.json());
 
@@ -26,9 +28,9 @@ app.use("/reviews", reviewRoutes);
 app.use("/api", searchRoutes);
 
 // Routes
-app.use(userRoute);
-app.use(loginRoute);
-app.use(profileRoute);
+app.use("/users", userRoute);
+app.use("/user", loginRoute);
+app.use("/profile", profileRoute);
 
 // Start server
 const PORT = process.env.PORT || 5000;

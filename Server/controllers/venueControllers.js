@@ -1,5 +1,5 @@
 const { PrismaClient } = require("@prisma/client");
-const { venueSchema } = require("../validation")
+const { venueSchema } = require("../middlewares/validation");
 
 const prisma = new PrismaClient();
 
@@ -53,7 +53,7 @@ const createVenue = async (req, res) => {
 const updateVenue = async (req, res) => {
   const result = venueSchema.safeParse(req.body);
   if (!result.success) {
-    return res.status(400).json({ errors: result.format()});
+    return res.status(400).json({ errors: result.format() });
   }
 
   try {
@@ -72,11 +72,17 @@ const updateVenue = async (req, res) => {
 const deleteVenue = async (req, res) => {
   try {
     await prisma.venue.delete({ where: { id: req.params.id } });
-    res.status(200).json({ message: "Venue deleted successfully"});
+    res.status(200).json({ message: "Venue deleted successfully" });
   } catch (error) {
     console.error("Error deleting venue:", error);
     res.status(500).json({ error: "Internal Server Error" });
   }
 };
 
-module.exports = { createVenue, getAllVenues, getAVenue, updateVenue, deleteVenue };
+module.exports = {
+  createVenue,
+  getAllVenues,
+  getAVenue,
+  updateVenue,
+  deleteVenue,
+};

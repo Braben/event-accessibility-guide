@@ -32,31 +32,49 @@ const loginUser = async (req, res) => {
     // Generate a JWT token
     const accessToken = jwt.sign(
       { userId: user.id },
-      "process.env.myJWT_SECRET",
+      process.env.myJWT_SECRET,
       {
         subject: "accessAPI",
         expiresIn: "1h",
       }
     );
+    //check if token is stored in cookies or sent as json response
+    res.cookie("accessToken", accessToken, {
+      httpOnly: true, // Set the cookie as HTTP-only
+      secure: process.env.NODE_ENV === "production", // Set the cookie only in production
+      sameSite: "strict", // Set the cookie to be sent only to the same site to prevent CSRF attacks
+    });
     // Return the token in the response
-    return res.json({ accessToken, user });
+    return res
+      .status(200)
+      .json({ message: "Login successful", accessToken, user });
   } catch (error) {
     console.error("Error logging in:", error);
     return res.status(500).json({ message: "Internal Server Error" });
   }
 };
 
-//logout user
+//logout user function
 const logoutUser = async (req, res) => {
   try {
-    // Clear the token from the client-side
-    res.clearCookie("token");
-    res.json({ message: "Logged out successfully" });
+    // Clear the access token cookie
+    res.clearCookie("accessToken", {
+      httpOnly: true, // Set the cookie as HTTP-only
+      secure: process.env.NODE_ENV === "production", /// Set the cookie only in production
+      sameSite: "strict", // Set the cookie to be sent only to the same site to prevent CSRF attacks
+    });
     console.log("Logged out successfully");
-    return res.status(200).json({ message: "Logged out successfully" });
+    return res
+      .status(200)
+      .json({ message: "Logged out successfully", accessToken: null });
   } catch (error) {
     console.error("Error logging out:", error);
-    return res.status(500).json({ message: "Internal Server Error" });
+    // Check if the response has already been sent
+    if (!res.headersSent) {
+      return res
+        .status(500)
+        .json({ message: "Error logging out", error: error.message });
+    }
   }
 };
 
