@@ -1,6 +1,12 @@
 const express = require("express");
-const { reviewSchema } = require("../validation");
-const { createReview, getAllReviews, getAReview, updatedReview, deleteReview} = require("../controllers/reviewController");
+const { reviewSchema } = require("../middlewares/validation");
+const {
+  createReview,
+  getAllReviews,
+  getAReview,
+  updatedReview,
+  deleteReview,
+} = require("../controllers/reviewController");
 
 const router = express.Router();
 

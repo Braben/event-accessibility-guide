@@ -14,8 +14,18 @@ const venueSchema = z.object({
 // Review Validation Schema
 const reviewSchema = z.object({
   venueId: z.string().min(1, "Venue ID is required"),
-  rating: z.number().min(1, "Rating must be at least 1").max(5, "Rating must be at most 5"),
+  rating: z
+    .number()
+    .min(1, "Rating must be at least 1")
+    .max(5, "Rating must be at most 5"),
   comments: z.string().optional(),
 });
 
-module.exports = { venueSchema, reviewSchema };
+const userSchema = z.object({
+  username: z.string().min(1, "Username is required"),
+  email: z.string().email("Invalid email address"),
+  password: z.string().min(1, "Password is required"),
+  role: z.enum(["admin", "user"]).default("user"),
+});
+
+module.exports = { venueSchema, reviewSchema, userSchema };
