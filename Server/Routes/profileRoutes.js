@@ -8,8 +8,8 @@ const {
 } = require("../Controllers/userProfileController");
 const isAuth = require("../middlewares/isAuth");
 
-Router.get("/user/:id", userProfile);
-Router.put("/user/:id", updateUserProfile);
-Router.delete("/user/:id", deleteUserProfile);
+Router.get("/:id", isAuth, userProfile);
+Router.put("/:id", isAuth, updateUserProfile);
+// Router.delete("/:id", isAuth, deleteUserProfile);
 
 module.exports = Router;
