@@ -9,29 +9,27 @@ const userRoute = require("./routes/userRoutes");
 const venueRoutes = require("./routes/venueRoutes");
 const reviewRoutes = require("./routes/reviewRoutes");
 const searchRoutes = require("./routes/searchRoutes");
-const userRoute = require("./routes/userRoutes");
+const userRoutes = require("./routes/userRoutes");
 const loginRoute = require("./routes/loginRoutes");
 const profileRoute = require("./routes/profileRoutes");
-const cors = require("cors");
-const venueRoutes = require("./routes/venueRoutes");
-const reviewRoutes = require("./routes/reviewRoutes");
-const searchRoutes = require("./routes/searchRoutes");
 const cookieParser = require("cookie-parser");
-// const prisma = require("./prisma");
 
 // Create Express app
 const app = express();
 
 // Middleware
 app.use(cookieParser());
-app.use(cors());
+app.use(cors({
+methods: ["GET", "POST", "PUT", "DELETE", "PATCH"],
+allowedHeaders: ["Authorization", "Content-Type"]
+}));
 app.use(express.json());
 
 // Connect to routes
 app.use("/venues", venueRoutes)
 app.use("/reviews", reviewRoutes)
 app.use("/api", searchRoutes)
-app.use(userRoute);
+app.use(userRoutes);
 app.use("/users", userRoute);
 app.use("/user", loginRoute);
 app.use("/profile", profileRoute);
