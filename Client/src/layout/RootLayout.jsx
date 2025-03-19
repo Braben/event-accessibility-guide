@@ -14,7 +14,7 @@ const RootLayout = () => {
       </main>
 
       {/* Footer Stays at the Bottom */}
-      {/* <Footer /> */}
+      <Footer />
     </div>
   );
 };
