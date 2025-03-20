@@ -20,7 +20,9 @@ const Events = () => {
     }
     try {
       // fetch api from backend
-      const response = await fetch(`https://event-accessibility-guide-production.up.railway.app/api/venues/search?query=${filters.location}&accessibility=${filters.accessibility}`);
+      const response = await fetch(
+        `https://event-accessibility-guide-production.up.railway.app/api/venues/search?query=${filters.location}&accessibility=${filters.accessibility}`
+      );
       const data = await response.json();
       console.log(data);
       // store filtered data
@@ -29,7 +31,6 @@ const Events = () => {
       console.error("Error fetching data:", error);
     }
   };
-
 
   return (
     <div className="mx-8 ">
@@ -51,7 +52,9 @@ const Events = () => {
             color="secondary"
             placeholder="Search venues"
             value={filters.location}
-            onChange={(e) => setFilters({ ...filters, location: e.target.value })}
+            onChange={(e) =>
+              setFilters({ ...filters, location: e.target.value })
+            }
             onKeyDown={(e) => {
               if (e.key === "Enter") {
                 e.preventDefault(); // Prevent default form submission
@@ -80,25 +83,36 @@ const Events = () => {
       </div>
 
       {showFilters && (
-        <div id="filters" className="h-48 w-full  bg-slate-950 mt-2">
+        <div id="filters" className="h-48 w-full  bg-slate-300 mt-2">
           <label>Location:</label>
-          <Input className="text-white"
+          <Input
+            className="text-white"
             type="text"
             placeholder="Enter location"
             value={filters.location}
             onChange={(e) =>
-              setFilters({...filters, location: e.target.value })}
+              setFilters({ ...filters, location: e.target.value })
+            }
           />
           <label>Accessibility Features:</label>
-          <select value={filters.accessibility} onChange={(e) => setFilters({...filters, accessibility: e.target.value})}>
+          <select
+            value={filters.accessibility}
+            onChange={(e) =>
+              setFilters({ ...filters, accessibility: e.target.value })
+            }
+          >
             <option value="">Select All</option>
             <option value="wheelchair accessible">Wheelchair Accessible</option>
             <option value="accessible seating">Accessible Seating</option>
             <option value="visual aids">Visual Aids</option>
             <option value="braille">Braille</option>
-            <option value="sign language interpreters">Sign Language Interpreters</option>
+            <option value="sign language interpreters">
+              Sign Language Interpreters
+            </option>
             <option value="hearing aids">Hearing Aids</option>
-            <option value="speech-to-text assistants">Speech-to-Text Assistants</option>
+            <option value="speech-to-text assistants">
+              Speech-to-Text Assistants
+            </option>
             <option value="deafness support">Deafness Support</option>
             <option value="wheelchair-accessible restrooms">
               Wheelchair-Accessible Restrooms
