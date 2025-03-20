@@ -4,9 +4,9 @@ dotenv.config();
 const { PrismaClient } = require("@prisma/client");
 const prisma = new PrismaClient();
 
-const userRoute = require("./Routes/userRoutes");
-const loginRoute = require("./Routes/loginRoutes");
-const profileRoute = require("./Routes/profileRoutes");
+const userRoute = require("./routes/userRoutes");
+const loginRoute = require("./routes/loginRoutes");
+const profileRoute = require("./routes/profileRoutes");
 const cors = require("cors");
 const venueRoutes = require("./routes/venueRoutes");
 const reviewRoutes = require("./routes/reviewRoutes");

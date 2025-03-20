@@ -5,7 +5,7 @@ const {
   userProfile,
   updateUserProfile,
   deleteUserProfile,
-} = require("../Controllers/userProfileController");
+} = require("../controllers/userProfileController");
 const isAuth = require("../middlewares/isAuth");
 
 Router.get("/:id", isAuth, userProfile);
