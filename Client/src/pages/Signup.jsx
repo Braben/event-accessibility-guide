@@ -15,6 +15,10 @@ import wheelchairImage from "../Assets/side-view-woman-sitting-wheelchair_104894
 
 const Signup = () => {
   const [showPassword, setShowPassword] = useState(false);
+  const [firstName, setFirstName] = useState("");
+  const [lastName, setLastName] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
 
   return (
     <div>
@@ -38,10 +42,10 @@ const Signup = () => {
                 <Input
                   id="firstName"
                   type="text"
-                  // value={venueName}
+                  value={firstName}
                   placeholder="John"
-                  className="w-full placeholder:italic placeholder:text-slate-400 "
-                  // onChange={(e) => setVenueName(e.target.value)}
+                  className="w-full placeholder:italic placeholder:text-slate-400  "
+                  onChange={(e) => setFirstName(e.target.value)}
                 />
               </div>
 
@@ -59,10 +63,10 @@ const Signup = () => {
                 <Input
                   id="LastName"
                   type="text"
-                  // value={venueCapacity}
+                  value={lastName}
                   placeholder="Doe"
                   className="w-full placeholder:italic placeholder:text-slate-400"
-                  // onChange={(e) => setVenueCapacity(e.target.value)}
+                  onChange={(e) => setLastName(e.target.value)}
                 />
               </div>
             </div>
@@ -79,10 +83,10 @@ const Signup = () => {
               <Input
                 id="email"
                 type="email"
-                // value={venueImage}
+                value={email}
                 placeholder="john.doe@example.com"
                 className="w-full placeholder:italic placeholder:text-slate-400"
-                // onChange={(e) => setVenueImage(e.target.value)}
+                onChange={(e) => setEmail(e.target.value)}
               />
             </div>
             <div className="w-full relative mb-4">
@@ -98,8 +102,10 @@ const Signup = () => {
               <Input
                 id="password"
                 type={showPassword ? "text" : "password"} // Toggle between text & password
+                value={password}
                 placeholder="Minimum length is 6 characters"
                 className="w-full placeholder:italic placeholder:text-slate-400 pr-10"
+                onChange={setPassword}
               />
 
               {/* Eye Icon */}
@@ -140,13 +146,20 @@ const Signup = () => {
             </p>
           </div>
         </div>
-        <div className="w-1/2 relative">
+        <div className=" w-1/2 relative">
           {/* <div className="absolute inset-0 bg-gradient-to-b from-white/60 to-transparent pointer-events-none"></div> */}
-          <figure className="w-full h-full">
+          <figure className="w-full h-full relative">
             <img
               src={wheelchairImage}
-              className="rounded-lg  object-cover scale-x-[-1] w-full "
+              className="rounded-lg object-cover scale-x-[-1] w-full h-[28rem]"
             />
+            <div className="absolute inset-x-0 bottom-0 -translate-y-24 translate-x-6 text-white ">
+              <h3 className="tracking-wide text-2xl font-bold">
+                Join Our Community
+              </h3>
+              <p>Help us make the world more accessible to everyone </p>
+            </div>
+            <div class="absolute -translate-y-10 rounded-md rotate-45 bg-orange-400 bottom-0 right-0 h-12 w-12"></div>
           </figure>
         </div>
       </div>
