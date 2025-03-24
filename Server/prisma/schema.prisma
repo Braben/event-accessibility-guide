@@ -19,6 +19,8 @@ model User {
   createdAt         DateTime         @default(now())
   notifications     Notification[]
   reviews           Review[]
+  venues            Venue[]
+
 }
 
 model Venue {
@@ -32,6 +34,8 @@ model Venue {
   createdAt             DateTime               @default(now())
   accessibilityFeatures AccessibilityFeature[]
   reviews               Review[]
+  userId                String
+  user                  User                   @relation(fields: [userId], references: [id])
 }
 
 model AccessibilityFeature {

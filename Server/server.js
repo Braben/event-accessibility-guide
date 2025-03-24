@@ -1,8 +1,6 @@
 const express = require("express");
 const dotenv = require("dotenv");
 dotenv.config();
-const { PrismaClient } = require("@prisma/client");
-const prisma = new PrismaClient();
 
 const userRoute = require("./routes/userRoutes");
 const loginRoute = require("./routes/loginRoutes");
@@ -21,6 +19,7 @@ const app = express();
 app.use(cookieParser());
 app.use(cors());
 app.use(express.json());
+app.use("/auth", loginRoute);
 
 // Connect to routes
 app.use("/venues", venueRoutes);
