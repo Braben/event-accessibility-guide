@@ -12,6 +12,7 @@ import { FiEye, FiEyeOff } from "react-icons/fi";
 import { Link } from "react-router-dom";
 import { FcGoogle } from "react-icons/fc";
 import wheelchairImage from "../Assets/side-view-woman-sitting-wheelchair_1048944-821772 1.png";
+import OnboardingModal from "../components/OnboardingModal";
 
 const Signup = () => {
   const [showPassword, setShowPassword] = useState(false);
@@ -117,7 +118,8 @@ const Signup = () => {
                 {showPassword ? <FiEyeOff size={20} /> : <FiEye size={20} />}
               </button>
             </div>
-            <Button className="mt-2 font-bold  w-full">Create Account</Button>
+            <OnboardingModal />
+            {/* <Button className="mt-2 font-bold  w-full">Create Account</Button> */}
             <div className="flex items-center w-full my-4">
               <div className="flex-1 border-t border-gray-400"></div>
               <span className="px-3 text-sm text-gray-500 ">
