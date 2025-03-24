@@ -16,17 +16,28 @@ import {
   IoIosStarOutline,
 } from "react-icons/io";
 import { GrSettingsOption } from "react-icons/gr";
+import { IoCheckmarkSharp } from "react-icons/io5";
+import { useNavigate } from "react-router-dom";
 export default function OnboardingModal() {
   const [step, setStep] = useState(1);
   const [userType, setUserType] = useState("");
   const [selected, setSelected] = useState("");
   const [selectedPreferences, setSelectedPreferences] = useState([]);
+  const [error, setError] = useState("");
 
   const totalSteps = 4;
   const progressWidth = `${(step / totalSteps) * 100}%`;
 
   const nextStep = () => {
     if (step < 5) setStep((prev) => prev + 1);
+  };
+  const mandatoryNext = () => {
+    if (!selected) {
+      setError("Please select a user type before proceeding."); // Show error
+      return;
+    }
+    setError(""); // Clear error if valid
+    nextStep(); // Proceed to next step
   };
   const prevStep = () => {
     if (step > 1) setStep((prev) => prev - 1);
@@ -42,6 +53,16 @@ export default function OnboardingModal() {
         : [...prev, preference]
     );
   };
+
+  const navigate = useNavigate();
+  const handleComplete = () => {
+    if (selected === "user") {
+      navigate("/event-listing"); // Navigate to Event Listing Page
+    } else {
+      navigate("/"); // Navigate to Admin Dashboard
+    }
+  };
+
   const roles = [
     {
       id: "user",
@@ -123,12 +144,14 @@ export default function OnboardingModal() {
                   </div>
                 ))}
               </div>
-
+              {error && (
+                <p className="text-red-500 text-center mt-3">{error}</p>
+              )}
               <div className="mt-6 mb-4 mr-3 flex justify-end">
                 <Button
                   size="sm"
                   className="bg-orange-400 font-bold border-none hover:bg-blue-700"
-                  onClick={nextStep}
+                  onClick={mandatoryNext}
                 >
                   Next
                 </Button>
@@ -444,6 +467,26 @@ export default function OnboardingModal() {
                     ))}
                   </div>
                 </div>
+              </div>
+              <div className="flex justify-between p-4">
+                <Button
+                  className="font-bold text-blue-700"
+                  variant="ghost"
+                  onClick={prevStep}
+                >
+                  <IoIosArrowBack className="mr-1 stroke-2" />
+                  Back
+                </Button>
+                <Button
+                  size="sm"
+                  className={`${
+                    selected === "user" ? "bg-blue-700" : "bg-orange-400"
+                  } font-bold border-none hover:bg-blue-800`}
+                  onClick={handleComplete}
+                >
+                  complete
+                  <IoCheckmarkSharp className="ml-1 stroke-2" />
+                </Button>
               </div>
             </div>
           )}
