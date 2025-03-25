@@ -1,5 +1,8 @@
 const { PrismaClient } = require("@prisma/client");
 const prisma = new PrismaClient();
+const bcrypt = require("bcryptjs");
+const env = require("dotenv");
+env.config();
 
 const createUser = async (req, res) => {
   const {
@@ -11,20 +14,29 @@ const createUser = async (req, res) => {
     disabilities,
     notificationToken,
     reviews,
+    venues,
     notification,
   } = req.body;
   try {
-    // const { name, email,password,ro } = req.body;
+    // Check if user already exists
+    const existingUser = await prisma.user.findUnique({ where: { email } });
+    if (existingUser) {
+      return res.status(400).json({ message: "User already exists" });
+    }
+    // Hash the password
+    const hashedPassword = await bcrypt.hash(password, 10);
+    // Create new user
     const newUser = await prisma.user.create({
       data: {
         name,
         email,
-        password,
+        password: hashedPassword,
         role,
         profileInfo,
         disabilities,
         notificationToken,
         reviews,
+        venues,
         notification,
       },
     });
@@ -35,19 +47,20 @@ const createUser = async (req, res) => {
   }
 };
 
-// const getUsers = async (req, res) => {
-//   try {
-//     const users = await prisma.user.findMany();
-//     res.json(users);
-//     console.log({ message: "Users retrieved successfully", data: users });
-//   } catch (error) {
-//     console.log("Error: ", error);
-//     res.status(500).json({ message: "Internal Server Error" });
-//   }
-// };
+//get all users
+const getUsers = async (req, res) => {
+  try {
+    const users = await prisma.user.findMany();
+    res.json(users);
+    console.log({ message: "Users retrieved successfully", data: users });
+  } catch (error) {
+    console.log("Error: ", error);
+    res.status(500).json({ message: "Internal Server Error" });
+  }
+};
 
 //get signle user
-const getUsers = async (req, res) => {
+const getUsersById = async (req, res) => {
   try {
     const { id } = req.params; // Extract user ID from request parameters
 
@@ -61,10 +74,6 @@ const getUsers = async (req, res) => {
       }
       res.json(user);
       console.log({ message: "User retrieved successfully", data: user });
-    } else {
-      const users = await prisma.user.findMany(); // Fetch all users
-      res.json(users);
-      console.log({ message: "Users retrieved successfully", data: users });
     }
   } catch (error) {
     console.error("Error fetching user:", error);
@@ -72,6 +81,7 @@ const getUsers = async (req, res) => {
   }
 };
 
+//update user function
 const updateUser = async (req, res) => {
   const { id } = req.params;
   const {
@@ -117,7 +127,7 @@ const updateUser = async (req, res) => {
   }
 };
 
-//delete user
+//delete user function
 const deleteUser = async (req, res) => {
   const { id } = req.params;
   try {
@@ -138,8 +148,9 @@ const deleteUser = async (req, res) => {
     console.log("Deleted user:", deletedUser);
   } catch (error) {
     console.error("Error deleting user:", error);
-    res.status(500).json({ message: "Internal Server Error" });
+    res.status(500).json({ message: error.message });
   }
 };
 
-module.exports = { createUser, getUsers, updateUser, deleteUser };
+// Export the controller functions
+module.exports = { createUser, getUsers, getUsersById, updateUser, deleteUser };
