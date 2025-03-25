@@ -13,7 +13,7 @@ const cookieParser = require("cookie-parser");
 // const prisma = require("./prisma");
 
 //for firebase
-const firebaseAuthRoutes = require("./Routes/firebaseAuthRoutes");
+const firebaseAuthRoutes = require("./routes/firebaseAuthRoutes");
 
 // Create Express app
 const app = express();
