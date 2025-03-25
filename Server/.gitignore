@@ -3,5 +3,5 @@ node_modules
 .env
 
 # Ignore Firebase credentials
-config/*.json
+Server/config/*.json
 Server/config/event-accessibility-guide-firebase-adminsdk-fbsvc-9d3ea00e6f.json
