@@ -2,7 +2,7 @@ const dotenv = require("dotenv");
 dotenv.config();
 
 const admin = require("firebase-admin");
-const serviceAccount = require("../config/event-accessibility-guide-firebase-adminsdk-fbsvc-9d3ea00e6f.json");
+const serviceAccount = JSON.parse(process.env.Firebase_Admin_SDK_Credentials);
 // Initialize Firebase Admin SDK
 
 admin.initializeApp({
