@@ -6,7 +6,7 @@ const bcrypt = require("bcryptjs");
 
 //  Standard Email/Password Signup
 const signupUser = async (req, res) => {
-  const { firstname, lastname, email, password } = req.body;
+  const { firstname, lastname, email, password, role } = req.body;
   if (!firstname || !lastname || !email || !password) {
     return res.status(400).json({ message: "All fields are required" });
   }
@@ -16,7 +16,7 @@ const signupUser = async (req, res) => {
     const userRecord = await admin.auth().createUser({
       email,
       password,
-      displayName: `${firstname} ${lastname}`, // 🔹 Store full name in Firebase
+      displayName: `${firstname} ${lastname}`, // Store full name in Firebase
     });
 
     // Check if user already exists
@@ -35,6 +35,7 @@ const signupUser = async (req, res) => {
         lastname,
         email,
         password: hashedPassword,
+        role,
       },
     });
 
@@ -77,6 +78,7 @@ const signupWithGoogle = async (req, res) => {
           firstname: name.split(" ")[0] || "",
           lastname: name.split(" ")[1] || "",
           googleAuth: true, //  Mark as Google user
+          role,
         },
       });
     }
@@ -94,7 +96,7 @@ const signupWithGoogle = async (req, res) => {
 // signin with email and password
 
 const loginUser = async (req, res) => {
-  const { email, password } = req.body;
+  const { email, password, role } = req.body;
   if (!email || !password) {
     return res.status(400).json({ message: "Email and password are required" });
   }
@@ -128,7 +130,7 @@ const loginUser = async (req, res) => {
       user: {
         id: user.id,
         email: user.email,
-        // role: user.role,
+        role: user.role,
       },
     });
   } catch (error) {

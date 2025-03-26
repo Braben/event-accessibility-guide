@@ -9,6 +9,7 @@ const cors = require("cors");
 const venueRoutes = require("./routes/venueRoutes");
 const reviewRoutes = require("./routes/reviewRoutes");
 const searchRoutes = require("./routes/searchRoutes");
+
 const cookieParser = require("cookie-parser");
 // const prisma = require("./prisma");
 

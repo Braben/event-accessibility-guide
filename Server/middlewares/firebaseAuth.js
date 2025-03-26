@@ -26,6 +26,7 @@ const verifyFirebaseToken = async (req, res, next) => {
       firstname,
       lastname,
       email: user.email,
+      role: "USER", // Default role
     };
 
     next();
