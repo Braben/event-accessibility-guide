@@ -39,8 +39,34 @@ const createVenue = async (req, res) => {
   }
 
   try {
+    const {
+      userId,
+      name,
+      address,
+      contactInformation,
+      description,
+      photos,
+      routeDirection,
+    } = req.body;
+    const user = await prisma.user.findUnique({
+      where: { id: userId },
+    });
+
+    if (!user) {
+      return res
+        .status(400)
+        .json({ error: "User not found. Provide a valid userId." });
+    }
     const newVenue = await prisma.venue.create({
-      data: req.body,
+      data: {
+        userId,
+        name,
+        address,
+        contactInformation,
+        description,
+        photos,
+        routeDirection,
+      },
     });
     res.status(201).json(newVenue);
   } catch (error) {

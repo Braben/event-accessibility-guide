@@ -31,7 +31,7 @@ const loginUser = async (req, res) => {
 
     // Generate a JWT token
     const accessToken = jwt.sign(
-      { userId: user.id },
+      { userId: user.id, role: user.role },
       process.env.myJWT_SECRET,
       {
         subject: "accessAPI",
@@ -45,9 +45,15 @@ const loginUser = async (req, res) => {
       sameSite: "strict", // Set the cookie to be sent only to the same site to prevent CSRF attacks
     });
     // Return the token in the response
-    return res
-      .status(200)
-      .json({ message: "Login successful", accessToken, user });
+    return res.status(200).json({
+      message: "Login successful",
+      accessToken,
+      user: {
+        id: user.id,
+        email: user.email,
+        role: user.role,
+      },
+    });
   } catch (error) {
     console.error("Error logging in:", error);
     return res.status(500).json({ message: "Internal Server Error" });

@@ -13,7 +13,10 @@ const userRoutes = require("./routes/userRoutes");
 const loginRoute = require("./routes/loginRoutes");
 const profileRoute = require("./routes/profileRoutes");
 const cookieParser = require("cookie-parser");
+// const prisma = require("./prisma");
 
+//for firebase
+const firebaseAuthRoutes = require("./routes/firebaseAuthRoutes");
 // Create Express app
 const app = express();
 
@@ -33,6 +36,10 @@ app.use(userRoutes);
 app.use("/users", userRoute);
 app.use("/user", loginRoute);
 app.use("/profile", profileRoute);
+// app.use("/auth", loginRoute);
+
+//for firebase
+app.use("/", firebaseAuthRoutes);
 
 // Start server
 const PORT = process.env.PORT || 5000;

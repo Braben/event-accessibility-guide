@@ -14,6 +14,7 @@ const createUser = async (req, res) => {
     disabilities,
     notificationToken,
     reviews,
+    venues,
     notification,
   } = req.body;
   try {
@@ -35,6 +36,7 @@ const createUser = async (req, res) => {
         disabilities,
         notificationToken,
         reviews,
+        venues,
         notification,
       },
     });
