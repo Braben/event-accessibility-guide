@@ -65,7 +65,7 @@ const Login = () => {
               id="password"
               type={showPassword ? "text" : "password"}
               value={password}
-              placeholder=""
+              placeholder="Enter password"
               className="w-full placeholder:italic placeholder:text-slate-400 pr-10"
               onChange={setPassword}
             />
