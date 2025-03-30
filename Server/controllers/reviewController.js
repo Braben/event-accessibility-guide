@@ -6,6 +6,11 @@ const prisma = new PrismaClient();
 const createReview = async (req, res) => {
   const { venueId, rating, comments, accessibilityRatings, userId } = req.body;
 
+  // Validate rating (must be between 1 and 5)
+  if (!Number.isInteger(rating) || rating < 1 || rating > 5) {
+    return res.status(400).json({ message: "Rating must be an integer between 1 and 5." });
+  }
+
   // Check if venue exists before creating a review
   try {
     const existingVenue = await prisma.venue.findUnique({ where: { id: venueId } });
@@ -63,6 +68,10 @@ const getAReview = async (req, res) => {
 const updatedReview = async (req, res) => {
   const { id } = req.params;
   const { rating, comments, accessibilityRatings, userId } = req.body;
+
+  if (rating !== undefined && (!Number.isInteger(rating) || rating < 1 || rating > 5)) {
+    return res.status(400).json({ message: "Rating must be an integer between 1 and 5." });
+  }
 
   try {
     const review = await prisma.review.findUnique({ where: { id } });

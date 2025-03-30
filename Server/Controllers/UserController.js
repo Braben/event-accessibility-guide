@@ -6,7 +6,8 @@ env.config();
 
 const createUser = async (req, res) => {
   const {
-    name,
+    firstname,
+    lastname,
     email,
     password,
     role,
@@ -28,7 +29,8 @@ const createUser = async (req, res) => {
     // Create new user
     const newUser = await prisma.user.create({
       data: {
-        name,
+        firstname,
+        lastname,
         email,
         password: hashedPassword,
         role,
@@ -85,7 +87,8 @@ const getUsersById = async (req, res) => {
 const updateUser = async (req, res) => {
   const { id } = req.params;
   const {
-    name,
+    firstname,
+    lastname,
     email,
     password,
     role,
@@ -105,7 +108,8 @@ const updateUser = async (req, res) => {
     const updatedUser = await prisma.user.update({
       where: { id },
       data: {
-        name,
+        firstname,
+        lastname,
         email,
         password,
         role,
