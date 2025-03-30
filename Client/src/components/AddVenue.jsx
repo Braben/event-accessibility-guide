@@ -43,11 +43,9 @@ const AddVenue = () => {
   return (
     <div>
       <Dialog size="md">
-        <Dialog.Trigger
-          className="bg-white text-black font-bold w-70 hover:bg-white rounded-none"
-          as={Button}
-        >
-          + Add Venue
+        <Dialog.Trigger className="w-48 bg-black p-3 font-bold" as={Button}>
+          {" "}
+          <span className="mr-2 ">+</span> Add Venue
         </Dialog.Trigger>
         <Dialog.Overlay>
           <Dialog.Content>

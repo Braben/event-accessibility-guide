@@ -1,6 +1,4 @@
 import React, { useState } from "react";
-// import { ChevronDownIcon } from "@heroicons/react/24/outline";
-// import { Star, ChevronLeft, ChevronRight } from "lucide-react";
 import { TbWheelchair } from "react-icons/tb";
 import { LuBath } from "react-icons/lu";
 import { FaElevator } from "react-icons/fa6";

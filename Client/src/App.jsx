@@ -25,9 +25,15 @@ function App() {
         <Route path="/login" element={<Login />} />
         <Route path="/signup" element={<Signup />} />
         <Route
-          path="/event-organizer-dashboard"
+          path="/organizer/dashboard"
           element={<EventOrganizerDashboard />}
         />
+        <Route
+          path="/organizer/accessibility"
+          element={<div>Accessibility Page</div>}
+        />
+        <Route path="/organizer/venue" element={<div>Venue Page</div>} />
+        <Route path="/organizer/settings" element={<div>Settings Page</div>} />
       </Route>
     )
   );
