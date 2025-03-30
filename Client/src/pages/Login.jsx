@@ -1,16 +1,3 @@
-<<<<<<< HEAD
-import React from 'react'
-
-const Login = () => {
-  return (
-    <div>
-      
-    </div>
-  )
-}
-
-export default Login
-=======
 import React from "react";
 import {
   Dialog,
@@ -176,4 +163,3 @@ const Login = () => {
 };
 
 export default Login;
->>>>>>> 69d64d9c4a18047f4fc960066304c1cdc42044ce

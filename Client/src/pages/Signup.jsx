@@ -1,14 +1,3 @@
-<<<<<<< HEAD
-import React from 'react'
-
-const Signup = () => {
-  return (
-    <div></div>
-  )
-}
-
-export default Signup
-=======
 import React from "react";
 import {
   Dialog,
@@ -181,4 +170,3 @@ const Signup = () => {
 };
 
 export default Signup;
->>>>>>> 69d64d9c4a18047f4fc960066304c1cdc42044ce

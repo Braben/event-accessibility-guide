@@ -6,10 +6,10 @@ const {
   updateUserProfile,
   deleteUserProfile,
 } = require("../controllers/userProfileController");
-const isAuth = require("../middlewares/isAuth");
+const {isAuth} = require("../middlewares/isAuth");
 
 router.get("/:id", isAuth, userProfile);
 router.put("/:id", isAuth, updateUserProfile);
-// Router.delete("/:id", isAuth, deleteUserProfile);
+// router.delete("/:id", isAuth, deleteUserProfile);
 
 module.exports = router;

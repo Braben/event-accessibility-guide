@@ -9,7 +9,6 @@ const userRoute = require("./routes/userRoutes");
 const venueRoutes = require("./routes/venueRoutes");
 const reviewRoutes = require("./routes/reviewRoutes");
 const searchRoutes = require("./routes/searchRoutes");
-const userRoutes = require("./routes/userRoutes");
 const loginRoute = require("./routes/loginRoutes");
 const profileRoute = require("./routes/profileRoutes");
 const cookieParser = require("cookie-parser");
@@ -32,7 +31,7 @@ app.use(express.json());
 app.use("/venues", venueRoutes)
 app.use("/reviews", reviewRoutes)
 app.use("/api", searchRoutes)
-app.use(userRoutes);
+// app.use(userRoutes);
 app.use("/users", userRoute);
 app.use("/user", loginRoute);
 app.use("/profile", profileRoute);

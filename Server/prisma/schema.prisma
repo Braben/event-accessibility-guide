@@ -9,12 +9,8 @@ datasource db {
 
 model User {
   id                String           @id @default(cuid())
-<<<<<<< HEAD
-  name              String?
-=======
   firstname         String?
   lastname          String?
->>>>>>> 69d64d9c4a18047f4fc960066304c1cdc42044ce
   email             String           @unique
   password          String
   role              UserRole         @default(USER)
@@ -24,11 +20,7 @@ model User {
   createdAt         DateTime         @default(now())
   notifications     Notification[]
   reviews           Review[]
-<<<<<<< HEAD
-=======
   venues            Venue[]
-
->>>>>>> 69d64d9c4a18047f4fc960066304c1cdc42044ce
 }
 
 model Venue {
@@ -42,11 +34,8 @@ model Venue {
   createdAt             DateTime               @default(now())
   accessibilityFeatures AccessibilityFeature[]
   reviews               Review[]
-<<<<<<< HEAD
-=======
   userId                String
   user                  User                   @relation(fields: [userId], references: [id])
->>>>>>> 69d64d9c4a18047f4fc960066304c1cdc42044ce
 }
 
 model AccessibilityFeature {

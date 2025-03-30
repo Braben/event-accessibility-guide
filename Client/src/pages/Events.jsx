@@ -1,16 +1,3 @@
-<<<<<<< HEAD
-import React from 'react'
-
-const Events = () => {
-  return (
-    <div>
-      
-    </div>
-  )
-}
-
-export default Events
-=======
 import React, { useState } from "react";
 import { Input } from "@material-tailwind/react";
 import { IoMdSearch } from "react-icons/io";
@@ -139,4 +126,3 @@ const Events = () => {
 };
 
 export default Events;
->>>>>>> 69d64d9c4a18047f4fc960066304c1cdc42044ce

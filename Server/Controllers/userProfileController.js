@@ -30,7 +30,8 @@ const userProfile = async (req, res) => {
 const updateUserProfile = async (req, res) => {
   const { id } = req.params;
   const {
-    name,
+    firstname,
+    lastname,
     email,
     password,
     role,
@@ -40,6 +41,8 @@ const updateUserProfile = async (req, res) => {
     reviews,
     notification,
   } = req.body;
+  console.log("Incoming request body:", req.body);
+
   try {
     // Check if user exists
     const existingUser = await prisma.user.findUnique({ where: { id } });
@@ -50,7 +53,8 @@ const updateUserProfile = async (req, res) => {
     const updatedUser = await prisma.user.update({
       where: { id },
       data: {
-        name,
+        firstname,
+        lastname,
         email,
         password,
         role,

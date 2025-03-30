@@ -5,7 +5,7 @@ const {
   signupUser,
   loginUser,
   logout,
-} = require("../controllers/firebaseSignUp-LogIn");
+} = require("../controllers/firebaseSignUP-LogIn");
 const router = express.Router();
 
 router.post("/signup", signupUser);
