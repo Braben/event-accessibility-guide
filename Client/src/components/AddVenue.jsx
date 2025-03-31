@@ -11,8 +11,8 @@ import {
   IconButton,
 } from "@material-tailwind/react";
 import { Xmark } from "iconoir-react";
-import { addVenue } from "../Slicers/VenueSlicer";
 import { useSelector, useDispatch } from "react-redux";
+import { createVenue } from "../Slicers/VenueSlicer";
 
 const AddVenue = () => {
   const [venueName, setVenueName] = useState("");
@@ -93,7 +93,7 @@ const AddVenue = () => {
                   accessibilityFeatures,
                 };
 
-                dispatch(addVenue(newVenue)); // Dispatch the action
+                dispatch(createVenue(newVenue)); // Dispatch the action
 
                 // Clear inputs
                 setVenueName("");

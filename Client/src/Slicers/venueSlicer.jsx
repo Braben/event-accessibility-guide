@@ -8,7 +8,7 @@ const venueSlice = createSlice({
   name: "venues",
   initialState,
   reducers: {
-    addVenue: (state, action) => {
+    createVenue: (state, action) => {
       state.venues.push(action.payload);
     },
     deleteVenue: (state, action) => {
@@ -24,6 +24,6 @@ const venueSlice = createSlice({
   },
 });
 
-export const { addVenue, deleteVenue, updateVenue } = venueSlice.actions;
+export const { createVenue, deleteVenue, updateVenue } = venueSlice.actions;
 
 export default venueSlice.reducer;
