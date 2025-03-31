@@ -1,6 +1,6 @@
 import React from "react";
-import { updateVenue } from "../slicers/VenueSlicer";
-import { useDispatch } from "react-redux";
+// import { updateVenue } from "../slicers/VenueSlicer";
+// import { useDispatch } from "react-redux";
 import {
   Dialog,
   Button,
