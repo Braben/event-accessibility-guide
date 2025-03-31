@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { deleteVenue } from "../slicers/VenueSlicer";
+import { deleteVenue } from "../slicers/venueSlicer";
 import UpdateVenue from "./UpdateVenue";
 import { FaEdit, FaTrash } from "react-icons/fa";
 
