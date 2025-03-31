@@ -39,14 +39,16 @@ const Login = () => {
             >
               Email
             </Typography>
-            <Input
-              id="email"
-              type="email"
-              value={email}
-              placeholder="john.doe@example.com"
-              className="w-full placeholder:italic placeholder:text-slate-400"
-              onChange={(e) => setEmail(e.target.value)}
-            />
+            <div className=" bg-[#e0dfe4]  border border-slate-300 rounded-lg ">
+              <Input
+                id="email"
+                type="email"
+                value={email}
+                placeholder="john.doe@example.com"
+                className="w-full placeholder:italic placeholder:text-slate-400 bg-transparent border-none focus:ring-0 focus:outline-none text-black  hover:border-none"
+                onChange={(e) => setEmail(e.target.value)}
+              />
+            </div>
           </div>
 
           {/* Password Input */}
@@ -61,22 +63,25 @@ const Login = () => {
             >
               Password
             </Typography>
-            <Input
-              id="password"
-              type={showPassword ? "text" : "password"}
-              value={password}
-              placeholder="Enter password"
-              className="w-full placeholder:italic placeholder:text-slate-400 pr-10"
-              onChange={setPassword}
-            />
-            {/* Toggle Password Visibility */}
-            <button
-              type="button"
-              onClick={() => setShowPassword(!showPassword)}
-              className="absolute inset-y-0 right-3 top-6 flex items-center text-black"
-            >
-              {showPassword ? <FiEyeOff size={20} /> : <FiEye size={20} />}
-            </button>
+
+            <div className=" bg-[#e0dfe4]  border border-slate-300 rounded-lg ">
+              <Input
+                id="password"
+                type={showPassword ? "text" : "password"}
+                value={password}
+                placeholder="Enter password"
+                className="w-full placeholder:italic placeholder:text-slate-400 pr-10 bg-transparent border-none focus:ring-0 focus:outline-none text-black  hover:border-none"
+                onChange={setPassword}
+              />
+              {/* Toggle Password Visibility */}
+              <button
+                type="button"
+                onClick={() => setShowPassword(!showPassword)}
+                className="absolute inset-y-0 right-3 top-6 flex items-center text-black"
+              >
+                {showPassword ? <FiEyeOff size={20} /> : <FiEye size={20} />}
+              </button>
+            </div>
           </div>
           <Button className="mt-2 font-bold w-full">Login</Button>
 

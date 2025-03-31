@@ -7,8 +7,11 @@ import { FiHome, FiSettings } from "react-icons/fi";
 import { TbPentagonPlus } from "react-icons/tb";
 import { CgMenuBoxed } from "react-icons/cg";
 import { IoNotificationsOutline, IoSearchSharp } from "react-icons/io5";
+import { MdOutlinePersonOutline } from "react-icons/md";
 import { GoDotFill } from "react-icons/go";
 import AddVenue from "../components/AddVenue";
+import profilePicture from "../Assets/unsplash_Ba1eGcAFj5w.png";
+import VenueLists from "../components/VenueLists";
 
 const EventOrganizerDashboard = () => {
   const sideBarLinks = [
@@ -67,8 +70,24 @@ const EventOrganizerDashboard = () => {
                 </List>
               </div>
             </div>
-            <hr className="border-t-white mx-2" />
-            <div className="mt-auto">hi</div>
+            <hr className="border-t-slate-700 mb-4 mx-2" />
+            <div className="mt-auto bg-[#3b3b3b] rounded-lg flex items-center p-2 gap-2">
+              {/* Profile Image */}
+              <img
+                src={profilePicture}
+                alt="Profile"
+                className="size-10 rounded-full"
+              />
+
+              {/* Name and Role - This should take available space */}
+              <div className="flex-grow">
+                <h4 className="text-[12px] text-white">John Mahama</h4>
+                <h4 className="text-[9px] text-gray-400">Event Organizer</h4>
+              </div>
+
+              {/* Person Icon - Pushed to the right */}
+              <MdOutlinePersonOutline className="text-white text-xl" />
+            </div>
           </div>
         </div>
         <div
@@ -121,6 +140,7 @@ const EventOrganizerDashboard = () => {
                   <div className="w-1/2 bg-[#e0e0e4]  border border-slate-400 rounded-lg flex ">
                     <Input
                       placeholder="Search..."
+                      type="text"
                       className="bg-transparent border-none focus:ring-0 focus:outline-none text-black px-2 py-3 hover:border-none"
                     >
                       <button className=" absolute inset-y-0 left-2 flex items-center">
@@ -134,6 +154,7 @@ const EventOrganizerDashboard = () => {
                   </div>
                 </div>
                 <hr className="-mx-3 my-3 border-secondary" />
+                <VenueLists />
               </div>
             </div>
           </div>
