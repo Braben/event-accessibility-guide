@@ -12,7 +12,7 @@ import {
 } from "@material-tailwind/react";
 import { Xmark } from "iconoir-react";
 import { useSelector, useDispatch } from "react-redux";
-import { createVenue } from "../Slicers/VenueSlicer";
+import { createVenue } from "../slicers/venueSlicer";
 
 const AddVenue = () => {
   const [venueName, setVenueName] = useState("");
@@ -86,6 +86,7 @@ const AddVenue = () => {
                 e.preventDefault();
 
                 const newVenue = {
+                  id: uuidv4(),
                   venueName,
                   venueCapacity,
                   venueAddress,
