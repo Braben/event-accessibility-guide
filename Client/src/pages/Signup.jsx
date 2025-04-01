@@ -26,7 +26,9 @@ const Signup = () => {
       <div className="flex flex-col md:flex-row gap-4 p-10">
         {/* Left Section (Form) */}
         <div className="md:w-1/2 p-8">
-          <h4 className="font-bold text-2xl mb-4">Create an Account</h4>
+          <h4 className="font-bold text-2xl mb-4 text-gray-900 dark:text-white">
+            Create an Account
+          </h4>
           <div>
             {/* Signup form */}
             <div className="flex flex-col sm:flex-row justify-between gap-4 mb-4">
@@ -35,19 +37,17 @@ const Signup = () => {
                 <Typography
                   as="label"
                   htmlFor="FirstName"
-                  type="small"
-                  color="default"
-                  className="font-semibold"
+                  className="font-semibold text-gray-900 dark:text-white"
                 >
                   First Name
                 </Typography>
-                <div className=" bg-[#e0dfe4]  border border-slate-300 rounded-lg ">
+                <div className="bg-gray-200 dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-lg">
                   <Input
                     id="firstName"
                     type="text"
                     value={firstName}
                     placeholder="John"
-                    className="w-full placeholder:italic placeholder:text-slate-400 bg-transparent border-none focus:ring-0 focus:outline-none text-black  hover:border-none"
+                    className="w-full placeholder-italic placeholder-gray-500 dark:placeholder-gray-400 bg-transparent border-none focus:ring-0 focus:outline-none text-gray-900 dark:text-white"
                     onChange={(e) => setFirstName(e.target.value)}
                   />
                 </div>
@@ -58,20 +58,18 @@ const Signup = () => {
                 <Typography
                   as="label"
                   htmlFor="LastName"
-                  type="small"
-                  color="default"
-                  className="font-semibold"
+                  className="font-semibold text-gray-900 dark:text-white"
                 >
                   Last Name
                 </Typography>
-                <div className=" bg-[#e0dfe4]  border border-slate-300 rounded-lg ">
+                <div className="bg-gray-200 dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-lg">
                   <Input
                     id="lastName"
                     type="text"
                     value={lastName}
                     placeholder="Doe"
-                    className="w-full placeholder:italic placeholder:text-slate-400 bg-transparent border-none focus:ring-0 focus:outline-none text-black  hover:border-none"
-                    onChange={(e) => setFirstName(e.target.value)}
+                    className="w-full placeholder-italic placeholder-gray-500 dark:placeholder-gray-400 bg-transparent border-none focus:ring-0 focus:outline-none text-gray-900 dark:text-white"
+                    onChange={(e) => setLastName(e.target.value)}
                   />
                 </div>
               </div>
@@ -82,20 +80,18 @@ const Signup = () => {
               <Typography
                 as="label"
                 htmlFor="email"
-                type="small"
-                color="default"
-                className="font-semibold"
+                className="font-semibold text-gray-900 dark:text-white"
               >
                 Email
               </Typography>
-              <div className=" bg-[#e0dfe4]  border border-slate-300 rounded-lg ">
+              <div className="bg-gray-200 dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-lg">
                 <Input
                   id="email"
                   type="email"
                   value={email}
                   placeholder="johndoe@example.com"
-                  className="w-full placeholder:italic placeholder:text-slate-400 bg-transparent border-none focus:ring-0 focus:outline-none text-black  hover:border-none"
-                  onChange={(e) => setFirstName(e.target.value)}
+                  className="w-full placeholder-italic placeholder-gray-500 dark:placeholder-gray-400 bg-transparent border-none focus:ring-0 focus:outline-none text-gray-900 dark:text-white"
+                  onChange={(e) => setEmail(e.target.value)}
                 />
               </div>
             </div>
@@ -105,27 +101,23 @@ const Signup = () => {
               <Typography
                 as="label"
                 htmlFor="password"
-                type="small"
-                color="default"
-                className="font-semibold"
+                className="font-semibold text-gray-900 dark:text-white"
               >
                 Password
               </Typography>
-
-              <div className=" bg-[#e0dfe4]  border border-slate-300 rounded-lg ">
+              <div className="bg-gray-200 dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-lg">
                 <Input
                   id="password"
                   type={showPassword ? "text" : "password"}
                   value={password}
                   placeholder="Enter password"
-                  className="w-full placeholder:text-slate-400 pr-10 placeholder:italic  bg-transparent border-none focus:ring-0 focus:outline-none text-black  hover:border-none"
+                  className="w-full placeholder-gray-500 dark:placeholder-gray-400 bg-transparent border-none focus:ring-0 focus:outline-none text-gray-900 dark:text-white"
                   onChange={(e) => setPassword(e.target.value)}
                 />
-                {/* Toggle Password Visibility */}
                 <button
                   type="button"
                   onClick={() => setShowPassword(!showPassword)}
-                  className="absolute inset-y-0 right-3 top-6 flex items-center text-black"
+                  className="absolute inset-y-0 right-3 top-6 flex items-center text-gray-900 dark:text-white"
                 >
                   {showPassword ? <FiEyeOff size={20} /> : <FiEye size={20} />}
                 </button>
@@ -135,15 +127,15 @@ const Signup = () => {
             <OnboardingModal />
 
             <div className="flex items-center w-full my-4">
-              <div className="flex-1 border-t border-gray-400"></div>
-              <span className="px-3 text-sm text-gray-500">
+              <div className="flex-1 border-t border-gray-400 dark:border-gray-600"></div>
+              <span className="px-3 text-sm text-gray-500 dark:text-gray-400">
                 Or Register with
               </span>
-              <div className="flex-1 border-t border-gray-400"></div>
+              <div className="flex-1 border-t border-gray-400 dark:border-gray-600"></div>
             </div>
 
             <Button
-              className="hover:bg-inherit hover:text-black"
+              className="hover:bg-gray-300 dark:hover:bg-gray-600 hover:text-black dark:hover:text-white"
               isFullWidth
               variant="outline"
             >
@@ -153,10 +145,10 @@ const Signup = () => {
               Continue with Google
             </Button>
 
-            <p className="text-center mt-3">
+            <p className="text-center mt-3 text-gray-900 dark:text-white">
               Already have an Account?{" "}
               <span>
-                <Link to="/login" className="text-blue-600">
+                <Link to="/login" className="text-blue-600 dark:text-blue-400">
                   login
                 </Link>
               </span>

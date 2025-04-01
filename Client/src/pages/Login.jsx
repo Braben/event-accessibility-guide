@@ -21,7 +21,7 @@ const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   return (
-    <div>
+    <div className="dark:bg-gray-900 dark:text-white ">
       <div className="flex flex-col sm:flex-row gap-4 p-10">
         {/* Left Section */}
         <div className="w-full sm:w-1/2 p-8">
@@ -39,19 +39,18 @@ const Login = () => {
             >
               Email
             </Typography>
-            <div className=" bg-[#e0dfe4]  border border-slate-300 rounded-lg ">
+            <div className="bg-gray-200 dark:bg-gray-700 border border-slate-300 dark:border-gray-600 rounded-lg">
               <Input
                 id="email"
                 type="email"
                 value={email}
                 placeholder="john.doe@example.com"
-                className="w-full placeholder:italic placeholder:text-slate-400 bg-transparent border-none focus:ring-0 focus:outline-none text-black  hover:border-none"
+                className="w-full placeholder:italic placeholder:text-slate-400 dark:placeholder:text-gray-300 bg-transparent border-none focus:ring-0 focus:outline-none dark:text-white hover:border-none"
                 onChange={(e) => setEmail(e.target.value)}
               />
             </div>
           </div>
 
-          {/* Password Input */}
           {/* Password Input */}
           <div className="w-full relative mb-4">
             <Typography
@@ -64,37 +63,41 @@ const Login = () => {
               Password
             </Typography>
 
-            <div className=" bg-[#e0dfe4]  border border-slate-300 rounded-lg ">
+            <div className="bg-gray-200 dark:bg-gray-700 border border-slate-300 dark:border-gray-600 rounded-lg">
               <Input
                 id="password"
                 type={showPassword ? "text" : "password"}
                 value={password}
                 placeholder="Enter password"
-                className="w-full placeholder:italic placeholder:text-slate-400 pr-10 bg-transparent border-none focus:ring-0 focus:outline-none text-black  hover:border-none"
-                onChange={setPassword}
+                className="w-full placeholder:italic placeholder:text-slate-400 dark:placeholder:text-gray-300 pr-10 bg-transparent border-none focus:ring-0 focus:outline-none dark:text-white hover:border-none"
+                onChange={(e) => setPassword(e.target.value)}
               />
               {/* Toggle Password Visibility */}
               <button
                 type="button"
                 onClick={() => setShowPassword(!showPassword)}
-                className="absolute inset-y-0 right-3 top-6 flex items-center text-black"
+                className="absolute inset-y-0 right-3 top-6 flex items-center text-black dark:text-white"
               >
                 {showPassword ? <FiEyeOff size={20} /> : <FiEye size={20} />}
               </button>
             </div>
           </div>
-          <Button className="mt-2 font-bold w-full">Login</Button>
+          <Button className="mt-2 font-bold w-full dark:bg-gray-700 dark:hover:bg-gray-600 dark:text-white">
+            Login
+          </Button>
 
           {/* Divider */}
           <div className="flex items-center w-full my-4">
-            <div className="flex-1 border-t border-gray-400"></div>
-            <span className="px-3 text-sm text-gray-500">Or Continue with</span>
-            <div className="flex-1 border-t border-gray-400"></div>
+            <div className="flex-1 border-t border-gray-400 dark:border-gray-600"></div>
+            <span className="px-3 text-sm text-gray-500 dark:text-gray-400">
+              Or Continue with
+            </span>
+            <div className="flex-1 border-t border-gray-400 dark:border-gray-600"></div>
           </div>
 
           {/* Google Login */}
           <Button
-            className="hover:bg-inherit hover:text-black"
+            className="hover:bg-inherit hover:text-black dark:hover:text-white"
             isFullWidth
             variant="outline"
           >
@@ -107,7 +110,7 @@ const Login = () => {
           <p className="text-center mt-3">
             Don't have an Account?{" "}
             <span>
-              <Link to="/signup" className="text-blue-600">
+              <Link to="/signup" className="text-blue-600 dark:text-blue-400">
                 Sign up
               </Link>
             </span>
@@ -121,7 +124,7 @@ const Login = () => {
               src={groupPlusWheel}
               className="rounded-lg object-cover scale-x-[-1] w-full h-[24rem]"
             />
-            <div className="absolute inset-x-0 bottom-0 -translate-y-24 translate-x-6 text-white">
+            <div className="absolute inset-x-0 bottom-0 -translate-y-24 translate-x-6 text-white dark:text-gray-300">
               <h3 className="tracking-wide text-2xl font-bold">Welcome Back</h3>
               <p>Continue your journey to make the world more accessible</p>
             </div>
