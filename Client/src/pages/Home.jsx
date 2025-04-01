@@ -138,7 +138,7 @@ const Home = () => {
     alert("Form submitted successfully!");
   };
   return (
-    <div className="flex flex-col items-center ">
+    <div className="flex flex-col items-center">
       {/* Hero Section */}
       <section className="w-full flex flex-col items-center py-8 md:py-16 bg-gradient-to-t from-[#CED8EA] to-[#F6F7FA] px-4">
         <h3 className="text-blue-900 bg-[#c6d1e6] text-base md:text-xl rounded-full font-medium py-2 px-4">

@@ -50,10 +50,7 @@ const NavBar2 = () => {
       </div>
 
       {/* Desktop Navigation */}
-      <ul
-        id="list"
-        className="hidden md:flex items-center space-x-8 font-bold text-gray-900 dark:text-white"
-      >
+      <ul id="list" className="hidden md:flex items-center space-x-8 font-bold">
         <li
           className="cursor-pointer hover:text-blue-700 dark:hover:text-blue-400"
           onClick={() => navigate("/venues")}
