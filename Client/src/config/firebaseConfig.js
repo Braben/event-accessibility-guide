@@ -12,23 +12,13 @@ import {
 } from "firebase/auth";
 
 // Your web app's Firebase configuration
-// const firebaseConfig = {
-//   apiKey: "process.env.VENUEHUBS_FIREBASE_apiKey",
-//   authDomain: "process.env.VENUEHUBS_FIREBASE_authDomain",
-//   projectId: "process.env.VENUEHUBS_FIREBASE_projectId",
-//   storageBucket: "process.env.VENUEHUBS_FIREBASE_storageBucket",
-//   messagingSenderId: "process.env.VENUEHUBS_FIREBASE_messagingSenderId",
-//   appId: "process.env.VENUEHUBS_FIREBASE_appId",
-// };
-
 const firebaseConfig = {
-  apiKey: "AIzaSyDomoBX6EfF38vqBJyH-z3-PTKlwUIweEs",
-
-  authDomain: "event-accessibility-guide.firebaseapp.com",
-  projectId: "event-accessibility-guide",
-  storageBucket: "event-accessibility-guide.firebasestorage.app",
-  messagingSenderId: "768647749557",
-  appId: "1:768647749557:web:0bec9b15783fddf57903fc",
+  apiKey: import.meta.env.VITE_FIREBASE_apiKey,
+  authDomain: import.meta.env.VITE_FIREBASE_authDomain,
+  projectId: import.meta.env.VITE_FIREBASE_projectId,
+  storageBucket: import.meta.env.VITE_FIREBASE_storageBucket,
+  messagingSenderId: import.meta.env.VITE_FIREBASE_messagingSenderId,
+  appId: import.meta.env.VITE_FIREBASE_appId,
 };
 
 // Initialize Firebase
