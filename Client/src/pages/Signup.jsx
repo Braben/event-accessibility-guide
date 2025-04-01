@@ -1,4 +1,5 @@
 import React from "react";
+import { useState } from "react";
 import {
   Dialog,
   Button,
@@ -7,19 +8,67 @@ import {
   Typography,
   IconButton,
 } from "@material-tailwind/react";
-import { useState } from "react";
 import { FiEye, FiEyeOff } from "react-icons/fi";
 import { Link } from "react-router-dom";
 import { FcGoogle } from "react-icons/fc";
 import wheelchairImage from "../Assets/side-view-woman-sitting-wheelchair_1048944-821772 1.png";
 import OnboardingModal from "../components/OnboardingModal";
 
+// Import Firebase authentication functions
+import { signUpWithEmail, signInWithGoogle } from "../services/authService";
+
 const Signup = () => {
   const [showPassword, setShowPassword] = useState(false);
-  const [firstName, setFirstName] = useState("");
-  const [lastName, setLastName] = useState("");
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+  const [formData, setFormData] = useState({
+    firstname: "",
+    lastname: "",
+    email: "",
+    password: "",
+  });
+
+  const handleChange = (e) => {
+    // Update the formData state with the new value
+    e.preventDefault();
+    setFormData({ ...formData, [e.target.name]: e.target.value });
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    const { firstname, lastname, email, password } = formData;
+    const user = await signUpWithEmail(firstname, lastname, email, password);
+    //save user to database
+
+    // Display a success message
+    alert("Account created successfully!");
+    console.log(user);
+    // Reset form data after successful signup
+    setFormData({
+      firstname: "",
+      lastname: "",
+      email: "",
+      password: "",
+    });
+    // Redirect to another page or perform any other action
+    // window.location.href = "/dashboard"; // Example redirect
+    // or use a router like react-router-dom to navigate
+    // navigate("/dashboard");
+  };
+
+  const handleGoogleSignIn = async () => {
+    // Call your Google sign-in function here
+    const user = await signInWithGoogle();
+    console.log(user);
+    alert("Signed in with Google successfully!");
+    // Reset form data after successful signup
+    setFormData({
+      firstname: "",
+      lastname: "",
+      email: "",
+      password: "",
+    });
+    // Redirect to another page or perform any other action
+    // window.location.href = "/"; // Example redirect
+  };
 
   return (
     <div>
@@ -29,131 +78,145 @@ const Signup = () => {
           <h4 className="font-bold text-2xl mb-4 text-gray-900 dark:text-white">
             Create an Account
           </h4>
-          <div>
-            {/* Signup form */}
-            <div className="flex flex-col sm:flex-row justify-between gap-4 mb-4">
-              {/* First Name Input */}
-              <div className="w-full sm:w-1/2">
+          <form onSubmit={handleSubmit}>
+            <div>
+              {/* Signup form */}
+              <div className="flex flex-col sm:flex-row justify-between gap-4 mb-4">
+                {/* First Name Input */}
+                <div className="w-full sm:w-1/2">
+                  <Typography
+                    as="label"
+                    htmlFor="FirstName"
+                    className="font-semibold text-gray-900 dark:text-white"
+                  >
+                    First Name
+                  </Typography>
+                  <div className="bg-gray-200 dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-lg">
+                    <Input
+                      id="firstname"
+                      name="firstname"
+                      type="text"
+                      value={formData.firstname}
+                      placeholder="John"
+                      className="w-full placeholder-italic placeholder-gray-500 dark:placeholder-gray-400 bg-transparent border-none focus:ring-0 focus:outline-none text-gray-900 dark:text-white"
+                      onChange={handleChange}
+                    />
+                  </div>
+                </div>
+
+                {/* Last Name Input */}
+                <div className="w-full sm:w-1/2">
+                  <Typography
+                    as="label"
+                    htmlFor="LastName"
+                    className="font-semibold text-gray-900 dark:text-white"
+                  >
+                    Last Name
+                  </Typography>
+                  <div className="bg-gray-200 dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-lg">
+                    <Input
+                      id="lastname"
+                      type="text"
+                      name="lastname"
+                      value={formData.lastname}
+                      placeholder="Doe"
+                      className="w-full placeholder-italic placeholder-gray-500 dark:placeholder-gray-400 bg-transparent border-none focus:ring-0 focus:outline-none text-gray-900 dark:text-white"
+                      onChange={handleChange}
+                    />
+                  </div>
+                </div>
+              </div>
+
+              {/* Email Input */}
+              <div className="w-full mb-4">
                 <Typography
                   as="label"
-                  htmlFor="FirstName"
+                  htmlFor="email"
                   className="font-semibold text-gray-900 dark:text-white"
                 >
-                  First Name
+                  Email
                 </Typography>
                 <div className="bg-gray-200 dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-lg">
                   <Input
-                    id="firstName"
-                    type="text"
-                    value={firstName}
-                    placeholder="John"
+                    id="email"
+                    type="email"
+                    name="email"
+                    value={formData.email}
+                    placeholder="johndoe@example.com"
                     className="w-full placeholder-italic placeholder-gray-500 dark:placeholder-gray-400 bg-transparent border-none focus:ring-0 focus:outline-none text-gray-900 dark:text-white"
-                    onChange={(e) => setFirstName(e.target.value)}
+                    onChange={handleChange}
                   />
                 </div>
               </div>
 
-              {/* Last Name Input */}
-              <div className="w-full sm:w-1/2">
+              {/* Password Input */}
+              <div className="w-full relative mb-4">
                 <Typography
                   as="label"
-                  htmlFor="LastName"
+                  htmlFor="password"
                   className="font-semibold text-gray-900 dark:text-white"
                 >
-                  Last Name
+                  Password
                 </Typography>
                 <div className="bg-gray-200 dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-lg">
                   <Input
-                    id="lastName"
-                    type="text"
-                    value={lastName}
-                    placeholder="Doe"
-                    className="w-full placeholder-italic placeholder-gray-500 dark:placeholder-gray-400 bg-transparent border-none focus:ring-0 focus:outline-none text-gray-900 dark:text-white"
-                    onChange={(e) => setLastName(e.target.value)}
+                    id="password"
+                    type={showPassword ? "text" : "password"}
+                    name="password"
+                    value={formData.password}
+                    placeholder="Enter password"
+                    className="w-full placeholder-gray-500 dark:placeholder-gray-400 bg-transparent border-none focus:ring-0 focus:outline-none text-gray-900 dark:text-white"
+                    onChange={handleChange}
                   />
+                  <button
+                    type="button"
+                    onClick={() => setShowPassword(!showPassword)}
+                    className="absolute inset-y-0 right-3 top-6 flex items-center text-gray-900 dark:text-white"
+                  >
+                    {showPassword ? (
+                      <FiEyeOff size={20} />
+                    ) : (
+                      <FiEye size={20} />
+                    )}
+                  </button>
                 </div>
               </div>
-            </div>
 
-            {/* Email Input */}
-            <div className="w-full mb-4">
-              <Typography
-                as="label"
-                htmlFor="email"
-                className="font-semibold text-gray-900 dark:text-white"
-              >
-                Email
-              </Typography>
-              <div className="bg-gray-200 dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-lg">
-                <Input
-                  id="email"
-                  type="email"
-                  value={email}
-                  placeholder="johndoe@example.com"
-                  className="w-full placeholder-italic placeholder-gray-500 dark:placeholder-gray-400 bg-transparent border-none focus:ring-0 focus:outline-none text-gray-900 dark:text-white"
-                  onChange={(e) => setEmail(e.target.value)}
-                />
+              <OnboardingModal />
+
+              <div className="flex items-center w-full my-4">
+                <div className="flex-1 border-t border-gray-400 dark:border-gray-600"></div>
+                <span className="px-3 text-sm text-gray-500 dark:text-gray-400">
+                  Or Register with
+                </span>
+                <div className="flex-1 border-t border-gray-400 dark:border-gray-600"></div>
               </div>
-            </div>
 
-            {/* Password Input */}
-            <div className="w-full relative mb-4">
-              <Typography
-                as="label"
-                htmlFor="password"
-                className="font-semibold text-gray-900 dark:text-white"
+              <Button
+                className="hover:bg-gray-300 dark:hover:bg-gray-600 hover:text-black dark:hover:text-white"
+                isFullWidth
+                variant="outline"
+                onClick={handleGoogleSignIn}
               >
-                Password
-              </Typography>
-              <div className="bg-gray-200 dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-lg">
-                <Input
-                  id="password"
-                  type={showPassword ? "text" : "password"}
-                  value={password}
-                  placeholder="Enter password"
-                  className="w-full placeholder-gray-500 dark:placeholder-gray-400 bg-transparent border-none focus:ring-0 focus:outline-none text-gray-900 dark:text-white"
-                  onChange={(e) => setPassword(e.target.value)}
-                />
-                <button
-                  type="button"
-                  onClick={() => setShowPassword(!showPassword)}
-                  className="absolute inset-y-0 right-3 top-6 flex items-center text-gray-900 dark:text-white"
-                >
-                  {showPassword ? <FiEyeOff size={20} /> : <FiEye size={20} />}
-                </button>
-              </div>
+                <span className="pr-2">
+                  <FcGoogle size={20} />
+                </span>
+                Continue with Google
+              </Button>
+
+              <p className="text-center mt-3 text-gray-900 dark:text-white">
+                Already have an Account?{" "}
+                <span>
+                  <Link
+                    to="/login"
+                    className="text-blue-600 dark:text-blue-400"
+                  >
+                    login
+                  </Link>
+                </span>
+              </p>
             </div>
-
-            <OnboardingModal />
-
-            <div className="flex items-center w-full my-4">
-              <div className="flex-1 border-t border-gray-400 dark:border-gray-600"></div>
-              <span className="px-3 text-sm text-gray-500 dark:text-gray-400">
-                Or Register with
-              </span>
-              <div className="flex-1 border-t border-gray-400 dark:border-gray-600"></div>
-            </div>
-
-            <Button
-              className="hover:bg-gray-300 dark:hover:bg-gray-600 hover:text-black dark:hover:text-white"
-              isFullWidth
-              variant="outline"
-            >
-              <span className="pr-2">
-                <FcGoogle size={20} />
-              </span>
-              Continue with Google
-            </Button>
-
-            <p className="text-center mt-3 text-gray-900 dark:text-white">
-              Already have an Account?{" "}
-              <span>
-                <Link to="/login" className="text-blue-600 dark:text-blue-400">
-                  login
-                </Link>
-              </span>
-            </p>
-          </div>
+          </form>
         </div>
 
         {/* Right Section (Image) - Hidden on Mobile */}

@@ -1,4 +1,6 @@
 import React from "react";
+import { useState } from "react";
+import { signInWithGoogle, signInWithEmail } from "../services/authService";
 import {
   Dialog,
   Button,
@@ -7,7 +9,6 @@ import {
   Typography,
   IconButton,
 } from "@material-tailwind/react";
-import { useState } from "react";
 import { FiEye, FiEyeOff } from "react-icons/fi";
 import { Link } from "react-router-dom";
 import { FcGoogle } from "react-icons/fc";
@@ -16,10 +17,42 @@ import groupPlusWheel from "../Assets/side-view-portrait-big-african-american-fa
 
 const Login = () => {
   const [showPassword, setShowPassword] = useState(false);
-  const [firstName, setFirstName] = useState("");
-  const [lastName, setLastName] = useState("");
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+  const [formData, setFormData] = useState({
+    email: "",
+    password: "",
+  });
+
+  const handleChange = (e) => {
+    // Update the formData state with the new value
+    e.preventDefault();
+    setFormData({ ...formData, [e.target.name]: e.target.value });
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    const { email, password } = formData;
+    const user = await signInWithEmail(email, password);
+    //save user to database
+    // Display a success message
+    alert("Signed in successfully!", user);
+    console.log(user);
+
+    setFormData({
+      email: "",
+      password: "",
+    });
+  };
+
+  const handleGoogleSignIn = async () => {
+    // Call your Google sign-in function here
+    const user = await signInWithGoogle();
+    console.log(user);
+    alert("Signed in with Google successfully!");
+
+    // Redirect to another page or perform any other action
+    // window.location.href = "/"; // Example redirect
+  };
+
   return (
     <div className="dark:bg-gray-900 dark:text-white ">
       <div className="flex flex-col sm:flex-row gap-4 p-10">
@@ -27,64 +60,71 @@ const Login = () => {
         <div className="w-full sm:w-1/2 p-8">
           <h4 className="font-bold text-2xl">Welcome back</h4>
           <p className="mb-4 text-sm">Please enter your details to Login</p>
-
-          {/* Email Input */}
-          <div className="w-full mb-4">
-            <Typography
-              as="label"
-              htmlFor="text3"
-              type="small"
-              color="default"
-              className="font-semibold"
-            >
-              Email
-            </Typography>
-            <div className="bg-gray-200 dark:bg-gray-700 border border-slate-300 dark:border-gray-600 rounded-lg">
-              <Input
-                id="email"
-                type="email"
-                value={email}
-                placeholder="john.doe@example.com"
-                className="w-full placeholder:italic placeholder:text-slate-400 dark:placeholder:text-gray-300 bg-transparent border-none focus:ring-0 focus:outline-none dark:text-white hover:border-none"
-                onChange={(e) => setEmail(e.target.value)}
-              />
-            </div>
-          </div>
-
-          {/* Password Input */}
-          <div className="w-full relative mb-4">
-            <Typography
-              as="label"
-              htmlFor="password"
-              type="small"
-              color="default"
-              className="font-semibold"
-            >
-              Password
-            </Typography>
-
-            <div className="bg-gray-200 dark:bg-gray-700 border border-slate-300 dark:border-gray-600 rounded-lg">
-              <Input
-                id="password"
-                type={showPassword ? "text" : "password"}
-                value={password}
-                placeholder="Enter password"
-                className="w-full placeholder:italic placeholder:text-slate-400 dark:placeholder:text-gray-300 pr-10 bg-transparent border-none focus:ring-0 focus:outline-none dark:text-white hover:border-none"
-                onChange={(e) => setPassword(e.target.value)}
-              />
-              {/* Toggle Password Visibility */}
-              <button
-                type="button"
-                onClick={() => setShowPassword(!showPassword)}
-                className="absolute inset-y-0 right-3 top-6 flex items-center text-black dark:text-white"
+          <form onSubmit={handleSubmit}>
+            {/* Email Input */}
+            <div className="w-full mb-4">
+              <Typography
+                as="label"
+                htmlFor="email"
+                type="small"
+                color="default"
+                className="font-semibold"
               >
-                {showPassword ? <FiEyeOff size={20} /> : <FiEye size={20} />}
-              </button>
+                Email
+              </Typography>
+              <div className="bg-gray-200 dark:bg-gray-700 border border-slate-300 dark:border-gray-600 rounded-lg">
+                <Input
+                  id="email"
+                  type="email"
+                  name="email"
+                  value={formData.email}
+                  placeholder="john.doe@example.com"
+                  className="w-full placeholder:italic placeholder:text-slate-400 dark:placeholder:text-gray-300 bg-transparent border-none focus:ring-0 focus:outline-none dark:text-white hover:border-none"
+                  onChange={handleChange}
+                  required
+                  autoComplete="email"
+                />
+              </div>
             </div>
-          </div>
-          <Button className="mt-2 font-bold w-full dark:bg-gray-700 dark:hover:bg-gray-600 dark:text-white">
-            Login
-          </Button>
+
+            {/* Password Input */}
+            <div className="w-full relative mb-4">
+              <Typography
+                as="label"
+                htmlFor="password"
+                type="small"
+                color="default"
+                className="font-semibold"
+              >
+                Password
+              </Typography>
+
+              <div className="bg-gray-200 dark:bg-gray-700 border border-slate-300 dark:border-gray-600 rounded-lg">
+                <Input
+                  id="password"
+                  type={showPassword ? "text" : "password"}
+                  name="password"
+                  value={formData.password}
+                  placeholder="Enter password"
+                  className="w-full placeholder:italic placeholder:text-slate-400 dark:placeholder:text-gray-300 pr-10 bg-transparent border-none focus:ring-0 focus:outline-none dark:text-white hover:border-none"
+                  onChange={handleChange}
+                  required
+                  autoComplete="current-password"
+                />
+                {/* Toggle Password Visibility */}
+                <button
+                  type="button"
+                  onClick={() => setShowPassword(!showPassword)}
+                  className="absolute inset-y-0 right-3 top-6 flex items-center text-black dark:text-white"
+                >
+                  {showPassword ? <FiEyeOff size={20} /> : <FiEye size={20} />}
+                </button>
+              </div>
+            </div>
+            <Button className="mt-2 font-bold w-full dark:bg-gray-700 dark:hover:bg-gray-600 dark:text-white">
+              Login
+            </Button>
+          </form>
 
           {/* Divider */}
           <div className="flex items-center w-full my-4">
@@ -100,6 +140,7 @@ const Login = () => {
             className="hover:bg-inherit hover:text-black dark:hover:text-white"
             isFullWidth
             variant="outline"
+            onClick={handleGoogleSignIn}
           >
             <span className="pr-2">
               <FcGoogle size={20} />
