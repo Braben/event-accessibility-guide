@@ -141,33 +141,39 @@ const Home = () => {
     <div className="flex flex-col items-center">
       {/* Hero Section */}
       <section className="w-full flex flex-col items-center py-16 bg-gradient-to-t from-[#CED8EA] to-[#F6F7FA]">
-        <h1 className="text-blue-900 bg-[#c6d1e6] h-11  w-71 p-[10px] pl-11 rounded-3xl font-bold">
+        <h3 className="text-blue-900 bg-[#c6d1e6] text-xl rounded-full font-medium py-2 px-4">
           Discover Accessible Places
-        </h1>
-        <h1 className="text-4xl font-bold mb-10 text-center mt-9">
-          Your Gateway to <span className="text-[#1E4B9D]">Accessible</span>{" "}
-          Venues
-        </h1>
-        <p>Find and explore venues with detailed accessibility information,</p>
-        <p>
-          making it easier for everyone to navigate the world with confidence
-        </p>
+        </h3>
+        <div className="flex flex-col items-center gap-[32px] m-10">
+          <h1 className="text-4xl font-bold mb-5 text-center">
+            Your Gateway to <span className="text-[#1E4B9D]">Accessible</span>{" "}
+            Venues
+          </h1>
+          <p>
+            Find and explore venues with detailed accessibility information,
+            <br />
+            making it easier for everyone to navigate the world with confidence
+          </p>
+        </div>
 
-        <div className="relative w-full max-w-2xl px-4">
-          <IoSearchSharp className="absolute left-29 top-[54px] text-blue-700 text-xl" />
+        <div className="relative w-full max-w-[690px] px-4">
+          {/* Search Icon */}
+          <IoSearchSharp className="absolute left-8 top-1/2 transform -translate-y-1/2 text-blue-700 text-xl" />
 
+          {/* Search Input */}
           <input
             type="search"
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
             onKeyDown={handleKeyPress}
             required
-            placeholder="Search restaurants, parks,hotels, and more..."
-            className="h-15 w-[420px] pl-12 pr-28 text-sm mt-8 ml-[80px] shadow-xl rounded-4xl bg-white border border-gray-300 focus:outline-none focus:ring-2 focus:ring-indigo-500"
+            placeholder="Search restaurants, parks, hotels, and more..."
+            className="h-12 w-full pl-12 pr-28 text-sm shadow-xl rounded-full bg-white border border-gray-300 focus:outline-none focus:ring-2 focus:ring-indigo-500"
           />
 
+          {/* Search Button */}
           <button
-            className="absolute right-[80px] top-[32px] h-15 bg-[#1E4B9D] text-white rounded-r-4xl hover:bg-indigo-700 px-6"
+            className="absolute right-4 top-1/2 transform -translate-y-1/2 h-12 bg-[#1E4B9D] text-white rounded-r-[64px] hover:bg-indigo-700 px-6 font-poppins"
             type="button"
             onClick={handleSearch}
           >
@@ -175,21 +181,21 @@ const Home = () => {
           </button>
         </div>
 
-        <button className=" flex gap-2 h-10 w-74 mr-7 text-white bg-[#1E4B9D] p-2 pl-15 rounded-4xl font-bold mt-12 hover:bg-indigo-700">
-          Explore more Venues{" "}
-          <FaLongArrowAltRight className="text-white mt-[6px]" />
+        <button className=" flex justify-center items-center gap-4 h-[59px] w-[401px] text-white bg-[#1E4B9D] px-4 py-2 rounded-full mt-10 hover:bg-indigo-700">
+          <p className="text-[18px] font-bold">Explore more Venues </p>
+          <FaLongArrowAltRight className="text-white w-6 mt-[6px]" />
         </button>
 
-        <div className="flex mt-15 gap-25">
-          <div className="flex-col ">
+        <div className="flex justify-center w-[883px] h-[118px] mt-14 gap-24">
+          <div className="flex flex-col gap-1 justify-center items-center">
             <h1 className="text-[#1E4B9D] font-bold text-4xl">5000+</h1>
-            <p className="mt-1">Accessible Venues</p>
+            <p className="">Accessible Venues</p>
           </div>
-          <div className="flex-col ">
+          <div className="flex flex-col gap-1 justify-center items-center">
             <h1 className="text-[#1E4B9D] font-bold text-4xl">15k</h1>{" "}
-            <p className="mt-1">Active Users</p>
+            <p className="">Active Users</p>
           </div>
-          <div className="flex-col ">
+          <div className="flex flex-col gap-1 justify-center items-center">
             <h1 className="text-[#1E4B9D] font-bold text-4xl">98%</h1>{" "}
             <p>Satisfaction Rate</p>
           </div>

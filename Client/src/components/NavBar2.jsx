@@ -29,6 +29,12 @@ const NavBar2 = () => {
       <ul id="list" className="hidden md:flex items-center space-x-8 font-bold">
         <li
           className="cursor-pointer hover:text-blue-700"
+          onClick={() => navigate("/")}
+        >
+          Home
+        </li>
+        <li
+          className="cursor-pointer hover:text-blue-700"
           onClick={() => navigate("/venues")}
         >
           Venues
