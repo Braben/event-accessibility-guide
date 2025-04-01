@@ -57,9 +57,9 @@ export default function OnboardingModal() {
   const navigate = useNavigate();
   const handleComplete = () => {
     if (selected === "user") {
-      navigate("/event-listing"); // Navigate to Event Listing Page
+      navigate("/venues"); // Navigate to Event Listing Page
     } else {
-      navigate("/"); // Navigate to Admin Dashboard
+      navigate("/organizer/dashboard"); // Navigate to Admin Dashboard
     }
   };
 
