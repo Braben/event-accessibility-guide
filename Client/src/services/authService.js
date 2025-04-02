@@ -14,27 +14,34 @@ const API_BASE_URL =
 
 // ✅ Signup with Email & Password
 export const signUpWithEmail = async (firstname, lastname, email, password) => {
-  const userCredential = await createUserWithEmailAndPassword(
-    auth,
-    email,
-    password
-  );
-  const user = userCredential.user;
+  try {
+    // First, save user details in the database
+    const response = await fetch(`${API_BASE_URL}/users/register`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ firstname, lastname, email, password }),
+    });
 
-  await fetch(`${API_BASE_URL}/signup`, {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ firstname, lastname, email, password }),
-  });
+    if (!response.ok) {
+      throw new Error("Failed to save user details in the database");
+    }
 
-  if (!user) {
-    console.log("Failed to create user");
-    throw new Error("Failed to create user");
+    // Now create user in Firebase
+    const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+    const user = userCredential.user;
+
+    if (!user) {
+      throw new Error("Failed to create Firebase user");
+    }
+
+    return user;
+  } catch (error) {
+    console.error("Signup error:", error);
+    throw error;
   }
-  return user;
 };
 
-// ✅ Signin with Email & Password
+// Signin with Email & Password
 export const signInWithEmail = async (email, password) => {
   const userCredential = await signInWithEmailAndPassword(
     auth,
@@ -46,7 +53,7 @@ export const signInWithEmail = async (email, password) => {
     throw new Error("Failed to sign in");
   }
 
-  await fetch(`${API_BASE_URL}/signin`, {
+  await fetch(`${API_BASE_URL}/user/login`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ email, password }),

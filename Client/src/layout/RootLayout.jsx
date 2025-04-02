@@ -1,9 +1,10 @@
+import React from "react";
 import { Outlet } from "react-router-dom";
 // import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
 import NavBar2 from "../components/NavBar2";
 
-const RootLayout = () => {
+const RootLayout = ({user}) => {
   return (
     <div className="">
       {/* Navbar Stays at the Top */}

@@ -13,7 +13,7 @@ import AddVenue from "../components/AddVenue";
 import profilePicture from "../Assets/unsplash_Ba1eGcAFj5w.png";
 import VenueLists from "../components/VenueLists";
 
-const EventOrganizerDashboard = () => {
+const EventOrganizerDashboard = ({user}) => {
   const sideBarLinks = [
     {
       icon: FiHome,
@@ -81,7 +81,7 @@ const EventOrganizerDashboard = () => {
 
               {/* Name and Role - This should take available space */}
               <div className="flex-grow">
-                <h4 className="text-[12px] text-white">John Mahama</h4>
+                <h4 className="text-[12px] text-white">{user?.displayName || ""}</h4>
                 <h4 className="text-[9px] text-gray-400">Event Organizer</h4>
               </div>
 
