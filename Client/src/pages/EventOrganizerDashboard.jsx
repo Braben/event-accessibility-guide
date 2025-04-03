@@ -86,7 +86,7 @@ const EventOrganizerDashboard = () => {
 
               {/* Name and Role - This should take available space */}
               <div className="flex-grow">
-                <h4 className="text-[12px] text-white">{user.email}</h4>
+                <h4 className="text-[12px] text-white">{userDetails.firstname}</h4>
                 <h4 className="text-[9px] text-gray-400">Event Organizer</h4>
               </div>
 

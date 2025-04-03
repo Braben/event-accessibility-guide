@@ -31,16 +31,22 @@ export const signUpWithEmail = async (firstname, lastname, email, password) => {
     // Now create user in Firebase
     const userCredential = await createUserWithEmailAndPassword(auth, email, password);
     const user = userCredential.user;
-    await setDbIdInFirebase(user, userData.id);
 
-    if (!user) {
-      throw new Error("Failed to create Firebase user");
+     // After Firebase user is created, update the `uid` in your DB
+     const updatedUserData = await fetch(`${API_BASE_URL}/users/${userData.id}`, {
+      method: "PATCH",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ uid: user.uid }), 
+    });
+    // await setDbIdInFirebase(user, userData.id);
+
+    if (!updatedUserData.ok) {
+      throw new Error("Failed to update UID in the database");
     }
-    await setDbIdInFirebase(user, userData.id);
 
     return user;
   } catch (error) {
-    console.error("Signup error:", error);
+    console.error("Signup error:", error.message);
     throw error;
   }
 };
@@ -57,12 +63,8 @@ export const signInWithEmail = async (email, password) => {
     if (!user) {
       throw new Error("Failed to sign in");
     }
-    const dbUserId = await getDbIdFromFirebase(user.uid);
-    if (!dbUserId) {
-      throw new Error("Database ID not found in Firebase");
-    }
   
-    await fetch(`${API_BASE_URL}/user/login`, {
+    const response = await fetch(`${API_BASE_URL}/user/login`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ email, password }),
