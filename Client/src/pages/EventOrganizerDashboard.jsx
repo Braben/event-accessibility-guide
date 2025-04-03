@@ -1,5 +1,5 @@
 import Sidebar from "../components/Sidebar";
-import React from "react";
+import React,{ useContext} from "react";
 import { Link } from "react-router-dom";
 
 import { Card, List, Typography, Chip, Input } from "@material-tailwind/react";
@@ -12,8 +12,13 @@ import { GoDotFill } from "react-icons/go";
 import AddVenue from "../components/AddVenue";
 import profilePicture from "../Assets/unsplash_Ba1eGcAFj5w.png";
 import VenueLists from "../components/VenueLists";
+import { UserContext } from "../context/UserContext";
 
-const EventOrganizerDashboard = ({user}) => {
+const EventOrganizerDashboard = () => {
+  const { user, userDetails } = useContext(UserContext);
+  if (!user) {
+    return <div>Please log in to view your dashboard.</div>; 
+  }
   const sideBarLinks = [
     {
       icon: FiHome,
@@ -81,7 +86,7 @@ const EventOrganizerDashboard = ({user}) => {
 
               {/* Name and Role - This should take available space */}
               <div className="flex-grow">
-                <h4 className="text-[12px] text-white">{user?.displayName || ""}</h4>
+                <h4 className="text-[12px] text-white">{user.email}</h4>
                 <h4 className="text-[9px] text-gray-400">Event Organizer</h4>
               </div>
 

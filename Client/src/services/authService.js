@@ -5,6 +5,7 @@ import {
   signInWithEmailAndPassword,
   signInWithPopup,
 } from "../config/firebaseConfig";
+import { setDbIdInFirebase, getDbIdFromFirebase } from "./firebaseService";
 import axios from "axios";
 
 // import { getAuth } from "firebase/auth";
@@ -25,14 +26,17 @@ export const signUpWithEmail = async (firstname, lastname, email, password) => {
     if (!response.ok) {
       throw new Error("Failed to save user details in the database");
     }
+    const userData = await response.json();
 
     // Now create user in Firebase
     const userCredential = await createUserWithEmailAndPassword(auth, email, password);
     const user = userCredential.user;
+    await setDbIdInFirebase(user, userData.id);
 
     if (!user) {
       throw new Error("Failed to create Firebase user");
     }
+    await setDbIdInFirebase(user, userData.id);
 
     return user;
   } catch (error) {
@@ -43,22 +47,36 @@ export const signUpWithEmail = async (firstname, lastname, email, password) => {
 
 // Signin with Email & Password
 export const signInWithEmail = async (email, password) => {
-  const userCredential = await signInWithEmailAndPassword(
-    auth,
-    email,
-    password
-  );
-  const user = userCredential.user;
-  if (!user) {
-    throw new Error("Failed to sign in");
-  }
+  try {
+    const userCredential = await signInWithEmailAndPassword(
+      auth,
+      email,
+      password
+    );
+    const user = userCredential.user;
+    if (!user) {
+      throw new Error("Failed to sign in");
+    }
+    const dbUserId = await getDbIdFromFirebase(user.uid);
+    if (!dbUserId) {
+      throw new Error("Database ID not found in Firebase");
+    }
+  
+    await fetch(`${API_BASE_URL}/user/login`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ email, password }),
+    });
+    if (!response.ok) {
+      throw new Error("Failed to retrieve user details from database");
+    }
 
-  await fetch(`${API_BASE_URL}/user/login`, {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ email, password }),
-  });
-  return user;
+    const userData = await response.json(); 
+    return userData; 
+  } catch (error) {
+    console.error("Signin error:", error);
+    throw error;
+  }
 };
 
 // ✅ Google Sign-In
@@ -96,6 +114,7 @@ export const isAuthenticated = () => {
 export const getUserProfile = async (userId) => {
   try {
     const response = await axios.get(`${API_BASE_URL}/users/${userId}`);
+    console.log("User profile data:", response.data); 
     return response.data;
   } catch (error) {
     console.error("Error fetching user profile:", error);
