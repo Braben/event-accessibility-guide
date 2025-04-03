@@ -2,10 +2,12 @@ const { PrismaClient } = require("@prisma/client");
 const prisma = new PrismaClient();
 const bcrypt = require("bcryptjs");
 const env = require("dotenv");
+const admin = require("firebase-admin");
 env.config();
 
 const createUser = async (req, res) => {
   const {
+    uid,
     firstname,
     lastname,
     email,
@@ -29,6 +31,7 @@ const createUser = async (req, res) => {
     // Create new user
     const newUser = await prisma.user.create({
       data: {
+        uid,
         firstname,
         lastname,
         email,
@@ -87,6 +90,7 @@ const getUsersById = async (req, res) => {
 const updateUser = async (req, res) => {
   const { id } = req.params;
   const {
+    uid,
     firstname,
     lastname,
     email,
@@ -108,6 +112,7 @@ const updateUser = async (req, res) => {
     const updatedUser = await prisma.user.update({
       where: { id },
       data: {
+        uid,
         firstname,
         lastname,
         email,

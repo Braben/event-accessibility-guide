@@ -9,6 +9,7 @@ datasource db {
 
 model User {
   id                String           @id @default(cuid())
+  uid               String?          @unique
   firstname         String?
   lastname          String?
   email             String           @unique
