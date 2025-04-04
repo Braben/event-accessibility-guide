@@ -21,10 +21,15 @@ export const UserProvider = ({ children }) => {
         });
         try {
           const data = await getUserProfile(user.uid);
-          setUserDetails(data); // Store user details from the DB
-        } catch (error) {
-          console.error("Error fetching user details:", error);
+          console.log("Fetched userDetails:", data);
+        if (data) {
+          setUserDetails(data);
+        } else {
+          console.warn("userDetails is null or undefined");
         }
+      } catch (error) {
+        console.error("Error fetching user details:", error);
+      }
       } else {
         setUser(null);
         setUserDetails(null);
