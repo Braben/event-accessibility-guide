@@ -86,6 +86,56 @@ const getUsersById = async (req, res) => {
   }
 };
 
+const updateCreatedUser = async ( req, res ) => {
+  const {id} = req.params;
+  const {
+    uid,
+    firstname,
+    lastname,
+    email,
+    password,
+    role,
+    profileInfo,
+    disabilities,
+    notificationToken,
+    reviews,
+    notification,
+  } = req.body;
+
+  try {
+    // Check if user exists
+    const existingUser = await prisma.user.findUnique({ where: { id } });
+    if (!existingUser) {
+      return res.status(404).json({ message: "User not found" });
+    }
+    // Update user (only include fields that are provided)
+    const updatedUser = await prisma.user.update({
+      where: { id },
+      data: {
+        uid,
+        firstname,
+        lastname,
+        email,
+        password,
+        role,
+        profileInfo,
+        disabilities,
+        notificationToken,
+        reviews,
+        notification,
+      },
+    });
+
+    res.status(200).json({
+      message: "User updated successfully",
+      user: updatedUser,
+    });
+  } catch (error) {
+    console.error("Error updating user:", error);
+    res.status(500).json({ message: "Internal Server Error" });
+  }
+}
+
 //update user function
 const updateUser = async (req, res) => {
   const { uid } = req.params;
@@ -162,4 +212,4 @@ const deleteUser = async (req, res) => {
 };
 
 // Export the controller functions
-module.exports = { createUser, getUsers, getUsersById, updateUser, deleteUser };
+module.exports = { createUser, getUsers, getUsersById, updateUser, deleteUser, updateCreatedUser };
