@@ -13,7 +13,7 @@ router.post("/register", createUser);
 router.get("/", getUsers);
 router.get("/:uid", getUsersById);
 router.patch("/:uid", updateUser);
-router.patch("/:id", updateCreatedUser)
+router.patch("/update-uid/:id", updateCreatedUser)
 router.delete("/:uid", deleteUser);
 
 module.exports = router;

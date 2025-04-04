@@ -88,42 +88,18 @@ const getUsersById = async (req, res) => {
 
 const updateCreatedUser = async ( req, res ) => {
   const {id} = req.params;
-  const {
-    uid,
-    firstname,
-    lastname,
-    email,
-    password,
-    role,
-    profileInfo,
-    disabilities,
-    notificationToken,
-    reviews,
-    notification,
-  } = req.body;
+  const { uid } = req.body;
 
   try {
     // Check if user exists
-    const existingUser = await prisma.user.findUnique({ where: { id } });
-    if (!existingUser) {
+    const user = await prisma.user.findUnique({ where: { id } });
+    if (!user) {
       return res.status(404).json({ message: "User not found" });
     }
     // Update user (only include fields that are provided)
     const updatedUser = await prisma.user.update({
       where: { id },
-      data: {
-        uid,
-        firstname,
-        lastname,
-        email,
-        password,
-        role,
-        profileInfo,
-        disabilities,
-        notificationToken,
-        reviews,
-        notification,
-      },
+      data: { uid },
     });
 
     res.status(200).json({
