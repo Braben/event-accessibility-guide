@@ -67,7 +67,7 @@ const logoutUser = async (req, res) => {
     res.clearCookie("accessToken", {
       httpOnly: true, // Set the cookie as HTTP-only
       secure: process.env.NODE_ENV === "production", /// Set the cookie only in production
-      sameSite: "strict", // Set the cookie to be sent only to the same site to prevent CSRF attacks
+      sameSite: "None", 
     });
     console.log("Logged out successfully");
     return res
