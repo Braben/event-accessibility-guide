@@ -124,3 +124,28 @@ export const getUserProfile = async (uid) => {
     throw error;
   }
 };
+
+// ✅ Logout User
+export const logoutUser = async () => {
+  try {
+    // Logout from Firebase
+    await auth.signOut();
+
+    // Clear the access token cookie
+    const response = await fetch(`${API_BASE_URL}/user/logout`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      credentials: "include", // Ensure credentials are included
+    });
+
+    if (!response.ok) {
+      throw new Error("Error logging out from server");
+    }
+
+    console.log("Logged out successfully");
+    return { message: "Logged out successfully" };
+  } catch (error) {
+    console.error("Error logging out:", error.message);
+    throw error;
+  }
+};
