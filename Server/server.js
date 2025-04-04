@@ -19,12 +19,27 @@ const firebaseAuthRoutes = require("./routes/firebaseAuthRoutes");
 // Create Express app
 const app = express();
 
+const allowedOrigins = [
+  "http://localhost:5174", // Local development
+  "https://venuehubs.netlify.app/", // Production frontend
+];
+
 // Middleware
 app.use(cookieParser());
 app.use(cors({
-methods: ["GET", "POST", "PUT", "DELETE", "PATCH"],
-allowedHeaders: ["Authorization", "Content-Type"]
+  origin: (origin, callback) => {
+    if (!origin || allowedOrigins.includes(origin)) {
+      callback(null, true);
+    } else {
+      callback(new Error("Not allowed by CORS"));
+    }
+  },
+  methods: ["GET", "POST", "PUT", "DELETE", "PATCH"],
+  allowedHeaders: ["Authorization", "Content-Type"],
+  credentials: true,
 }));
+
+app.use(cookieParser());  
 app.use(express.json());
 
 // Connect to routes
