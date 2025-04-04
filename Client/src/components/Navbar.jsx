@@ -1,10 +1,30 @@
 import React, { useState, useEffect } from 'react';
 import { Link ,useLocation} from 'react-router-dom';
+import { getAuth, onAuthStateChanged } from 'firebase/auth';
+import LogoutButton from './LogoutBtn';
 
 const Navbar = () => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [windowWidth, setWindowWidth] = useState(window.innerWidth);
   const locations = useLocation();
+  const [user, setUser] = useState(null);
+  const auth = getAuth();
+  useEffect(() => {
+    const unsubscribe = onAuthStateChanged(auth, async (currentUser) => {
+      console.log("FIREBASE USER:", currentUser);
+      if (currentUser) {
+        // Fetch additional user details from your database
+        const userProfile = await getUserProfile(currentUser.uid);
+        setUser({ ...currentUser, ...userProfile });
+      } else {
+        setUser(null);
+      }
+    });
+  
+    return () => unsubscribe();
+  }, []);
+  
+
 
   useEffect(() => {
     const handleResize = () => setWindowWidth(window.innerWidth);
@@ -157,22 +177,28 @@ const Navbar = () => {
             ...styles.buttonContainer,
             display: windowWidth >= 768 ? 'flex' : 'none'
           }}>
-            <Link 
-              to="/login" 
-              style={styles.loginButton}
-              onMouseEnter={(e) => e.target.style.backgroundColor = '#4338ca'}
-              onMouseLeave={(e) => e.target.style.backgroundColor = styles.loginButton.backgroundColor}
-            >
-              Login
-            </Link>
-            <Link 
-              to="/signup" 
-              style={styles.signupButton}
-              onMouseEnter={(e) => e.target.style.backgroundColor = '#15803d'}
-              onMouseLeave={(e) => e.target.style.backgroundColor = styles.signupButton.backgroundColor}
-            >
-              Sign Up
-            </Link>
+            {user? (
+              <LogoutButton /> ) : (
+                <>
+                  <Link 
+                    to="/login" 
+                    style={styles.loginButton}
+                    onMouseEnter={(e) => e.target.style.backgroundColor = '#4338ca'}
+                    onMouseLeave={(e) => e.target.style.backgroundColor = styles.loginButton.backgroundColor}
+                  >
+                    Login
+                  </Link>
+                  <Link 
+                    to="/signup" 
+                    style={styles.signupButton}
+                    onMouseEnter={(e) => e.target.style.backgroundColor = '#15803d'}
+                    onMouseLeave={(e) => e.target.style.backgroundColor = styles.signupButton.backgroundColor}
+                  >
+                    Sign Up
+                  </Link>
+                </>
+              )
+            }
           </div>
           
           {/* Mobile menu button */}

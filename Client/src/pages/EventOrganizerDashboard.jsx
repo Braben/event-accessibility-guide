@@ -16,7 +16,8 @@ import { UserContext } from "../context/UserContext";
 
 const EventOrganizerDashboard = () => {
   const { user, userDetails } = useContext(UserContext);
-  if (!user) {
+  console.log("userDetails:", userDetails);
+  if (!user || !userDetails) {
     return <div>Please log in to view your dashboard.</div>; 
   }
   const sideBarLinks = [
@@ -86,7 +87,7 @@ const EventOrganizerDashboard = () => {
 
               {/* Name and Role - This should take available space */}
               <div className="flex-grow">
-                <h4 className="text-[12px] text-white">{userDetails.firstname}</h4>
+                <h4 className="text-[12px] text-white">{userDetails.firstname} {userDetails.lastname} </h4>
                 <h4 className="text-[9px] text-gray-400">Event Organizer</h4>
               </div>
 
@@ -110,7 +111,7 @@ const EventOrganizerDashboard = () => {
             <div className="flex flex-col m-6">
               <div className="bg-[#294c9f] text-white rounded-xl p-3 h-24">
                 <h2 className="text-xl font-bold tracking-wide">
-                  Welcome back, John!
+                  Welcome back, {userDetails.firstname}!
                 </h2>
                 <p className="text-sm mt-2">
                   Your venues are performing well. You have 3 new accessibility

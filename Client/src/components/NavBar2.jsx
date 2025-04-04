@@ -9,11 +9,32 @@ import {
 import { Menu, Xmark } from "iconoir-react";
 import { TbPentagonFilled } from "react-icons/tb";
 import { useNavigate } from "react-router-dom";
+import { getAuth, onAuthStateChanged } from 'firebase/auth';
+import LogoutButton from "./LogoutBtn";
+import { getUserProfile } from "../services/authService";
 
 const NavBar2 = () => {
   const navigate = useNavigate();
   const [open, setOpen] = useState(false);
   const menuRef = useRef(null);
+
+   const [user, setUser] = useState(null);
+    const auth = getAuth();
+    useEffect(() => {
+      const unsubscribe = onAuthStateChanged(auth, async (currentUser) => {
+        console.log("FIREBASE USER:", currentUser);
+        if (currentUser) {
+          // Fetch additional user details from your database
+          const userProfile = await getUserProfile(currentUser.uid);
+          setUser({ ...currentUser, ...userProfile });
+        } else {
+          setUser(null);
+        }
+      });
+    
+      return () => unsubscribe();
+    }, []);
+
   useEffect(() => {
     function handleClickOutside(event) {
       if (menuRef.current && !menuRef.current.contains(event.target)) {
@@ -82,18 +103,23 @@ const NavBar2 = () => {
         id="buttons"
         className="hidden md:flex items-center space-x-4 font-bold text-gray-900 dark:text-white"
       >
-        <span
-          className="cursor-pointer hover:text-blue-700 dark:hover:text-blue-400"
-          onClick={() => navigate("/login")}
-        >
-          Login
-        </span>
-        <button
-          className="bg-[#294c9f] text-white py-2 px-5 rounded-full hover:bg-blue-800 dark:hover:bg-blue-500 transition"
-          onClick={() => navigate("/signup")}
-        >
-          Sign up
-        </button>
+        {user? (
+          <LogoutButton />) : (
+            <>
+              <span
+                className="cursor-pointer hover:text-blue-700 dark:hover:text-blue-400"
+                onClick={() => navigate("/login")}
+              >
+                Login
+              </span>
+              <button
+                className="bg-[#294c9f] text-white py-2 px-5 rounded-full hover:bg-blue-800 dark:hover:bg-blue-500 transition"
+                onClick={() => navigate("/signup")}
+              >
+                Sign up
+              </button>
+            </>
+          )}
       </div>
 
       {/* Mobile Menu Icon */}

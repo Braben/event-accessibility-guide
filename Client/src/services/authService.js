@@ -33,7 +33,7 @@ export const signUpWithEmail = async (firstname, lastname, email, password) => {
     const user = userCredential.user;
 
      // After Firebase user is created, update the `uid` in your DB
-     const updatedUserData = await fetch(`${API_BASE_URL}/users/${userData.id}`, {
+     const updatedUserData = await fetch(`${API_BASE_URL}/users/update-uid/${userData.id}`, {
       method: "PATCH",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ uid: user.uid }), 
@@ -114,6 +114,7 @@ export const isAuthenticated = () => {
 };
 // ✅ Get User Profile
 export const getUserProfile = async (uid) => {
+  console.log('Fetching profile for uid:', uid);
   try {
     const response = await axios.get(`${API_BASE_URL}/users/${uid}`);
     console.log("User profile data:", response.data); 
