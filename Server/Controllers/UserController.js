@@ -67,11 +67,11 @@ const getUsers = async (req, res) => {
 //get signle user
 const getUsersById = async (req, res) => {
   try {
-    const { id } = req.params; // Extract user ID from request parameters
+    const { uid } = req.params; // Extract user ID from request parameters
 
-    if (id) {
+    if (uid) {
       const user = await prisma.user.findUnique({
-        where: { id }, // Find user by ID
+        where: { uid }, // Find user by ID
       });
 
       if (!user) {
@@ -88,9 +88,9 @@ const getUsersById = async (req, res) => {
 
 //update user function
 const updateUser = async (req, res) => {
-  const { id } = req.params;
+  const { uid } = req.params;
   const {
-    uid,
+    id,
     firstname,
     lastname,
     email,
@@ -104,15 +104,15 @@ const updateUser = async (req, res) => {
   } = req.body;
   try {
     // Check if user exists
-    const existingUser = await prisma.user.findUnique({ where: { id } });
+    const existingUser = await prisma.user.findUnique({ where: { uid } });
     if (!existingUser) {
       return res.status(404).json({ message: "User not found" });
     }
     // Update user (only include fields that are provided)
     const updatedUser = await prisma.user.update({
-      where: { id },
+      where: { uid },
       data: {
-        uid,
+        id,
         firstname,
         lastname,
         email,
@@ -138,16 +138,16 @@ const updateUser = async (req, res) => {
 
 //delete user function
 const deleteUser = async (req, res) => {
-  const { id } = req.params;
+  const { uid } = req.params;
   try {
     // Check if user exists
-    const existingUser = await prisma.user.findUnique({ where: { id } });
+    const existingUser = await prisma.user.findUnique({ where: { uid } });
     if (!existingUser) {
       return res.status(404).json({ message: "User not found" });
     }
     // Delete user
     const deletedUser = await prisma.user.delete({
-      where: { id },
+      where: { uid },
     });
     res.status(200).json({
       message: "User deleted successfully",
