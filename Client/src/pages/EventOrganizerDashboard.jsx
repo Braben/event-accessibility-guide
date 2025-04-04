@@ -79,20 +79,26 @@ const EventOrganizerDashboard = () => {
             <hr className="border-t-slate-700 mb-4 mx-2" />
             <div className="mt-auto bg-[#3b3b3b] rounded-lg flex items-center p-2 gap-2">
               {/* Profile Image */}
-              <img
-                src={profilePicture}
-                alt="Profile"
-                className="size-10 rounded-full"
-              />
+              {userDetails.profileInfo ? (
+                <img
+                  src={profilePicture}
+                  alt="Profile"
+                  className="size-10 rounded-full"
+                />
+              ): (
+                <MdOutlinePersonOutline className="text-white text-2xl" />
+              )}
 
               {/* Name and Role - This should take available space */}
               <div className="flex-grow">
                 <h4 className="text-[12px] text-white">{userDetails.firstname} {userDetails.lastname} </h4>
-                <h4 className="text-[9px] text-gray-400">Event Organizer</h4>
+                <h4 className="text-[9px] text-gray-400">
+                  {userDetails.role}
+                </h4>
               </div>
 
               {/* Person Icon - Pushed to the right */}
-              <MdOutlinePersonOutline className="text-white text-xl" />
+              {/* <MdOutlinePersonOutline className="text-white text-xl" /> */}
             </div>
           </div>
         </div>

@@ -72,8 +72,9 @@ export const signInWithEmail = async (email, password) => {
     if (!response.ok) {
       throw new Error("Failed to retrieve user details from database");
     }
-
     const userData = await response.json(); 
+    console.log("userData", userData)
+    localStorage.setItem("user", JSON.stringify(userData));
     return userData; 
   } catch (error) {
     console.error("Signin error:", error);
@@ -128,13 +129,31 @@ export const getUserProfile = async (uid) => {
 // ✅ Logout User
 export const logoutUser = async () => {
   try {
+    // Get the current user from Firebase
+    const user = auth.currentUser;
+    if (!user) {
+      throw new Error("No user is currently signed in");
+    }
+
+    // Prepare the access token from localStorage or from the current session
+    const userData = JSON.parse(localStorage.getItem("user"));
+    const accessToken = userData?.accessToken;
+
+    if (!accessToken) {
+      throw new Error("Access token is missing");
+    }
+
     // Logout from Firebase
     await auth.signOut();
+    localStorage.removeItem("user");
 
-    // Clear the access token cookie
+    // Send the access token with the logout request
     const response = await fetch(`${API_BASE_URL}/user/logout`, {
       method: "POST",
-      headers: { "Content-Type": "application/json" },
+      headers: {
+        "Content-Type": "application/json",
+        "Authorization": `Bearer ${accessToken}`, // Send access token in Authorization header
+      },
       credentials: "include", // Ensure credentials are included
     });
 
@@ -149,3 +168,5 @@ export const logoutUser = async () => {
     throw error;
   }
 };
+
+
