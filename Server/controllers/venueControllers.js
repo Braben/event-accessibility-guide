@@ -80,6 +80,9 @@ const createVenue = async (req, res) => {
         venueCapacity,
         routeDirection,
       },
+      include: {
+        accessibilityFeatures: true, // Include accessibilityFeatures in the returned venue object
+      },
     });
     res.status(201).json(newVenue);
   } catch (error) {
