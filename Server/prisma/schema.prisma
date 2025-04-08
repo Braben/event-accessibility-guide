@@ -27,10 +27,11 @@ model User {
 model Venue {
   id                    String                 @id @default(cuid())
   name                  String
-  address               String
-  contactInformation    String
+  address               String?
+  contactInformation    String?
+  venueCapacity         Int?
   description           String?
-  photos                String[]
+  photos                String[]        @default([])
   routeDirection        String?
   createdAt             DateTime               @default(now())
   accessibilityFeatures AccessibilityFeature[]

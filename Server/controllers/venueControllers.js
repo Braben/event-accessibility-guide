@@ -47,6 +47,8 @@ const createVenue = async (req, res) => {
       description,
       photos,
       routeDirection,
+      accessibilityFeatures,
+      venueCapacity,
     } = req.body;
     const user = await prisma.user.findUnique({
       where: { id: userId },
@@ -64,7 +66,9 @@ const createVenue = async (req, res) => {
         address,
         contactInformation,
         description,
-        photos,
+        photos: photos || [],
+        accessibilityFeatures,
+        venueCapacity,
         routeDirection,
       },
     });
