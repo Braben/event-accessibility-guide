@@ -14,7 +14,10 @@ import { Xmark } from "iconoir-react";
 import { useSelector, useDispatch } from "react-redux";
 import { createVenue } from "../slicers/venueSlicer";
 
-const AddVenue = () => {
+const API_BASE_URL =
+  "https://event-accessibility-guide-production.up.railway.app";
+
+const AddVenue = ({userDetails}) => {
   const [venueName, setVenueName] = useState("");
   const [venueCapacity, setVenueCapacity] = useState(0);
   const [venueAddress, setVenueAddress] = useState("");
@@ -51,6 +54,48 @@ const AddVenue = () => {
           : [...prev, option] // Add if not selected
     );
   };
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+
+    const newVenue = {
+      name: venueName,
+      venueCapacity,
+      photos: [],
+      address: venueAddress,
+      description: venueDescription,
+      accessibilityFeatures,
+      userId: userDetails.id, // Replace with logged-in user ID
+    };
+
+    try {
+      const res = await fetch(`${API_BASE_URL}/venues`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(newVenue),
+      });
+
+      if (res.ok) {
+        const newVenue = await res.json();
+        dispatch(createVenue(newVenue)); // Dispatch the venue to the Redux store
+
+        // Clear the form
+        setVenueName("");
+        setVenueCapacity(0);
+        setVenueAddress("");
+        setVenueDescription("");
+        setAccessibilityFeatures([]);
+        setIsOpen(false);
+      } else {
+        const error = await res.json();
+        alert(error.error); // Handle error response
+      }
+    } catch (error) {
+      console.error("Failed to save venue:", error);
+      alert("Failed to save venue");
+    }
+  };
   return (
     <div>
       <Dialog open={isOpen} onClose={() => setIsOpen(false)} size="md">
@@ -82,29 +127,30 @@ const AddVenue = () => {
             <form
               action="#"
               className="mt-3"
-              onSubmit={(e) => {
-                e.preventDefault();
+              onSubmit={handleSubmit}
+              // onSubmit={(e) => {
+              //   e.preventDefault();
 
-                const newVenue = {
-                  id: uuidv4(),
-                  venueName,
-                  venueCapacity,
-                  venueAddress,
-                  venueDescription,
-                  accessibilityFeatures,
-                };
+              //   const newVenue = {
+              //     id: uuidv4(),
+              //     venueName,
+              //     venueCapacity,
+              //     venueAddress,
+              //     venueDescription,
+              //     accessibilityFeatures,
+              //   };
 
-                dispatch(createVenue(newVenue)); // Dispatch the action
+              //   dispatch(createVenue(newVenue)); // Dispatch the action
 
-                // Clear inputs
-                setVenueName("");
-                setVenueCapacity(0);
-                setVenueAddress("");
-                setVenueDescription("");
-                setAccessibilityFeatures([]);
+              //   // Clear inputs
+              //   setVenueName("");
+              //   setVenueCapacity(0);
+              //   setVenueAddress("");
+              //   setVenueDescription("");
+              //   setAccessibilityFeatures([]);
 
-                setIsOpen(false); // Close the modal
-              }}
+              //   setIsOpen(false); // Close the modal
+              // }}
             >
               <div className="mb-4 mt-2 space-y-1.5">
                 <div className="flex justify-between gap-4">

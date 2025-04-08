@@ -148,7 +148,7 @@ const EventOrganizerDashboard = () => {
                     </p>
                   </div>
                   <div id="button">
-                    <AddVenue />
+                    <AddVenue userDetails={userDetails} />
                   </div>
                 </div>
                 <hr className="-mx-3 my-3 border-secondary " />
