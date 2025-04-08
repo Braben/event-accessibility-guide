@@ -171,7 +171,16 @@ const deleteUser = async (req, res) => {
     if (!existingUser) {
       return res.status(404).json({ message: "User not found" });
     }
-    // Delete user
+    // delete user from firebase
+    try {
+      await admin.auth().deleteUser(uid);
+      console.log(`User with UID ${uid} deleted from Firebase`);
+    } catch (error) {
+      console.error(`Error deleting user from Firebase: ${error.message}`);
+      return res.status(500).json({ message: `Error deleting user from Firebase: ${error.message}` });
+    }
+
+    // Delete user from db
     const deletedUser = await prisma.user.delete({
       where: { uid },
     });
