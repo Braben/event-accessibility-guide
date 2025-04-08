@@ -33,6 +33,7 @@ const getAVenue = async (req, res) => {
 
 // CREATE a new venue
 const createVenue = async (req, res) => {
+  console.log("Received data:", req.body);
   const result = venueSchema.safeParse(req.body);
   if (!result.success) {
     return res.status(400).json({ errors: result.error.format() });
@@ -59,6 +60,12 @@ const createVenue = async (req, res) => {
         .status(400)
         .json({ error: "User not found. Provide a valid userId." });
     }
+    const features = await prisma.accessibilityFeature.findMany({
+      where: {
+        category: { in: accessibilityFeatures },
+      },
+    });
+    const Ids = features.map((feature) => ({ id: feature.id }));
     const newVenue = await prisma.venue.create({
       data: {
         userId,
@@ -67,7 +74,9 @@ const createVenue = async (req, res) => {
         contactInformation,
         description,
         photos: photos || [],
-        accessibilityFeatures,
+        accessibilityFeatures: {
+          connect:Ids
+        },
         venueCapacity,
         routeDirection,
       },

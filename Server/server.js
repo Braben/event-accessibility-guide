@@ -11,6 +11,7 @@ const reviewRoutes = require("./routes/reviewRoutes");
 const searchRoutes = require("./routes/searchRoutes");
 const loginRoute = require("./routes/loginRoutes");
 const profileRoute = require("./routes/profileRoutes");
+const accessibilityFeaturesRoutes = require('./routes/accessibilityFeaturesRoutes');
 const cookieParser = require("cookie-parser");
 // const prisma = require("./prisma");
 
@@ -48,6 +49,7 @@ app.use("/api", searchRoutes)
 app.use("/users", userRoute);
 app.use("/user", loginRoute);
 app.use("/profile", profileRoute);
+app.use("/features",accessibilityFeaturesRoutes);
 // app.use("/auth", loginRoute);
 
 //for firebase

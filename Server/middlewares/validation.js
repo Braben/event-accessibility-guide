@@ -29,4 +29,10 @@ const userSchema = z.object({
   role: z.enum(["admin", "user"]).default("user"),
 });
 
-module.exports = { venueSchema, reviewSchema, userSchema };
+const accessibilityFeatures = z.object({
+  category: z.string().min(1, 'Category is required').max(500, 'Category too long'),
+description: z.string().min(1, 'Description is required').max(1000, 'Description too long'),
+availabiltyStatus: z.boolean(),
+})
+
+module.exports = { venueSchema, reviewSchema, userSchema, accessibilityFeatures };
