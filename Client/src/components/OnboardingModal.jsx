@@ -6,7 +6,7 @@ import {
   timelineBodyTheme,
 } from "@material-tailwind/react";
 import { TbX } from "react-icons/tb";
-import { useState } from "react";
+import { useState, useContext } from "react";
 import { SlLocationPin } from "react-icons/sl";
 import { GoPeople } from "react-icons/go";
 import { BsCalendar4Week } from "react-icons/bs";
@@ -18,12 +18,22 @@ import {
 import { GrSettingsOption } from "react-icons/gr";
 import { IoCheckmarkSharp } from "react-icons/io5";
 import { useNavigate } from "react-router-dom";
-export default function OnboardingModal() {
+import { getCurrentUser, getUserProfile, signInWithEmail } from "../services/authService";
+import axios from "axios";
+import { UserContext } from "../context/UserContext";
+import toast from "react-hot-toast";
+
+const API_BASE_URL =
+  "https://event-accessibility-guide-production.up.railway.app";
+
+export default function OnboardingModal({password}) {
+  const { user, userDetails, setUserDetails } = useContext(UserContext);
   const [step, setStep] = useState(1);
   const [userType, setUserType] = useState("");
   const [selected, setSelected] = useState("");
   const [selectedPreferences, setSelectedPreferences] = useState([]);
   const [error, setError] = useState("");
+  const [open, setOpen] = useState(false);
 
   const totalSteps = 4;
   const progressWidth = `${(step / totalSteps) * 100}%`;
@@ -55,11 +65,29 @@ export default function OnboardingModal() {
   };
 
   const navigate = useNavigate();
-  const handleComplete = () => {
-    if (selected === "user") {
-      navigate("/venues"); // Navigate to Event Listing Page
-    } else {
-      navigate("/organizer/dashboard"); // Navigate to Admin Dashboard
+  const handleComplete = async () => {
+    console.log(user)
+    const role = selected === "user" ? "USER" : "ADMIN";
+    const updatedUser = {
+      role,
+    }
+    try {
+      const updatedRoleUser = await axios.patch(`${API_BASE_URL}/users/${user.uid}`, updatedUser)
+      console.log(updatedRoleUser)
+      const updatedUserDetails = await getUserProfile(user.uid);
+      setUserDetails(updatedUserDetails);
+      if (updatedRoleUser) {
+         // Display a success message
+        toast.success("Account created successfully!");
+        setOpen(false);
+      } await signInWithEmail(user.email, password)
+      if (role === "USER") {
+        navigate("/venues"); // Navigate to Event Listing Page
+      } else {
+        navigate("/organizer/dashboard"); // Navigate to Admin Dashboard
+      }
+    } catch (error) {
+      console.error("Navigation failed:", error);
     }
   };
 
@@ -90,8 +118,8 @@ export default function OnboardingModal() {
     },
   ];
   return (
-    <Dialog>
-      <Dialog.Trigger className="mt-2 font-bold  w-full" as={Button}>
+    <Dialog open={open} handler={setOpen}>
+      <Dialog.Trigger onClick={() => setOpen(true)} className="mt-2 font-bold  w-full" as={Button}>
         Create an Account
       </Dialog.Trigger>
       <Dialog.Overlay>

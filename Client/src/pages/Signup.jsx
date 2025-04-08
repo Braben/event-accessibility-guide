@@ -1,5 +1,5 @@
-import React from "react";
-import { useState } from "react";
+import React, { useEffect } from "react";
+import { useState, useContext } from "react";
 import {
   Dialog,
   Button,
@@ -13,11 +13,14 @@ import { Link } from "react-router-dom";
 import { FcGoogle } from "react-icons/fc";
 import wheelchairImage from "../Assets/side-view-woman-sitting-wheelchair_1048944-821772 1.png";
 import OnboardingModal from "../components/OnboardingModal";
+import { UserContext } from "../context/UserContext";
+import toast from "react-hot-toast";
 
 // Import Firebase authentication functions
 import { signUpWithEmail, signInWithGoogle } from "../services/authService";
 
 const Signup = () => {
+  const { user, userDetails, loading } = useContext(UserContext);
   const [showPassword, setShowPassword] = useState(false);
   const [formData, setFormData] = useState({
     firstname: "",
@@ -25,6 +28,7 @@ const Signup = () => {
     email: "",
     password: "",
   });
+  const [newUser, setNewUser] = useState(null);
 
   const handleChange = (e) => {
     // Update the formData state with the new value
@@ -35,19 +39,21 @@ const Signup = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     const { firstname, lastname, email, password } = formData;
-    const user = await signUpWithEmail(firstname, lastname, email, password);
+    const newUser = await signUpWithEmail(firstname, lastname, email, password);
+    setNewUser(newUser)
+    
     //save user to database
 
-    // Display a success message
-    alert("Account created successfully!");
-    console.log(user);
+    // // Display a success message
+    // alert("Account created successfully!");
+    console.log(formData)
     // Reset form data after successful signup
-    setFormData({
-      firstname: "",
-      lastname: "",
-      email: "",
-      password: "",
-    });
+    // setFormData({
+    //   firstname: "",
+    //   lastname: "",
+    //   email: "",
+    //   password: "",
+    // });
     // Redirect to another page or perform any other action
     // window.location.href = "/dashboard"; // Example redirect
     // or use a router like react-router-dom to navigate
@@ -58,7 +64,7 @@ const Signup = () => {
     // Call your Google sign-in function here
     const user = await signInWithGoogle();
     console.log(user);
-    alert("Signed in with Google successfully!");
+    toast.success("Signed in with Google successfully!");
     // Reset form data after successful signup
     setFormData({
       firstname: "",
@@ -141,6 +147,7 @@ const Signup = () => {
                     id="email"
                     type="email"
                     name="email"
+                    autoComplete="off" 
                     value={formData.email}
                     placeholder="johndoe@example.com"
                     className="w-full placeholder-italic placeholder-gray-500 dark:placeholder-gray-400 bg-transparent border-none focus:ring-0 focus:outline-none text-gray-900 dark:text-white"
@@ -163,6 +170,7 @@ const Signup = () => {
                     id="password"
                     type={showPassword ? "text" : "password"}
                     name="password"
+                    autoComplete="new-password" 
                     value={formData.password}
                     placeholder="Enter password"
                     className="w-full placeholder-gray-500 dark:placeholder-gray-400 bg-transparent border-none focus:ring-0 focus:outline-none text-gray-900 dark:text-white"
@@ -181,8 +189,8 @@ const Signup = () => {
                   </button>
                 </div>
               </div>
-
-              <OnboardingModal />
+              
+              <OnboardingModal password={formData.password} user={user} />
 
               <div className="flex items-center w-full my-4">
                 <div className="flex-1 border-t border-gray-400 dark:border-gray-600"></div>

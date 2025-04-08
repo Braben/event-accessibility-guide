@@ -15,6 +15,7 @@ import { FcGoogle } from "react-icons/fc";
 import wheelchairImage from "../Assets/side-view-woman-sitting-wheelchair_1048944-821772 1.png";
 import groupPlusWheel from "../Assets/side-view-portrait-big-african-american-family-with-person-wheelchair-welcoming-guests-sum_236854-44054 1.png";
 import { useNavigate } from "react-router-dom";
+import toast from "react-hot-toast";
 
 const Login = () => {
   const [showPassword, setShowPassword] = useState(false);
@@ -25,7 +26,7 @@ const Login = () => {
 
   const handleChange = (e) => {
     // Update the formData state with the new value
-    e.preventDefault();
+    // e.preventDefault();
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
   const navigate = useNavigate();
@@ -34,16 +35,19 @@ const Login = () => {
     e.preventDefault();
     const { email, password } = formData;
     const user = await signInWithEmail(email, password);
-    //save user to database
-    // Display a success message
-    alert("Signed in successfully!", user);
-    console.log(user);
-    navigate("/organizer/dashboard");
-
-    setFormData({
-      email: "",
-      password: "",
-    });
+    if (user) {
+      toast.success("Signed in successfully!");
+      console.log(user);
+      if ( user.user?.role === "USER") {
+        navigate("/venue");
+      } else if ( user.user?.role === "ADMIN") {
+        navigate("/organizer/dashboard");
+      }
+      setFormData({
+        email: "",
+        password: "",
+      });
+    }
   };
 
   const handleGoogleSignIn = async () => {
@@ -85,7 +89,7 @@ const Login = () => {
                   className="w-full placeholder:italic placeholder:text-slate-400 dark:placeholder:text-gray-300 bg-transparent border-none focus:ring-0 focus:outline-none dark:text-white hover:border-none"
                   onChange={handleChange}
                   required
-                  autoComplete="email"
+                  autoComplete="off"
                 />
               </div>
             </div>
@@ -112,7 +116,7 @@ const Login = () => {
                   className="w-full placeholder:italic placeholder:text-slate-400 dark:placeholder:text-gray-300 pr-10 bg-transparent border-none focus:ring-0 focus:outline-none dark:text-white hover:border-none"
                   onChange={handleChange}
                   required
-                  autoComplete="current-password"
+                  autoComplete="new-password"
                 />
                 {/* Toggle Password Visibility */}
                 <button

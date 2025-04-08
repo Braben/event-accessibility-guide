@@ -15,8 +15,12 @@ import VenueLists from "../components/VenueLists";
 import { UserContext } from "../context/UserContext";
 
 const EventOrganizerDashboard = () => {
-  const { user, userDetails } = useContext(UserContext);
+  const { user, userDetails, loading } = useContext(UserContext);
   console.log("userDetails:", userDetails);
+  console.log(user)
+  if (loading) {
+    return <div>Loading...</div>; // or a spinner
+  }
   if (!user || !userDetails) {
     return <div>Please log in to view your dashboard.</div>; 
   }
@@ -93,7 +97,7 @@ const EventOrganizerDashboard = () => {
               <div className="flex-grow">
                 <h4 className="text-[12px] text-white">{userDetails.firstname} {userDetails.lastname} </h4>
                 <h4 className="text-[9px] text-gray-400">
-                  {userDetails.role}
+                  {userDetails.role === "ADMIN" ? "EVENT ORGANIZER" : "USER"}
                 </h4>
               </div>
 

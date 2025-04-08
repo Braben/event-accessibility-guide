@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { getAuth, signOut } from "firebase/auth";
 import { Button } from "@material-tailwind/react";
 import { logoutUser } from "../services/authService";
+import toast from "react-hot-toast";
 
 const LogoutButton = () => {
 
@@ -15,7 +16,7 @@ const LogoutButton = () => {
       navigate("/login"); // Navigate to login page after successful logout
     } catch (error) {
       console.error("Logout failed:", error);
-      alert("Logout failed. Please try again.");
+      toast.success("Logout out successfully");
     }
   }   
 

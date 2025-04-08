@@ -5,7 +5,6 @@ import {
   signInWithEmailAndPassword,
   signInWithPopup,
 } from "../config/firebaseConfig";
-import { setDbIdInFirebase, getDbIdFromFirebase } from "./firebaseService";
 import axios from "axios";
 
 // import { getAuth } from "firebase/auth";
@@ -87,13 +86,14 @@ export const signInWithGoogle = async () => {
   const result = await signInWithPopup(auth, googleProvider);
   const user = result.user;
 
-  await fetch(`${API_BASE_URL}/google/signin`, {
+  await fetch(`${API_BASE_URL}/profile/signup`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({
       firstname: user.displayName.split(" ")[0],
       lastname: user.displayName.split(" ")[1] || "",
       email: user.email,
+      uid: user.uid
     }),
   });
 
@@ -113,9 +113,12 @@ export const getCurrentUser = () => {
 export const isAuthenticated = () => {
   return !!auth.currentUser;
 };
+
+const delay = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 // ✅ Get User Profile
-export const getUserProfile = async (uid) => {
+export const getUserProfile = async (uid, delayMs = 3000) => {
   console.log('Fetching profile for uid:', uid);
+  await delay(delayMs);
   try {
     const response = await axios.get(`${API_BASE_URL}/users/${uid}`);
     console.log("User profile data:", response.data); 

@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { useContext, useEffect, useRef, useState } from "react";
 import {
   IconButton,
   Collapse,
@@ -12,28 +12,16 @@ import { useNavigate } from "react-router-dom";
 import { getAuth, onAuthStateChanged } from 'firebase/auth';
 import LogoutButton from "./LogoutBtn";
 import { getUserProfile } from "../services/authService";
+import { UserContext } from "../context/UserContext";
+import { useLocation } from "react-router-dom";
 
 const NavBar2 = () => {
   const navigate = useNavigate();
   const [open, setOpen] = useState(false);
   const menuRef = useRef(null);
+  const {user, accessToken } = useContext(UserContext);
+  const location = useLocation();
 
-   const [user, setUser] = useState(null);
-    const auth = getAuth();
-    useEffect(() => {
-      const unsubscribe = onAuthStateChanged(auth, async (currentUser) => {
-        console.log("FIREBASE USER:", currentUser);
-        if (currentUser) {
-          // Fetch additional user details from your database
-          const userProfile = await getUserProfile(currentUser.uid);
-          setUser({ ...currentUser, ...userProfile });
-        } else {
-          setUser(null);
-        }
-      });
-    
-      return () => unsubscribe();
-    }, []);
 
   useEffect(() => {
     function handleClickOutside(event) {
@@ -71,7 +59,19 @@ const NavBar2 = () => {
       </div>
 
       {/* Desktop Navigation */}
+      {(!user || user.role === "USER") && (
       <ul id="list" className="hidden md:flex items-center space-x-8 font-bold">
+        {user && accessToken && location.pathname === "/" && (
+          <li
+            className="cursor-pointer hover:text-blue-700 dark:hover:text-blue-400"
+            onClick={() => {
+              navigate("/organizer/dashboard");
+              setOpen(false);
+            }}
+          >
+            Go Back to Dashboard
+          </li>
+        )}
         <li
           className="cursor-pointer hover:text-blue-700 dark:hover:text-blue-400"
           onClick={() => navigate("/venues")}
@@ -97,13 +97,14 @@ const NavBar2 = () => {
           Contact
         </li>
       </ul>
+      )};
 
       {/* Desktop Buttons */}
       <div
         id="buttons"
         className="hidden md:flex items-center space-x-4 font-bold text-gray-900 dark:text-white"
       >
-        {user? (
+        {user && accessToken ? (
           <LogoutButton />) : (
             <>
               <span

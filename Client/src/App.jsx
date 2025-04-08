@@ -13,6 +13,7 @@ import Login from "./pages/Login";
 import Signup from "./pages/Signup";
 import RootLayout from "./layout/RootLayout";
 import EventOrganizerDashboard from "./pages/EventOrganizerDashboard";
+import { Toaster } from "react-hot-toast";
 
 function App() {
   const router = createBrowserRouter(
@@ -37,7 +38,12 @@ function App() {
       </Route>
     )
   );
-  return <RouterProvider router={router} />;
+  return (
+    <>
+      <Toaster position="top-center" reverseOrder={false} />
+      <RouterProvider router={router} />;
+    </>
+  )
 }
 
 export default App;
