@@ -19,8 +19,9 @@ const NavBar2 = () => {
   const navigate = useNavigate();
   const [open, setOpen] = useState(false);
   const menuRef = useRef(null);
-  const {user, accessToken } = useContext(UserContext);
+  const {user,userDetails, accessToken } = useContext(UserContext);
   const location = useLocation();
+  console.log("usernav:",userDetails)
 
 
   useEffect(() => {
@@ -59,7 +60,7 @@ const NavBar2 = () => {
       </div>
 
       {/* Desktop Navigation */}
-      {(!user || user.role === "USER") && (
+      {(!user || userDetails?.role === "USER") && (
       <ul id="list" className="hidden md:flex items-center space-x-8 font-bold">
         {user && accessToken && location.pathname === "/" && (
           <li

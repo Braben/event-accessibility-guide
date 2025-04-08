@@ -39,7 +39,7 @@ const Login = () => {
       toast.success("Signed in successfully!");
       console.log(user);
       if ( user.user?.role === "USER") {
-        navigate("/venue");
+        navigate("/venues");
       } else if ( user.user?.role === "ADMIN") {
         navigate("/organizer/dashboard");
       }
