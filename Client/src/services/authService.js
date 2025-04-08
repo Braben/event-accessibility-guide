@@ -138,49 +138,6 @@ export const getUserProfile = async (uid, delayMs = 3000) => {
 };
 
 // ✅ Logout User
-// export const logoutUser = async () => {
-//   try {
-//     // Get the current user from Firebase
-//     const user = auth.currentUser;
-//     if (!user) {
-//       throw new Error("No user is currently signed in");
-//     }
-
-//     // Prepare the access token from localStorage or from the current session
-//     const userData = JSON.parse(localStorage.getItem("user"));
-//     const accessToken = userData?.accessToken;
-
-//     if (!accessToken) {
-//       throw new Error("Access token is missing");
-//     }
-
-//     // Logout from Firebase
-//     // await auth.signOut();
-//     await signOut(getAuth());
-//     localStorage.removeItem("user");
-
-//     // Send the access token with the logout request
-//     const response = await fetch(`${API_BASE_URL}/user/logout`, {
-//       method: "POST",
-//       headers: {
-//         "Content-Type": "application/json",
-//         Authorization: `Bearer ${accessToken}`, // Send access token in Authorization header
-//       },
-//       credentials: "include", // Ensure credentials are included
-//     });
-
-//     if (!response.ok) {
-//       throw new Error("Error logging out from server");
-//     }
-
-//     console.log("Logged out successfully");
-//     return { message: "Logged out successfully" };
-//   } catch (error) {
-//     console.error("Error logging out:", error.message);
-//     throw error;
-//   }
-// };
-
 export const logoutUser = async (accessToken) => {
   try {
     if (!accessToken) {

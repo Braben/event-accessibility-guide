@@ -1,21 +1,20 @@
 import { createContext, useState, useEffect } from "react";
 import { getAuth, onAuthStateChanged } from "firebase/auth";
-import { auth } from "../config/firebaseConfig";
 import { getUserProfile } from "../services/authService";
-import { getDbIdFromFirebase } from "../services/firebaseService";
+// import { getDbIdFromFirebase } from "../services/firebaseService";
 
 export const UserContext = createContext();
 
 export const UserProvider = ({ children }) => {
   const [user, setUser] = useState(null);
-  const [accessToken, setAccessToken] = useState(null); 
+  const [accessToken, setAccessToken] = useState(null);
   const [userDetails, setUserDetails] = useState(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const auth = getAuth();
     const unsubscribe = onAuthStateChanged(auth, (user) => {
-      const handleAuthChange = async() => {
+      const handleAuthChange = async () => {
         setLoading(true);
         if (user) {
           try {
@@ -41,17 +40,18 @@ export const UserProvider = ({ children }) => {
           setUserDetails(null);
           setAccessToken(null);
         }
-          setLoading(false);
-      } 
+        setLoading(false);
+      };
       handleAuthChange();
     });
-        
 
     return () => unsubscribe();
   }, []);
 
   return (
-    <UserContext.Provider value={{ user, accessToken, userDetails, loading, setUserDetails }}>
+    <UserContext.Provider
+      value={{ user, accessToken, userDetails, loading, setUserDetails }}
+    >
       {children}
     </UserContext.Provider>
   );
