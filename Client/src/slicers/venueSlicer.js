@@ -21,9 +21,12 @@ const venueSlice = createSlice({
         venue.id === action.payload.id ? { ...venue, ...action.payload } : venue
       );
     },
+    setVenues: (state, action) => {
+      state.venues = action.payload; 
+    },
   },
 });
 
-export const { createVenue, deleteVenue, updateVenue } = venueSlice.actions;
+export const { createVenue, deleteVenue, updateVenue, setVenues } = venueSlice.actions;
 
 export default venueSlice.reducer;

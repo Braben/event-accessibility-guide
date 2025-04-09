@@ -47,25 +47,28 @@ const AddVenue = ({userDetails}) => {
   ];
 
   const handleAccessibilityChange = (option) => {
-    setAccessibilityFeatures(
-      (prev) =>
-        prev.includes(option)
-          ? prev.filter((item) => item !== option) // Remove if already selected
-          : [...prev, option] // Add if not selected
-    );
+    setAccessibilityFeatures((prev) => {
+      const updated = prev.includes(option)
+        ? prev.filter((item) => item !== option)
+        : [...prev, option];
+      console.log("Updated features:", updated); // ✅ add this
+      return updated;
+    });
   };
+  
   const handleSubmit = async (e) => {
     e.preventDefault();
 
     const newVenue = {
       name: venueName,
-      venueCapacity,
+      venueCapacity: parseInt(venueCapacity, 10),
       photos: [],
       address: venueAddress,
       description: venueDescription,
       accessibilityFeatures,
       userId: userDetails.id, // Replace with logged-in user ID
     };
+    console.log("newvenue", newVenue)
 
     try {
       const res = await fetch(`${API_BASE_URL}/venues`, {
@@ -77,7 +80,9 @@ const AddVenue = ({userDetails}) => {
       });
 
       if (res.ok) {
+        console.log(res);
         const newVenue = await res.json();
+        console.log("venue sent to slice:", newVenue)
         dispatch(createVenue(newVenue)); // Dispatch the venue to the Redux store
 
         // Clear the form

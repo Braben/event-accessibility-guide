@@ -1,14 +1,35 @@
-import { useState } from "react";
+import { useState, useContext, useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { deleteVenue } from "../slicers/venueSlicer";
+import { deleteVenue, setVenues, updateVenue } from "../slicers/venueSlicer";
 import UpdateVenue from "./UpdateVenue";
 import { FaEdit, FaTrash } from "react-icons/fa";
+import { UserContext } from "../context/UserContext";
+import axios from "axios";
+import toast from "react-hot-toast";
+const API_BASE_URL =
+  "https://event-accessibility-guide-production.up.railway.app";
 
 const TOTAL_ACCESSIBILITY_FEATURES = 20; // Change this based on your system
 
 const VenueLists = () => {
+  const { userDetails } = useContext(UserContext);
   const dispatch = useDispatch();
   const venues = useSelector((state) => state.venues.venues);
+  console.log(venues);
+
+  useEffect(() => {
+    const fetchVenues = async () => {
+      try {
+        const res = await axios.get(`${API_BASE_URL}/venues`);
+        dispatch(setVenues(res.data));
+      } catch (err) {
+        console.error("Failed to fetch venues", err);
+      }
+    };
+
+    fetchVenues();
+  }, [dispatch]);
+  const userVenues = venues.filter((venue) => venue.userId === userDetails.id);
 
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedVenue, setSelectedVenue] = useState(null);
@@ -23,6 +44,26 @@ const VenueLists = () => {
   const handleClose = () => {
     setIsModalOpen(false);
     setSelectedVenue(null);
+  };
+
+  const handleDelete = async (venueId) => {
+    if (window.confirm('Are you sure you want to delete this venue?')) {
+      try {
+        const response = await fetch(`${API_BASE_URL}/venues/${venueId}`, {
+          method: 'DELETE',
+        });
+
+        if (response.ok) {
+          toast('Venue deleted successfully');
+          // Dispatch the deleteVenue action to remove the venue from state
+          dispatch(deleteVenue(venueId));
+        } else {
+          alert('Failed to delete venue');
+        }
+      } catch (error) {
+        alert('Error deleting venue: ' + error.message);
+      }
+    }
   };
 
   // Function to get accessibility score and progress bar color
@@ -40,12 +81,20 @@ const VenueLists = () => {
   // Function to format accessibility features display
   const formatFeatures = (features) => {
     if (!features || features.length === 0) return "None";
-
-    const firstTwo = features.slice(0, 2).join(", ");
-    const remaining = features.length - 2;
-
-    return remaining > 0 ? `${firstTwo} +${remaining} more` : firstTwo;
+  
+    // Create a string of feature categories
+    const categories = features.map(feature => feature.category);
+  
+    // Check if we need to slice and combine or just return the listed features
+    if (categories.length > 2) {
+      const firstTwo = categories.slice(0, 2).join(", ");
+      const remaining = categories.length - 2;
+      return `${firstTwo} +${remaining} more`;
+    }
+  
+    return categories.join(", ");
   };
+  
 
   return (
     <div className="container  -mt-3 -ml-3  ">
@@ -74,17 +123,17 @@ const VenueLists = () => {
                 </div>
               </div>
             ) : (
-              venues.map((venue) => {
+              userVenues.map((venue) => {
                 const { score, color } = getAccessibilityData(
                   venue.accessibilityFeatures
                 );
                 return (
                   <div key={venue.id} className="table-row border-b">
                     <div className="table-cell px-4 py-2">
-                      {venue.venueName}
+                      {venue.name}
                     </div>
                     <div className="table-cell px-4 py-2">
-                      {venue.venueAddress}
+                      {venue.address}
                     </div>
                     <div className="table-cell px-4 py-2">
                       {venue.venueCapacity}
@@ -117,7 +166,7 @@ const VenueLists = () => {
                         <FaEdit size={18} />
                       </button>
                       <button
-                        onClick={() => dispatch(deleteVenue(venue.id))}
+                        onClick={() => handleDelete(venue.id)}
                         className="text-red-500 hover:text-red-700"
                       >
                         <FaTrash size={18} />
