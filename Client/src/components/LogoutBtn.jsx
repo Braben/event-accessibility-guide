@@ -22,7 +22,7 @@ const LogoutButton = () => {
       navigate("/login"); // Navigate to login page after successful logout
     } catch (error) {
       console.error("Logout failed:", error);
-      console.log("logout not successful");
+      toast.error("error");
     }
   };
 

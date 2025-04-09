@@ -17,7 +17,7 @@ const API_BASE_URL =
 export const signUpWithEmail = async (firstname, lastname, email, password) => {
   try {
     // First, save user details in the database
-    const response = await fetch(`${API_BASE_URL}/users/register`, {
+    const response = await fetch(`${API_BASE_URL}/signup`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ firstname, lastname, email, password }),
@@ -91,25 +91,42 @@ export const signInWithEmail = async (email, password) => {
 
 // ✅ Google Sign-In
 export const signInWithGoogle = async () => {
-  const result = await signInWithPopup(auth, googleProvider);
-  const user = result.user;
+  try {
+    const result = await signInWithPopup(auth, googleProvider);
+    const user = result.user;
+    if (!user) {
+      throw new Error("Failed to sign in with Google");
+    }
 
-  await fetch(`${API_BASE_URL}/profile/signup`, {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({
-      firstname: user.displayName.split(" ")[0],
-      lastname: user.displayName.split(" ")[1] || "",
-      email: user.email,
-      uid: user.uid,
-    }),
-  });
+    const idToken = await user.getIdToken();
 
-  if (!user) {
-    throw new Error("Failed to create user");
+    //save accessToken to localstorage for later
+    localStorage.setItem("user", JSON.stringify({ accessToken: idToken }));
+
+    //send user data to the backend
+    const response = await fetch(`${API_BASE_URL}/profile/signup`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${idToken}`,
+      },
+      body: JSON.stringify({
+        firstname: user.displayName.split(" ")[0],
+        lastname: user.displayName.split(" ")[1],
+        email: user.email,
+        uid: user.uid,
+      }),
+    });
+
+    if (!response.ok) {
+      const errordata = await response.json();
+      throw new Error(errordata.message || "Failed to create user profile");
+    }
+    return user;
+  } catch (error) {
+    console.error("Google sigin in Error: ", error.message);
+    throw error;
   }
-
-  return user;
 };
 
 // ✅ Get Current User

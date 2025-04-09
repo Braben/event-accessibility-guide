@@ -1,6 +1,9 @@
-import React from "react";
+import React, { useContext } from "react";
 import { useState } from "react";
 import { signInWithGoogle, signInWithEmail } from "../services/authService";
+import { useNavigate } from "react-router-dom";
+import { UserContext } from "../context/UserContext";
+import toast from "react-hot-toast";
 import {
   Dialog,
   Button,
@@ -14,10 +17,10 @@ import { Link } from "react-router-dom";
 import { FcGoogle } from "react-icons/fc";
 import wheelchairImage from "../Assets/side-view-woman-sitting-wheelchair_1048944-821772 1.png";
 import groupPlusWheel from "../Assets/side-view-portrait-big-african-american-family-with-person-wheelchair-welcoming-guests-sum_236854-44054 1.png";
-import { useNavigate } from "react-router-dom";
-import toast from "react-hot-toast";
 
 const Login = () => {
+  const { signInWithGoogle } = useContext(UserContext);
+  const navigate = useNavigate();
   const [showPassword, setShowPassword] = useState(false);
   const [formData, setFormData] = useState({
     email: "",
@@ -29,7 +32,6 @@ const Login = () => {
     // e.preventDefault();
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
-  const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -38,9 +40,9 @@ const Login = () => {
     if (user) {
       toast.success("Signed in successfully!");
       console.log(user);
-      if ( user.user?.role === "USER") {
+      if (user.user?.role === "USER") {
         navigate("/venues");
-      } else if ( user.user?.role === "ADMIN") {
+      } else if (user.user?.role === "ADMIN") {
         navigate("/organizer/dashboard");
       }
       setFormData({
@@ -52,12 +54,14 @@ const Login = () => {
 
   const handleGoogleSignIn = async () => {
     // Call your Google sign-in function here
-    const user = await signInWithGoogle();
-    console.log(user);
-    alert("Signed in with Google successfully!");
-
-    // Redirect to another page or perform any other action
-    // window.location.href = "/"; // Example redirect
+    try {
+      await signInWithGoogle();
+      toast.success("signed in successfully");
+      navigate("/");
+    } catch (error) {
+      toast.error("Failed to sigin with Google");
+      console.error("failed :", error.message);
+    }
   };
 
   return (
