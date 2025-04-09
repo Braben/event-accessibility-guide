@@ -3,6 +3,7 @@ const admin = require("../config/firebaseAdmin");
 const { PrismaClient } = require("@prisma/client");
 const prisma = new PrismaClient();
 const bcrypt = require("bcryptjs");
+const jwt = require("jsonwebtoken");
 
 //  Standard Email/Password Signup
 const signupUser = async (req, res) => {
@@ -62,8 +63,9 @@ const signupWithGoogle = async (req, res) => {
 
   try {
     //  Verify Google ID Token
-    const decodedToken = await admin.auth().verifyIdToken(idToken);
-    const { uid, email, name } = decodedToken;
+    // const decodedToken = await admin.auth().verifyIdToken(idToken);
+    // const { uid, email, name } = decodedToken;
+    const { userId: uid, email, firstname, lastname } = req.user;
 
     //  Check if user exists in DB
     let user = await prisma.user.findUnique({ where: { email } });
@@ -75,10 +77,10 @@ const signupWithGoogle = async (req, res) => {
         data: {
           uid,
           email,
-          firstname: name.split(" ")[0] || "",
-          lastname: name.split(" ")[1] || "",
+          firstname,
+          lastname,
           googleAuth: true, //  Mark as Google user
-          role,
+          role: "USER",
         },
       });
     }
@@ -95,55 +97,103 @@ const signupWithGoogle = async (req, res) => {
 // Login (Handled by frontend)
 // signin with email and password
 
+// const loginUser = async (req, res) => {
+//   const { email, password, role } = req.body;
+//   if (!email || !password) {
+//     return res.status(400).json({ message: "Email and password are required" });
+//   }
+//   try {
+//     //  Find user in DB
+//     const user = await prisma.user.findUnique({ where: { email } });
+//     if (!user) {
+//       return res.status(400).json({ message: "User not found" });
+//     }
+//     //  Check password
+//     const isPasswordValid = await bcrypt.compare(password, user.password);
+//     if (!isPasswordValid) {
+//       return res.status(400).json({ message: "Invalid password" });
+//     }
+//     //  Generate JWT token
+//     const accessToken = jwt.sign(
+//       { userId: user.id, role: user.role },
+//       process.env.JWT_SECRET,
+//       { expiresIn: "1h" }
+//     );
+//     //  Set JWT token as cookie
+//     res.cookie("accessToken", accessToken, {
+//       httpOnly: true,
+//       secure: process.env.NODE_ENV === "production",
+//       sameSite: "strict",
+//     });
+//     //  Return user data
+//     return res.status(200).json({
+//       message: "Login successful",
+//       accessToken,
+//       user: {
+//         id: user.id,
+//         email: user.email,
+//         role: user.role,
+//       },
+//     });
+//   } catch (error) {
+//     console.error("Error logging in:", error);
+//     return res.status(500).json({ message: "Internal Server Error", user });
+//     //   return res.status(400).json({ message: "Frontend handles authentication" });
+//   }
+// };
+
 const loginUser = async (req, res) => {
   const { email, password, role } = req.body;
+
   if (!email || !password) {
     return res.status(400).json({ message: "Email and password are required" });
   }
+
   try {
-    //  Find user in DB
     const user = await prisma.user.findUnique({ where: { email } });
     if (!user) {
-      return res.status(400).json({ message: "User not found" });
+      return res.status(401).json({ message: "Invalid email or password" });
     }
-    //  Check password
+
     const isPasswordValid = await bcrypt.compare(password, user.password);
     if (!isPasswordValid) {
-      return res.status(400).json({ message: "Invalid password" });
+      return res.status(401).json({ message: "Invalid email or password" });
     }
-    //  Generate JWT token
-    const accessToken = jwt.sign(
-      { userId: user.id, role: user.role },
-      process.env.JWT_SECRET,
-      { expiresIn: "1h" }
-    );
-    //  Set JWT token as cookie
-    res.cookie("accessToken", accessToken, {
+
+    const firebaseToken = await admin.auth().createCustomToken(user.id);
+
+    // const accessToken = jwt.sign(
+    //   { userId: user.id, role: user.role },
+    //   process.env.JWT_SECRET,
+    //   { expiresIn: "1h" }
+    // );
+
+    res.cookie("accessToken", firebaseToken, {
       httpOnly: true,
       secure: process.env.NODE_ENV === "production",
       sameSite: "strict",
     });
-    //  Return user data
+
+    const { password: _, ...userData } = user; // Exclude password
     return res.status(200).json({
       message: "Login successful",
-      accessToken,
-      user: {
-        id: user.id,
-        email: user.email,
-        role: user.role,
-      },
+      accessToken: firebaseToken,
+      user: userData,
     });
   } catch (error) {
     console.error("Error logging in:", error);
-    return res.status(500).json({ message: "Internal Server Error", user });
-    //   return res.status(400).json({ message: "Frontend handles authentication" });
+    return res.status(500).json({ message: "Internal Server Error" });
   }
 };
 
 // Logout User
 const logout = async (req, res) => {
+  const authHeader = req.headers["authorization"];
   const accessToken =
-    req.cookies?.accessToken || req.headers["authorization"]?.split(" ")[1];
+    req.cookies?.accessToken ||
+    (authHeader &&
+      authHeader.startsWith("Bearer ") &&
+      authHeader.split(" ")[1]);
 
   if (!accessToken) {
     return res.status(400).json({ message: "No token provided" });

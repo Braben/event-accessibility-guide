@@ -14,7 +14,7 @@ const cookieParser = require("cookie-parser");
 // const prisma = require("./prisma");
 
 //for firebase
-const firebaseAuthRoutes = require("./routes/firebaseAuthRoutes");
+const firebaseAuthRoutes = require("./Routes/firebaseAuthRoutes");
 
 // Create Express app
 const app = express();

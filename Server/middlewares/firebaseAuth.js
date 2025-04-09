@@ -2,8 +2,12 @@ const admin = require("../config/firebaseAdmin"); // Import Firebase Admin SDK
 
 // Middleware to verify Firebase ID token
 const verifyFirebaseToken = async (req, res, next) => {
+  const authHeader = req.headers["authorization"];
   const accessToken =
-    req.cookies?.accessToken || req.headers["authorization"]?.split(" ")[1];
+    req.cookies?.accessToken ||
+    (authHeader &&
+      authHeader.startsWith("Bearer ") &&
+      authHeader.split(" ")[1]);
 
   if (!accessToken) {
     return res.status(401).json({ message: "Unauthorized: Please log in" });

@@ -5,12 +5,14 @@ const {
   signupUser,
   loginUser,
   logout,
+  signupWithGoogle,
 } = require("../controllers/firebaseSignUp-LogIn");
 const router = express.Router();
 
 router.post("/signup", signupUser);
 router.post("/login", verifyFirebaseToken, loginUser);
 router.post("/logout", verifyFirebaseToken, logout);
+router.post("/google", verifyFirebaseToken, signupWithGoogle);
 
 // 🔹 Route to get authenticated user's profile
 router.get("/profile", verifyFirebaseToken, authorizeUser, (req, res) => {
