@@ -9,7 +9,7 @@ import {
 import { Menu, Xmark } from "iconoir-react";
 import { TbPentagonFilled } from "react-icons/tb";
 import { useNavigate } from "react-router-dom";
-import { getAuth, onAuthStateChanged } from 'firebase/auth';
+import { getAuth, onAuthStateChanged } from "firebase/auth";
 import LogoutButton from "./LogoutBtn";
 import { getUserProfile } from "../services/authService";
 import { UserContext } from "../context/UserContext";
@@ -19,10 +19,9 @@ const NavBar2 = () => {
   const navigate = useNavigate();
   const [open, setOpen] = useState(false);
   const menuRef = useRef(null);
-  const {user,userDetails, accessToken } = useContext(UserContext);
+  const { user, userDetails, accessToken } = useContext(UserContext);
   const location = useLocation();
-  console.log("usernav:",userDetails)
-
+  console.log("usernav:", userDetails);
 
   useEffect(() => {
     function handleClickOutside(event) {
@@ -61,44 +60,47 @@ const NavBar2 = () => {
 
       {/* Desktop Navigation */}
       {(!user || userDetails?.role === "USER") && (
-      <ul id="list" className="hidden md:flex items-center space-x-8 font-bold">
-        {user && accessToken && location.pathname === "/" && (
+        <ul
+          id="list"
+          className="hidden md:flex items-center space-x-8 font-bold"
+        >
+          {user && accessToken && location.pathname === "/" && (
+            <li
+              className="cursor-pointer hover:text-blue-700 dark:hover:text-blue-400"
+              onClick={() => {
+                navigate("/organizer/dashboard");
+                setOpen(false);
+              }}
+            >
+              Go Back to Dashboard
+            </li>
+          )}
           <li
             className="cursor-pointer hover:text-blue-700 dark:hover:text-blue-400"
-            onClick={() => {
-              navigate("/organizer/dashboard");
-              setOpen(false);
-            }}
+            onClick={() => navigate("/venues")}
           >
-            Go Back to Dashboard
+            Venues
           </li>
-        )}
-        <li
-          className="cursor-pointer hover:text-blue-700 dark:hover:text-blue-400"
-          onClick={() => navigate("/venues")}
-        >
-          Venues
-        </li>
-        <li
-          className="cursor-pointer hover:text-blue-700 dark:hover:text-blue-400"
-          onClick={() => navigate("/about")}
-        >
-          About
-        </li>
-        <li
-          className="cursor-pointer hover:text-blue-700 dark:hover:text-blue-400"
-          onClick={() => navigate("/faqs")}
-        >
-          FAQs
-        </li>
-        <li
-          className="cursor-pointer hover:text-blue-700 dark:hover:text-blue-400"
-          onClick={() => navigate("/contact")}
-        >
-          Contact
-        </li>
-      </ul>
-      )};
+          <li
+            className="cursor-pointer hover:text-blue-700 dark:hover:text-blue-400"
+            onClick={() => navigate("/about")}
+          >
+            About
+          </li>
+          <li
+            className="cursor-pointer hover:text-blue-700 dark:hover:text-blue-400"
+            onClick={() => navigate("/faqs")}
+          >
+            FAQs
+          </li>
+          <li
+            className="cursor-pointer hover:text-blue-700 dark:hover:text-blue-400"
+            onClick={() => navigate("/contact")}
+          >
+            Contact
+          </li>
+        </ul>
+      )}
 
       {/* Desktop Buttons */}
       <div
@@ -106,22 +108,23 @@ const NavBar2 = () => {
         className="hidden md:flex items-center space-x-4 font-bold text-gray-900 dark:text-white"
       >
         {user && accessToken ? (
-          <LogoutButton />) : (
-            <>
-              <span
-                className="cursor-pointer hover:text-blue-700 dark:hover:text-blue-400"
-                onClick={() => navigate("/login")}
-              >
-                Login
-              </span>
-              <button
-                className="bg-[#294c9f] text-white py-2 px-5 rounded-full hover:bg-blue-800 dark:hover:bg-blue-500 transition"
-                onClick={() => navigate("/signup")}
-              >
-                Sign up
-              </button>
-            </>
-          )}
+          <LogoutButton />
+        ) : (
+          <>
+            <span
+              className="cursor-pointer hover:text-blue-700 dark:hover:text-blue-400"
+              onClick={() => navigate("/login")}
+            >
+              Login
+            </span>
+            <button
+              className="bg-[#294c9f] text-white py-2 px-5 rounded-full hover:bg-blue-800 dark:hover:bg-blue-500 transition"
+              onClick={() => navigate("/signup")}
+            >
+              Sign up
+            </button>
+          </>
+        )}
       </div>
 
       {/* Mobile Menu Icon */}
