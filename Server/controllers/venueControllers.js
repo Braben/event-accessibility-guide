@@ -98,11 +98,23 @@ const updateVenue = async (req, res) => {
   if (!result.success) {
     return res.status(400).json({ errors: result.format() });
   }
-
+  const { accessibilityFeatures, ...restOfBody } = req.body;
   try {
+    let updateData = { ...restOfBody };
+    if (accessibilityFeatures && Array.isArray(accessibilityFeatures)) {
+      const features = await prisma.accessibilityFeature.findMany({
+        where: {
+          category: { in: accessibilityFeatures }, 
+        },
+      });
+
+      updateData.accessibilityFeatures = {
+        connect: features.map((feature) => ({ id: feature.id })), // Connect by the feature ID
+      };
+    }
     const updatedVenue = await prisma.venue.update({
       where: { id: req.params.id },
-      data: req.body,
+      data: updateData,
     });
     res.status(200).json(updatedVenue);
   } catch (error) {
@@ -111,54 +123,18 @@ const updateVenue = async (req, res) => {
   }
 };
 
-// DELETE a venue
-// const deleteVenue = async (req, res) => {
-//   try {
-//     await prisma.venue.delete({ where: {
-//       id: req.params.id,
-//       accessibilityFeature: {
-//         venueId: req.params.id
-//       }
-//       } });
-//     res.status(200).json({ message: "Venue deleted successfully" });
-//   } catch (error) {
-//     console.error("Error deleting venue:", error);
-//     res.status(500).json({ error: "Internal Server Error" });
-//   }
-// };
+//DELETE a venue
 const deleteVenue = async (req, res) => {
+  const venueId = req.params.id;
   try {
-    const venueId = req.params.id;
     const venue = await prisma.venue.findUnique({
       where: { id: venueId },
-      include: { accessibilityFeatures: true },
+      include: { accessibilityFeatures: true }, 
     });
-
-    if (!venue) {
-      return res.status(404).json({ error: "Venue not found" });
-    }
-
-    for (let feature of venue.accessibilityFeatures) {
-      const isFeatureLinkedToOtherVenues = await prisma.accessibilityFeature.findMany({
-        where: {
-          id: feature.id,
-          venueId: {
-            not: venueId, 
-          },
-        },
-      });
-
-      // If the feature is not linked to other venues, delete it
-      if (isFeatureLinkedToOtherVenues.length === 0) {
-        await prisma.accessibilityFeature.delete({
-          where: { id: feature.id },
-        });
-      }
-    }
-    await prisma.venue.delete({
-      where: { id: venueId },
-    });
-
+    await prisma.venue.delete({ where: {
+      id: venueId,
+    
+      } });
     res.status(200).json({ message: "Venue deleted successfully" });
   } catch (error) {
     console.error("Error deleting venue:", error);
