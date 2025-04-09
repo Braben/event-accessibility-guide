@@ -2,7 +2,7 @@ import { useEffect, useRef, useState } from "react";
 import { Menu, Xmark } from "iconoir-react";
 import { TbPentagonFilled } from "react-icons/tb";
 import { Link, useLocation, useNavigate } from "react-router-dom";
-import { useNotifications } from '../context/NotificationContext';
+import { useNotifications } from "../contextnotification/NotificationContext";
 
 const NavBar2 = () => {
   const navigate = useNavigate();
@@ -13,17 +13,21 @@ const NavBar2 = () => {
   const notificationRef = useRef(null);
 
   // Use the notification context
-  const { 
-    notifications, 
-    unreadCount, 
-    markAsRead, 
-    markAllAsRead 
-  } = useNotifications();
+  const { notifications, unreadCount, markAsRead, markAllAsRead } =
+    useNotifications();
 
   // Check if current route is venue-related or profile
-  const isVenueOrProfile = ['/venue', '/venuedetails1', '/venuedetails2', '/venuedetails3', '/venuedetails4', '/profile'].some(
-    path => location.pathname === path || 
-           (path === '/venue' && location.pathname.includes('venue'))
+  const isVenueOrProfile = [
+    "/venue",
+    "/venuedetails1",
+    "/venuedetails2",
+    "/venuedetails3",
+    "/venuedetails4",
+    "/profile",
+  ].some(
+    (path) =>
+      location.pathname === path ||
+      (path === "/venue" && location.pathname.includes("venue"))
   );
 
   useEffect(() => {
@@ -45,14 +49,18 @@ const NavBar2 = () => {
   // Close notifications when clicking outside - only add listener when notifications are shown
   useEffect(() => {
     function handleClickOutside(event) {
-      if (notificationRef.current && !notificationRef.current.contains(event.target)) {
+      if (
+        notificationRef.current &&
+        !notificationRef.current.contains(event.target)
+      ) {
         setShowNotifications(false);
       }
     }
-    
+
     if (showNotifications) {
       document.addEventListener("mousedown", handleClickOutside);
-      return () => document.removeEventListener("mousedown", handleClickOutside);
+      return () =>
+        document.removeEventListener("mousedown", handleClickOutside);
     }
   }, [showNotifications]);
 
@@ -60,7 +68,7 @@ const NavBar2 = () => {
     { label: "Venues", path: "/venue" },
     { label: "About", path: "/about" },
     { label: "FAQs", path: "/faqs" },
-    { label: "Contact", path: "/contact" }
+    { label: "Contact", path: "/contact" },
   ];
 
   return (
@@ -84,15 +92,11 @@ const NavBar2 = () => {
 
       {/* Mobile Menu Button */}
       <div className="md:hidden">
-        <button 
+        <button
           className="p-2 text-gray-700 hover:text-blue-700"
           onClick={() => setOpen(!open)}
         >
-          {open ? (
-            <Xmark className="h-6 w-6" />
-          ) : (
-            <Menu className="h-6 w-6" />
-          )}
+          {open ? <Xmark className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
         </button>
       </div>
 
@@ -116,8 +120,16 @@ const NavBar2 = () => {
           <div className="flex items-center gap-4">
             {/* Notification Icon */}
             <div className="relative" ref={notificationRef}>
-              <div className="cursor-pointer relative" onClick={() => setShowNotifications(!showNotifications)}>
-                <svg width="24" height="24" fill="currentColor" viewBox="0 0 24 24">
+              <div
+                className="cursor-pointer relative"
+                onClick={() => setShowNotifications(!showNotifications)}
+              >
+                <svg
+                  width="24"
+                  height="24"
+                  fill="currentColor"
+                  viewBox="0 0 24 24"
+                >
                   <path d="M12 22C13.1 22 14 21.1 14 20H10C10 21.1 10.9 22 12 22ZM18 16V11C18 7.93 16.36 5.36 13.5 4.68V4C13.5 3.17 12.83 2.5 12 2.5C11.17 2.5 10.5 3.17 10.5 4V4.68C7.63 5.36 6 7.92 6 11V16L4 18V19H20V18L18 16Z" />
                 </svg>
                 {unreadCount > 0 && (
@@ -132,20 +144,29 @@ const NavBar2 = () => {
                 <div className="absolute top-10 right-0 w-80 bg-white text-black rounded-lg shadow-lg p-4 z-10">
                   <div className="flex justify-between items-center border-b pb-2">
                     <span className="font-bold">Notifications</span>
-                    <span className="text-blue-500 text-sm cursor-pointer" onClick={markAllAsRead}>Mark all as read</span>
+                    <span
+                      className="text-blue-500 text-sm cursor-pointer"
+                      onClick={markAllAsRead}
+                    >
+                      Mark all as read
+                    </span>
                   </div>
                   <div className="max-h-96 overflow-y-auto">
                     {notifications?.length === 0 ? (
                       <p className="text-center py-4">No new notifications</p>
                     ) : (
-                      notifications?.map(notification => (
-                        <div 
-                          key={notification.id} 
-                          className={`p-3 border-b cursor-pointer ${notification.read ? 'bg-gray-100' : ''}`} 
+                      notifications?.map((notification) => (
+                        <div
+                          key={notification.id}
+                          className={`p-3 border-b cursor-pointer ${
+                            notification.read ? "bg-gray-100" : ""
+                          }`}
                           onClick={() => markAsRead(notification.id)}
                         >
                           <p>{notification.message}</p>
-                          <span className="text-xs text-gray-500">{notification.time}</span>
+                          <span className="text-xs text-gray-500">
+                            {notification.time}
+                          </span>
                         </div>
                       ))
                     )}
@@ -155,24 +176,34 @@ const NavBar2 = () => {
             </div>
 
             {/* Profile Picture */}
-            <img 
+            <img
               src="https://wallpapers.com/images/featured/cool-profile-picture-87h46gcobjl5e4xu.jpg"
-              className="w-8 h-8 rounded-full cursor-pointer" 
-              onClick={() => navigate('/profile')} 
+              className="w-8 h-8 rounded-full cursor-pointer"
+              onClick={() => navigate("/profile")}
             />
           </div>
         ) : (
           // For regular pages: Login & Sign up buttons
           <>
-            <Link to="/login" className="text-black dark:text-white hover:text-blue-500">Login</Link>
-            <Link to="/signup" className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-md">Sign up</Link>
+            <Link
+              to="/login"
+              className="text-black dark:text-white hover:text-blue-500"
+            >
+              Login
+            </Link>
+            <Link
+              to="/signup"
+              className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-md"
+            >
+              Sign up
+            </Link>
           </>
         )}
       </div>
 
       {/* Mobile Drawer Menu - Replaced Material Tailwind Drawer with conditional rendering */}
       {open && (
-        <div 
+        <div
           ref={menuRef}
           className="fixed top-0 right-0 h-full w-64 bg-white dark:bg-gray-900 shadow-lg p-4 z-50"
         >
@@ -180,7 +211,7 @@ const NavBar2 = () => {
             <h5 className="text-xl font-medium text-gray-900 dark:text-white">
               VenueHubs
             </h5>
-            <button 
+            <button
               className="p-2 text-gray-700 hover:text-blue-700 dark:text-white dark:hover:text-blue-400"
               onClick={() => setOpen(false)}
             >
@@ -200,14 +231,14 @@ const NavBar2 = () => {
                 {item.label}
               </button>
             ))}
-            
+
             {/* Mobile auth buttons */}
             {!isVenueOrProfile ? (
               <div className="flex flex-col gap-2 mt-4">
                 <button
                   className="px-4 py-2 border border-blue-600 text-blue-600 rounded-md hover:bg-blue-50 dark:border-blue-400 dark:text-blue-400 dark:hover:bg-gray-800"
                   onClick={() => {
-                    navigate('/login');
+                    navigate("/login");
                     setOpen(false);
                   }}
                 >
@@ -216,7 +247,7 @@ const NavBar2 = () => {
                 <button
                   className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700"
                   onClick={() => {
-                    navigate('/signup');
+                    navigate("/signup");
                     setOpen(false);
                   }}
                 >
@@ -228,7 +259,7 @@ const NavBar2 = () => {
                 <button
                   className="px-4 py-2 border border-blue-600 text-blue-600 rounded-md hover:bg-blue-50 dark:border-blue-400 dark:text-blue-400 dark:hover:bg-gray-800"
                   onClick={() => {
-                    navigate('/profile');
+                    navigate("/profile");
                     setOpen(false);
                   }}
                 >

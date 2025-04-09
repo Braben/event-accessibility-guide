@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { CheckCircle, Circle, X } from "lucide-react";
+// import { FaCheckCircle, FaCircle } from "react-icons/fa";
 
 const VenueFilterSidebar = ({ isOpen, onClose }) => {
   // State to track selected filters
@@ -22,7 +23,9 @@ const VenueFilterSidebar = ({ isOpen, onClose }) => {
   return (
     <>
       {/* Overlay */}
-      {isOpen && <div className="fixed inset-0 bg-black/50 z-40" onClick={onClose} />}
+      {isOpen && (
+        <div className="fixed inset-0 bg-black/50 z-40" onClick={onClose} />
+      )}
 
       {/* Sidebar */}
       <div
@@ -43,12 +46,19 @@ const VenueFilterSidebar = ({ isOpen, onClose }) => {
           {/* Accessibility Features */}
           <h3 className="font-medium mb-2">Accessibility Features</h3>
           <div className="grid grid-cols-2 gap-2 mb-4">
-            {["Wheelchair Access", "Accessible Restrooms", "Elevator Access", "Accessible Parking"].map((feature) => (
+            {[
+              "Wheelchair Access",
+              "Accessible Restrooms",
+              "Elevator Access",
+              "Accessible Parking",
+            ].map((feature) => (
               <button
                 key={feature}
                 onClick={() => toggleFilter("accessibility", feature)}
                 className={`bg-[#E0E0E4] p-2 rounded flex items-center space-x-2 w-full ${
-                  selectedFilters.accessibility.includes(feature) ? "border-blue-600 bg-blue-100" : ""
+                  selectedFilters.accessibility.includes(feature)
+                    ? "border-blue-600 bg-blue-100"
+                    : ""
                 }`}
               >
                 {selectedFilters.accessibility.includes(feature) ? (
@@ -64,12 +74,19 @@ const VenueFilterSidebar = ({ isOpen, onClose }) => {
           {/* Venue Types */}
           <h3 className="font-medium mb-2">Venue Types</h3>
           <div className="grid grid-cols-2 gap-2 mb-4">
-            {["Arts & Culture", "Sports & Recreation", "Education", "Entertainment"].map((type) => (
+            {[
+              "Arts & Culture",
+              "Sports & Recreation",
+              "Education",
+              "Entertainment",
+            ].map((type) => (
               <button
                 key={type}
                 onClick={() => toggleFilter("venueTypes", type)}
                 className={`bg-[#E0E0E4] p-2 rounded flex items-center space-x-2 w-full ${
-                  selectedFilters.venueTypes.includes(type) ? "border-blue-600 bg-blue-100" : ""
+                  selectedFilters.venueTypes.includes(type)
+                    ? "border-blue-600 bg-blue-100"
+                    : ""
                 }`}
               >
                 {selectedFilters.venueTypes.includes(type) ? (
@@ -84,7 +101,13 @@ const VenueFilterSidebar = ({ isOpen, onClose }) => {
 
           {/* Distance Slider */}
           <h3 className="font-medium mb-2">Distance</h3>
-          <input type="range" min="1" max="50" defaultValue="32" className="w-full mb-2" />
+          <input
+            type="range"
+            min="1"
+            max="50"
+            defaultValue="32"
+            className="w-full mb-2"
+          />
           <div className="flex justify-between text-sm text-gray-600">
             <span>1 mile</span>
             <span>32 miles</span>
@@ -96,11 +119,15 @@ const VenueFilterSidebar = ({ isOpen, onClose }) => {
         <div className="p-4 border-t bg-white">
           <button
             className="w-full border py-2 rounded mb-2"
-            onClick={() => setSelectedFilters({ accessibility: [], venueTypes: [] })}
+            onClick={() =>
+              setSelectedFilters({ accessibility: [], venueTypes: [] })
+            }
           >
             Reset Filters
           </button>
-          <button className="w-full bg-blue-600 text-white py-2 rounded">Apply Filters</button>
+          <button className="w-full bg-blue-600 text-white py-2 rounded">
+            Apply Filters
+          </button>
         </div>
       </div>
     </>
