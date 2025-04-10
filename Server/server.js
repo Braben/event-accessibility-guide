@@ -26,7 +26,7 @@ const allowedOrigins = [
   "http://localhost:5175",
   "http://localhost:5176",
   "http://localhost:5177",
-  "https://venuehubs.netlify.app/", 
+  "https://venuehubs.netlify.app", 
 ];
 
 // Middleware
