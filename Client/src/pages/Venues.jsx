@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { IoSearchSharp } from "react-icons/io5";
 import { CiFilter } from "react-icons/ci";
-import { useNavigate } from "react-router-dom";
 import VenueFilterSidebar from "./VenueFilterSidebar";
 import VenueCard from "../components/VenueCard";
 
@@ -17,8 +16,6 @@ const Venues = () => {
     venueTypes: [],
     distance: 32,
   });
-
-  const navigate = useNavigate();
 
   useEffect(() => {
     fetchVenues();
@@ -107,7 +104,7 @@ const Venues = () => {
           <CiFilter className="text-xl" />
           {appliedFilters.accessibility.length > 0 ||
           appliedFilters.venueTypes.length > 0
-            ? `Filterseee (${
+            ? `Filters (${
                 appliedFilters.accessibility.length +
                 appliedFilters.venueTypes.length
               })`

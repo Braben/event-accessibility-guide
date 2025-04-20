@@ -9,9 +9,9 @@ import {
 import { Menu, Xmark } from "iconoir-react";
 import { TbPentagonFilled } from "react-icons/tb";
 import { useNavigate, useLocation } from "react-router-dom";
-import { getAuth, onAuthStateChanged } from "firebase/auth";
+// import { getAuth, onAuthStateChanged } from "firebase/auth";
 import LogoutButton from "./LogoutBtn";
-import { getUserProfile } from "../services/authService";
+// import { getUserProfile } from "../services/authService";
 import { UserContext } from "../context/UserContext";
 
 const NavBar2 = () => {

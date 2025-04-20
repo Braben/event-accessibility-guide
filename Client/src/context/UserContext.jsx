@@ -1,7 +1,7 @@
 import { createContext, useState, useEffect } from "react";
 import { getAuth, onAuthStateChanged } from "firebase/auth";
 import { getUserProfile } from "../services/authService";
-import { getDbIdFromFirebase } from "../services/firebaseService";
+// import { getDbIdFromFirebase } from "../services/firebaseService";
 
 export const UserContext = createContext();
 
