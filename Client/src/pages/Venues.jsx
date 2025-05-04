@@ -1,125 +1,184 @@
-import React, { useState } from "react";
-import { Input } from "@material-tailwind/react";
-import { IoMdSearch } from "react-icons/io";
+import React, { useState, useEffect } from "react";
+import { IoSearchSharp } from "react-icons/io5";
 import { CiFilter } from "react-icons/ci";
-import { Button } from "@material-tailwind/react";
-const Venues = () => {
-  const [showFilters, setShowFilters] = useState(false);
-  const [filters, setFilters] = useState({
-    location: "",
-    accessibility: "",
-  });
-  const [venues, setVenues] = useState([]);
+import VenueFilterSidebar from "./VenueFilterSidebar";
+import VenueCard from "../components/VenueCard";
 
-  //function to handle search/filter
-  const handleSearch = async (e) => {
-    e.preventDefault();
-    if (!filters.location) {
-      console.error("Please enter a location/ event.");
-      return;
-    }
+const Venues = () => {
+  const [venues, setVenues] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+  const [isFilterOpen, setIsFilterOpen] = useState(false);
+  const [searchQuery, setSearchQuery] = useState("");
+  const [searchVenues, setSearchVenues] = useState([]);
+  const [appliedFilters, setAppliedFilters] = useState({
+    accessibility: [],
+    venueTypes: [],
+    distance: 32,
+  });
+
+  useEffect(() => {
+    fetchVenues();
+  }, []);
+
+  const fetchVenues = async () => {
     try {
-      // fetch api from backend
       const response = await fetch(
-        `https://event-accessibility-guide-production.up.railway.app/api/venues/search?query=${filters.location}&accessibility=${filters.accessibility}`
+        "https://event-accessibility-guide-production.up.railway.app/venues"
       );
+      if (!response.ok) throw new Error("Failed to fetch venues");
       const data = await response.json();
-      console.log(data);
-      // store filtered data
       setVenues(data);
     } catch (error) {
-      console.error("Error fetching data:", error);
+      setError(error.message);
+    } finally {
+      setLoading(false);
     }
   };
 
-  return (
-    <div className="mx-8 ">
-      <div className="mt-4 ">
-        <h3 className="font-bold text-2xl">Accessible Venues</h3>
-        <p>Find venues with accessibility features for your next event </p>
-      </div>
-      <div className="flex items-center gap-3 ">
-        <form
-          className="bg-gray-200 h-12 w-4/5 gap-3 px-5 flex items-center justify-center border border-black border-opacity-40"
-          onSubmit={handleSearch}
-        >
-          <button type="submit" className="transition">
-            <IoMdSearch className="size-8 font-bold text-gray-700" />
-          </button>
+  const handleSearch = async (e) => {
+    e.preventDefault();
+    if (!searchQuery.trim()) return;
 
-          <Input
-            className="border-transparent focus:ring-0 focus:outline-none focus:border-transparent focus-visible:ring-0 focus-visible:outline-none shadow-none placeholder:text-black  bg-transparent w-64 p-0"
-            color="secondary"
-            placeholder="Search venues"
-            value={filters.location}
-            onChange={(e) =>
-              setFilters({ ...filters, location: e.target.value })
-            }
-            onKeyDown={(e) => {
-              if (e.key === "Enter") {
-                e.preventDefault(); // Prevent default form submission
-                handleSearch(e); // Call search function
-              }
-            }}
-            style={{
-              border: "none",
-              outline: "none",
-              boxShadow: "none",
-            }}
+    try {
+      let queryParams = `query=${searchQuery.trim()}`;
+
+      if (appliedFilters.accessibility.length > 0) {
+        queryParams += `&accessibility=${appliedFilters.accessibility.join(
+          ","
+        )}`;
+      }
+
+      if (appliedFilters.venueTypes.length > 0) {
+        queryParams += `&venueTypes=${appliedFilters.venueTypes.join(",")}`;
+      }
+
+      queryParams += `&distance=${appliedFilters.distance}`;
+
+      const response = await fetch(
+        `https://event-accessibility-guide-production.up.railway.app/api/venues/search?${queryParams}`
+      );
+      const data = await response.json();
+      setSearchVenues(data);
+    } catch (err) {
+      console.error("Search error:", err);
+    }
+  };
+
+  const applyFilters = (filters) => {
+    setAppliedFilters(filters);
+    if (searchQuery) handleSearch(new Event("submit"));
+  };
+
+  const clearAllFilters = () => {
+    setAppliedFilters({ accessibility: [], venueTypes: [], distance: 32 });
+  };
+
+  const displayedVenues = searchVenues.length > 0 ? searchVenues : venues;
+
+  return (
+    <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-8">
+      <div className="mb-10 p-2 gap-2">
+        <h1 className="text-5xl font-bold text-black">Accessible Venues</h1>
+        <p className="text-xl text-black mt-2">
+          Find venues with accessibility features for your next event venues
+        </p>
+      </div>
+
+      <div className="flex flex-col md:flex-row items-center gap-4 justify-between mb-6">
+        <form onSubmit={handleSearch} className="relative w-10/12 ">
+          <IoSearchSharp className="absolute left-4 top-1/2 transform -translate-y-1/2 text-blue-700 text-xl" />
+          <input
+            type="search"
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+            placeholder="Search venues (restaurants, parks, hotels...)"
+            className="w-full pl-12 pr-4 py-3 rounded-lg border border-gray-300 shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
           />
         </form>
 
         <button
-          className="btn btn-outline border-black w-1/4  border-opacity-40  focus:outline-none focus:ring-2 hover:bg-gray-300  h-12"
-          style={{
-            outline: "none",
-            boxShadow: "none",
-          }}
-          onClick={() => setShowFilters(!showFilters)}
+          onClick={() => setIsFilterOpen(true)}
+          className="flex items-center gap-2 w-2/12 bg-blue-100 text-blue-700 px-5 py-3 rounded-lg shadow-sm border border-blue-300 hover:bg-blue-200 transition"
         >
-          <CiFilter className="size-6  stroke-[1]" />
-          {showFilters ? "Hide Filters" : "Show Filters"}
+          <CiFilter className="text-xl" />
+          {appliedFilters.accessibility.length > 0 ||
+          appliedFilters.venueTypes.length > 0
+            ? `Filters (${
+                appliedFilters.accessibility.length +
+                appliedFilters.venueTypes.length
+              })`
+            : "Show Filters"}
         </button>
       </div>
 
-      {showFilters && (
-        <div id="filters" className="h-48 w-full  bg-slate-300 mt-2">
-          <label>Location:</label>
-          <Input
-            className="text-white"
-            type="text"
-            placeholder="Enter location"
-            value={filters.location}
-            onChange={(e) =>
-              setFilters({ ...filters, location: e.target.value })
-            }
-          />
-          <label>Accessibility Features:</label>
-          <select
-            value={filters.accessibility}
-            onChange={(e) =>
-              setFilters({ ...filters, accessibility: e.target.value })
-            }
+      <VenueFilterSidebar
+        isOpen={isFilterOpen}
+        onClose={() => setIsFilterOpen(false)}
+        onApplyFilters={applyFilters}
+        initialFilters={appliedFilters}
+      />
+
+      {/* Applied Filters */}
+      {(appliedFilters.accessibility.length > 0 ||
+        appliedFilters.venueTypes.length > 0) && (
+        <div className="flex flex-wrap gap-3 mb-6">
+          {[...appliedFilters.accessibility, ...appliedFilters.venueTypes].map(
+            (filter) => (
+              <span
+                key={filter}
+                className="bg-blue-200 text-blue-800 px-4 py-1 rounded-full text-sm flex items-center gap-2"
+              >
+                {filter}
+                <button
+                  className="font-bold"
+                  onClick={() => {
+                    setAppliedFilters((prev) => ({
+                      ...prev,
+                      accessibility: prev.accessibility.filter(
+                        (f) => f !== filter
+                      ),
+                      venueTypes: prev.venueTypes.filter((f) => f !== filter),
+                    }));
+                  }}
+                >
+                  ×
+                </button>
+              </span>
+            )
+          )}
+          <button
+            onClick={clearAllFilters}
+            className="text-sm text-red-500 underline ml-2"
           >
-            <option value="">Select All</option>
-            <option value="wheelchair accessible">Wheelchair Accessible</option>
-            <option value="accessible seating">Accessible Seating</option>
-            <option value="visual aids">Visual Aids</option>
-            <option value="braille">Braille</option>
-            <option value="sign language interpreters">
-              Sign Language Interpreters
-            </option>
-            <option value="hearing aids">Hearing Aids</option>
-            <option value="speech-to-text assistants">
-              Speech-to-Text Assistants
-            </option>
-            <option value="deafness support">Deafness Support</option>
-            <option value="wheelchair-accessible restrooms">
-              Wheelchair-Accessible Restrooms
-            </option>
-            <option value="noisy environments">Noisy Environments</option>
-          </select>
+            Clear all
+          </button>
         </div>
+      )}
+
+      {/* Loading and Error */}
+      {loading && (
+        <div className="text-center text-gray-500">Loading venues...</div>
+      )}
+      {error && <div className="text-center text-red-500">Error: {error}</div>}
+
+      <div> {`Showing ${venues.length} venues`}</div>
+
+      {/* Venue Cards Grid */}
+      {!loading && displayedVenues.length > 0 ? (
+        <div className="container mx-auto">
+          <div className=" container mx-auto grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-3 gap-6 mt-6">
+            {displayedVenues.map((venue) => (
+              <VenueCard key={venue.id} venue={venue} />
+            ))}
+          </div>
+        </div>
+      ) : (
+        !loading && (
+          <div className="text-center text-gray-500 mt-16">
+            No venues found.
+          </div>
+        )
       )}
     </div>
   );
