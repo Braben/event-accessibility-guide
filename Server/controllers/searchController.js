@@ -19,6 +19,7 @@ const searchVenues = async (req, res) => {
           { description: { contains: word, mode: "insensitive" } },
           { address: { contains: word, mode: "insensitive" } },
           { accessibilityFeatures: { some: { category: { contains: word, mode: "insensitive" } } } },
+          { events: { some: { title: { contains: word, mode: "insensitive" } } } },
         ],
       }));
       filters.push({ AND: words });
@@ -34,7 +35,7 @@ const searchVenues = async (req, res) => {
 
     const venues = await prisma.venue.findMany({
       where: { AND: filters},
-      include: { accessibilityFeatures: true, reviews: true }
+      include: { accessibilityFeatures: true, reviews: true, events:true, }
     });
 
     if (venues.length === 0) {

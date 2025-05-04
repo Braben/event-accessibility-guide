@@ -21,7 +21,7 @@ model User {
   createdAt         DateTime         @default(now())
   notifications     Notification[]
   reviews           Review[]
-  venues            Venue[]
+  venues            Event[]
 }
 
 model Venue {
@@ -30,14 +30,28 @@ model Venue {
   address               String?
   contactInformation    String?
   venueCapacity         Int?
+  events                Event[]
   description           String?
-  photos                String[]        @default([])
+  photos                String[]              @default([])
   routeDirection        String?
-  createdAt             DateTime               @default(now())
+  createdAt             DateTime              @default(now())
   accessibilityFeatures AccessibilityFeature[]
   reviews               Review[]
-  userId                String
-  user                  User                   @relation(fields: [userId], references: [id])
+}
+
+
+model Event {
+  id                    String                 @id @default(cuid())
+  title                 String
+  description           String?
+  startDate             DateTime?
+  endDate               DateTime?
+  photos                String[]        @default([])
+  createdAt             DateTime               @default(now())
+  venueId               String
+  venue                 Venue    @relation(fields: [venueId], references: [id])
+  createdBy             String
+  user                  User    @relation(fields: [createdBy], references: [id])
 }
 
 model AccessibilityFeature {
