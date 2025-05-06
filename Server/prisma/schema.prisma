@@ -56,7 +56,7 @@ model Event {
 
 model AccessibilityFeature {
   id                 String  @id @default(cuid())
-  category           String
+  category           String @unique
   description        String?
   availabilityStatus Boolean @default(true)
   venueId            String?

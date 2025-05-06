@@ -1,0 +1,182 @@
+[
+  {
+    "id": "ckv1a1a000000001",
+    "name": "Royal Event Hall",
+    "address": "123 Main Street, Accra",
+    "contactInformation": "+233 20 123 4567",
+    "venueCapacity": 300,
+    "description": "A spacious hall suitable for weddings and conferences.",
+    "photos": [
+      "https://example.com/photo1.jpg",
+      "https://example.com/photo2.jpg"
+    ],
+    "routeDirection": "Located off Main Street near the central bank.",
+    "createdAt": "2025-05-05T08:00:00Z",
+    "accessibilityFeatures": [
+      "Wheel chair access",
+      "Accessible Toilet"
+    ],
+    "reviews": []
+  },
+  {
+    "id": "ckv1a1a000000002",
+    "name": "Sunset Garden Arena",
+    "address": "45 Mango Lane, Kumasi",
+    "contactInformation": "+233 24 987 6543",
+    "venueCapacity": 150,
+    "description": "An open-air garden perfect for parties and engagements.",
+    "photos": [
+      "https://example.com/garden1.jpg"
+    ],
+    "routeDirection": "Next to Mango Market, off the ring road.",
+    "createdAt": "2025-05-05T08:01:00Z",
+    "accessibilityFeatures": [
+      "Braille itinerary"
+    ],
+    "reviews": []
+  },
+  {
+    "id": "ckv1a1a000000003",
+    "name": "CityView Conference Center",
+    "address": "100 Ring Road Central, Accra",
+    "contactInformation": "+233 30 222 3344",
+    "venueCapacity": 500,
+    "description": "Modern conference space with advanced facilities.",
+    "photos": [
+      "https://example.com/conference.jpg"
+    ],
+    "routeDirection": "Opposite the Accra Mall on Ring Road.",
+    "createdAt": "2025-05-05T08:02:00Z",
+    "accessibilityFeatures": [
+      "Elevator",
+      "Earing aids"
+    ],
+    "reviews": []
+  },
+  {
+    "id": "ckv1a1a000000004",
+    "name": "Green Hills Park Venue",
+    "address": "Green Hills, Koforidua",
+    "contactInformation": "+233 55 888 9999",
+    "venueCapacity": 200,
+    "description": "Lush park venue ideal for outdoor celebrations.",
+    "photos": [
+      "https://example.com/park.jpg"
+    ],
+    "routeDirection": "5 mins from Koforidua Technical University.",
+    "createdAt": "2025-05-05T08:03:00Z",
+    "accessibilityFeatures": [
+      "Close parking"
+    ],
+    "reviews": []
+  },
+  {
+    "id": "ckv1a1a000000005",
+    "name": "LakeView Banquet Hall",
+    "address": "Lake Road, Cape Coast",
+    "contactInformation": "+233 26 777 8888",
+    "venueCapacity": 350,
+    "description": "Banquet hall with scenic views of the lake.",
+    "photos": [
+      "https://example.com/lakehall.jpg"
+    ],
+    "routeDirection": "Near the old castle, behind Shell Station.",
+    "createdAt": "2025-05-05T08:04:00Z",
+    "accessibilityFeatures": [
+      "Wheel chair access",
+      "Braille itinerary"
+    ],
+    "reviews": []
+  },
+  {
+    "id": "ckv1a1a000000006",
+    "name": "Victory Dome",
+    "address": "East Legon, Accra",
+    "contactInformation": "+233 27 112 3344",
+    "venueCapacity": 1000,
+    "description": "Large auditorium for concerts and church events.",
+    "photos": [
+      "https://example.com/dome.jpg"
+    ],
+    "routeDirection": "Located near American House, East Legon.",
+    "createdAt": "2025-05-05T08:05:00Z",
+    "accessibilityFeatures": [
+      "Elevator",
+      "Earing aids",
+      "Close parking"
+    ],
+    "reviews": []
+  },
+  {
+    "id": "ckv1a1a000000007",
+    "name": "Serenity Event Grounds",
+    "address": "Tema Community 25",
+    "contactInformation": "+233 23 444 5555",
+    "venueCapacity": 250,
+    "description": "Calm and beautiful space for events and concerts.",
+    "photos": [
+      "https://example.com/serenity.jpg"
+    ],
+    "routeDirection": "Next to Community 25 Police Station.",
+    "createdAt": "2025-05-05T08:06:00Z",
+    "accessibilityFeatures": [
+      "Wheel chair access"
+    ],
+    "reviews": []
+  },
+  {
+    "id": "ckv1a1a000000008",
+    "name": "Palm Tree Pavilion",
+    "address": "Beach Road, Takoradi",
+    "contactInformation": "+233 20 333 6666",
+    "venueCapacity": 180,
+    "description": "Beachfront pavilion ideal for romantic events.",
+    "photos": [
+      "https://example.com/pavilion.jpg"
+    ],
+    "routeDirection": "Opposite Takoradi Beach Hotel.",
+    "createdAt": "2025-05-05T08:07:00Z",
+    "accessibilityFeatures": [
+      "Braille itinerary",
+      "Accessible Toilet"
+    ],
+    "reviews": []
+  },
+  {
+    "id": "ckv1a1a000000009",
+    "name": "Golden Palms Center",
+    "address": "Spintex Road, Accra",
+    "contactInformation": "+233 29 123 4567",
+    "venueCapacity": 400,
+    "description": "A top-tier venue with multiple event spaces.",
+    "photos": [
+      "https://example.com/golden.jpg"
+    ],
+    "routeDirection": "Opposite KFC, Spintex.",
+    "createdAt": "2025-05-05T08:08:00Z",
+    "accessibilityFeatures": [
+      "Elevator",
+      "Accessible Toilet"
+    ],
+    "reviews": []
+  },
+  {
+    "id": "ckv1a1a000000010",
+    "name": "Freedom Square",
+    "address": "Independence Avenue, Accra",
+    "contactInformation": "+233 21 888 0000",
+    "venueCapacity": 2000,
+    "description": "Iconic square used for national events and concerts.",
+    "photos": [
+      "https://example.com/freedom.jpg"
+    ],
+    "routeDirection": "Next to Independence Arch.",
+    "createdAt": "2025-05-05T08:09:00Z",
+    "accessibilityFeatures": [
+      "Wheel chair access",
+      "Accessible Toilet",
+      "Earing aids"
+    ],
+    "reviews": []
+  }
+]
