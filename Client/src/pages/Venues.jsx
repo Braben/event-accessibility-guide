@@ -21,13 +21,22 @@ const Venues = () => {
     fetchVenues();
   }, []);
 
+  useEffect(() => {
+    if (searchQuery.trim() === "") {
+      setSearchVenues([]);
+    }
+  }, [searchQuery]);
+  
+
   const fetchVenues = async () => {
     try {
       const response = await fetch(
         "https://event-accessibility-guide-production.up.railway.app/venues"
       );
+      console.log("Filter URL:", url);
       if (!response.ok) throw new Error("Failed to fetch venues");
       const data = await response.json();
+      console.log("Filter response:", data);
       setVenues(data);
     } catch (error) {
       setError(error.message);
@@ -65,13 +74,49 @@ const Venues = () => {
     }
   };
 
-  const applyFilters = (filters) => {
+  const applyFilters = async (filters) => {
     setAppliedFilters(filters);
-    if (searchQuery) handleSearch(new Event("submit"));
+  
+    try {
+      let queryParams = [];
+
+      if (searchQuery.trim()) {
+        queryParams.push(`query=${searchQuery.trim()}`);
+      }
+  
+      if (filters.accessibility.length > 0) {
+        const normalizedAccessibility = filters.accessibility.map((item) =>
+          item.trim()
+        );
+        queryParams.push(`accessibility=${filters.accessibility.map(encodeURIComponent).join(",")}`);
+      }      
+  
+      // if (filters.venueTypes.length > 0) {
+      //   queryParams.push(
+      //     `venueTypes=${filters.venueTypes.map(encodeURIComponent).join(",")}`
+      //   );
+      // }
+  
+      // queryParams.push(`distance=${filters.distance}`);
+  
+      const response = await fetch(
+        `https://event-accessibility-guide-production.up.railway.app/api/venues/search?${queryParams.join("&")}`
+      );
+  
+      if (!response.ok) throw new Error("Failed to fetch filtered venues");
+  
+      const data = await response.json();
+      setSearchVenues(data);
+    } catch (err) {
+      console.error("Apply filters error:", err);
+    }
   };
+  
 
   const clearAllFilters = () => {
     setAppliedFilters({ accessibility: [], venueTypes: [], distance: 32 });
+    setSearchVenues([]);
+    setSearchQuery("");
   };
 
   const displayedVenues = searchVenues.length > 0 ? searchVenues : venues;
@@ -87,7 +132,13 @@ const Venues = () => {
 
       <div className="flex flex-col md:flex-row items-center gap-4 justify-between mb-6">
         <form onSubmit={handleSearch} className="relative w-10/12 ">
-          <IoSearchSharp className="absolute left-4 top-1/2 transform -translate-y-1/2 text-blue-700 text-xl" />
+          <button
+            type="submit"
+            className="absolute left-4 top-1/2 transform -translate-y-1/2 text-blue-700 text-xl"
+            aria-label="Search"
+          >
+            <IoSearchSharp />
+          </button>
           <input
             type="search"
             value={searchQuery}
@@ -162,7 +213,14 @@ const Venues = () => {
       )}
       {error && <div className="text-center text-red-500">Error: {error}</div>}
 
-      <div> {`Showing ${venues.length} venues`}</div>
+      {(searchVenues.length > 0 ||
+        appliedFilters.accessibility.length > 0 ||
+        appliedFilters.venueTypes.length > 0) ? (
+        <div>{`Showing ${displayedVenues.length} out of ${venues.length} venues`}</div>
+      ) : (
+        <div>{`Showing ${venues.length} venues`}</div>
+      )}
+
 
       {/* Venue Cards Grid */}
       {!loading && displayedVenues.length > 0 ? (

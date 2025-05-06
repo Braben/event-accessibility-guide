@@ -1,13 +1,37 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { CheckCircle, Circle, X } from "lucide-react";
 // import { FaCheckCircle, FaCircle } from "react-icons/fa";
 
-const VenueFilterSidebar = ({ isOpen, onClose }) => {
+const VenueFilterSidebar = ({ isOpen, onClose, onApplyFilters, initialFilters }) => {
   // State to track selected filters
   const [selectedFilters, setSelectedFilters] = useState({
     accessibility: [],
     venueTypes: [],
   });
+
+  const [accessibilityFeatures, setAccessibilityFeatures] = useState([]);
+
+  useEffect(() => {
+    const fetchAccessibilityFeatures = async () => {
+      try {
+        const res = await fetch(
+          "https://event-accessibility-guide-production.up.railway.app/features"
+        );
+        const data = await res.json();
+        setAccessibilityFeatures(data);
+      } catch (err) {
+        console.error("Error fetching accessibility features:", err);
+      }
+    };
+
+    fetchAccessibilityFeatures();
+  }, []);
+
+  useEffect(() => {
+    if (initialFilters) {
+      setSelectedFilters(initialFilters);
+    }
+  }, [initialFilters]);
 
   // Function to toggle selection
   const toggleFilter = (category, value) => {
@@ -46,29 +70,26 @@ const VenueFilterSidebar = ({ isOpen, onClose }) => {
           {/* Accessibility Features */}
           <h3 className="font-medium mb-2">Accessibility Features</h3>
           <div className="grid grid-cols-2 gap-2 mb-4">
-            {[
-              "Wheelchair Access",
-              "Accessible Restrooms",
-              "Elevator Access",
-              "Accessible Parking",
-            ].map((feature) => (
-              <button
-                key={feature}
-                onClick={() => toggleFilter("accessibility", feature)}
-                className={`bg-[#E0E0E4] p-2 rounded flex items-center space-x-2 w-full ${
-                  selectedFilters.accessibility.includes(feature)
-                    ? "border-blue-600 bg-blue-100"
-                    : ""
-                }`}
-              >
-                {selectedFilters.accessibility.includes(feature) ? (
-                  <CheckCircle size={16} className="text-blue-600" />
-                ) : (
-                  <Circle size={16} />
-                )}
-                <span>{feature}</span>
-              </button>
-            ))}
+            {accessibilityFeatures.map((feature) => {
+              const category = feature.category;
+              return (
+                <button
+                  key={feature.id}
+                  onClick={() => toggleFilter("accessibility", feature.category)}
+                  className={`bg-[#E0E0E4] p-2 rounded flex items-center space-x-2 w-full ${
+                    selectedFilters.accessibility.includes(category)
+                      ? "border-blue-600 bg-blue-100"
+                      : ""
+                  }`}
+                >
+                  {selectedFilters.accessibility.includes(category) ? (
+                    <CheckCircle size={16} className="text-blue-600" />
+                  ) : (
+                    <Circle size={16} />
+                  )}
+                  <span>{category}</span>
+                </button>
+            )})}
           </div>
 
           {/* Venue Types */}
@@ -125,7 +146,10 @@ const VenueFilterSidebar = ({ isOpen, onClose }) => {
           >
             Reset Filters
           </button>
-          <button className="w-full bg-blue-600 text-white py-2 rounded">
+          <button className="w-full bg-blue-600 text-white py-2 rounded" onClick={() => {
+            onApplyFilters(selectedFilters);
+            onClose();
+          }}>
             Apply Filters
           </button>
         </div>
