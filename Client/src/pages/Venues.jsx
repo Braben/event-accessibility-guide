@@ -33,7 +33,6 @@ const Venues = () => {
       const response = await fetch(
         "https://event-accessibility-guide-production.up.railway.app/venues"
       );
-      console.log("Filter URL:", url);
       if (!response.ok) throw new Error("Failed to fetch venues");
       const data = await response.json();
       console.log("Filter response:", data);
