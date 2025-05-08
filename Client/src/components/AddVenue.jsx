@@ -1,46 +1,36 @@
-import React from "react";
-import { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { v4 as uuidv4 } from "uuid";
-import { useEffect } from "react";
-import {
-  Dialog,
-  Button,
-  Input,
-  Checkbox,
-  Typography,
-  IconButton,
-} from "@material-tailwind/react";
-import { Xmark } from "iconoir-react";
 import { useSelector, useDispatch } from "react-redux";
-import { createVenue } from "../slicers/venueSlicer";
+import { createVenue, updateVenue } from "../slicers/venueSlicer";
 
-const AddVenue = () => {
+const AddVenue = ({ venue = null, isEditing = false, onCancel }) => {
   const [venueName, setVenueName] = useState("");
-  const [venueCapacity, setVenueCapacity] = useState(0);
   const [venueAddress, setVenueAddress] = useState("");
-  const [venueImage, setVenueImage] = useState(null);
   const [venueDescription, setVenueDescription] = useState("");
   const [accessibilityFeatures, setAccessibilityFeatures] = useState([]);
-  const [isOpen, setIsOpen] = useState(false);
+  
   const dispatch = useDispatch();
   const venues = useSelector((state) => state.venues.venues);
+  
+  // Initialize form with venue data if editing
   useEffect(() => {
-    console.log(venues); // Log when state updates
-  }, [venues]);
+    if (isEditing && venue) {
+      setVenueName(venue.venueName || venue.name || "");
+      setVenueAddress(venue.venueAddress || venue.address || "");
+      setVenueDescription(venue.venueDescription || "");
+      setAccessibilityFeatures(venue.accessibilityFeatures || []);
+    }
+  }, [isEditing, venue]);
 
   const accessibilityOptions = [
-    "Balanced sound",
-    "Earing aids",
-    "Sign language translators",
-    "Braille itinerary",
-    "Wheel chair access",
-    "Elevator",
-    "Automatic doors",
-    "Lighting considerations",
-    "Close parking",
-    "Large prints",
-    "Service Animal Accommodation",
-    "Sensory-Friendly Environment",
+    "Ground Level Entry",
+    "Wide Doorways",
+    "Service Animals Welcome",
+    "Reserved Accessible Seating",
+    "Wheelchair Ramps",
+    "Elevators",
+    "Accessible Restrooms",
+    "Hearing Loops"
   ];
 
   const handleAccessibilityChange = (option) => {
@@ -51,209 +41,137 @@ const AddVenue = () => {
           : [...prev, option] // Add if not selected
     );
   };
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+
+    if (isEditing && venue) {
+      const updatedVenue = {
+        ...venue,
+        venueName,
+        venueAddress,
+        venueDescription,
+        accessibilityFeatures,
+      };
+      dispatch(updateVenue(updatedVenue));
+    } else {
+      const newVenue = {
+        id: uuidv4(),
+        venueName,
+        venueAddress,
+        venueDescription,
+        accessibilityFeatures,
+        accessibility: Math.round((accessibilityFeatures.length / accessibilityOptions.length) * 100),
+      };
+      dispatch(createVenue(newVenue));
+    }
+
+    // Clear inputs and go back to list
+    setVenueName("");
+    setVenueAddress("");
+    setVenueDescription("");
+    setAccessibilityFeatures([]);
+    onCancel();
+  };
+
   return (
-    <div>
-      <Dialog open={isOpen} onClose={() => setIsOpen(false)} size="md">
-        <Dialog.Trigger
-          as={Button}
-          className="w-48 bg-black p-3 font-bold"
-          onClick={() => setIsOpen(true)} // Open modal
-        >
-          <span className="mr-2">+</span> Add Venue
-        </Dialog.Trigger>
-        <Dialog.Overlay>
-          <Dialog.Content>
-            <Dialog.DismissTrigger
-              as={IconButton}
-              size="sm"
-              variant="ghost"
-              color="secondary"
-              className="absolute right-2 top-2"
-              isCircular
+    <div className="bg-white p-6 rounded-lg shadow">
+      <div className="border-b pb-4 mb-4">
+        <h2 className="text-xl font-bold">{isEditing ? "Edit Event" : "Add Event"}</h2>
+        <p className="text-gray-600 text-sm">
+          {isEditing ? "Manage and refresh your event details" : "Create a new accessible event venue"}
+        </p>
+      </div>
+        
+      <form onSubmit={handleSubmit} className="space-y-4">
+        <div>
+          <label htmlFor="venueName" className="block text-sm font-medium mb-1">
+            Event Name
+          </label>
+          <input
+            id="venueName"
+            type="text"
+            value={venueName}
+            onChange={(e) => setVenueName(e.target.value)}
+            placeholder="Enter event name"
+            className="w-full border border-gray-300 rounded-md p-2"
+            required
+          />
+        </div>
+        
+        <div>
+          <label htmlFor="venueAddress" className="block text-sm font-medium mb-1">
+            Venue
+          </label>
+          <div className="relative">
+            <select
+              id="venueAddress"
+              value={venueAddress}
+              onChange={(e) => setVenueAddress(e.target.value)}
+              className="w-full border border-gray-300 rounded-md p-2 pr-8 appearance-none"
+              required
             >
-              <Xmark className="h-5 w-5" />
-            </Dialog.DismissTrigger>
-            <Typography type="h6" className="mb-1">
-              Add New Venue
-            </Typography>
-            <Typography className="text-foreground text-sm">
-              Add a new venue with Accessibility information
-            </Typography>
-            <form
-              action="#"
-              className="mt-3"
-              onSubmit={(e) => {
-                e.preventDefault();
-
-                const newVenue = {
-                  id: uuidv4(),
-                  venueName,
-                  venueCapacity,
-                  venueAddress,
-                  venueDescription,
-                  accessibilityFeatures,
-                };
-
-                dispatch(createVenue(newVenue)); // Dispatch the action
-
-                // Clear inputs
-                setVenueName("");
-                setVenueCapacity(0);
-                setVenueAddress("");
-                setVenueDescription("");
-                setAccessibilityFeatures([]);
-
-                setIsOpen(false); // Close the modal
-              }}
-            >
-              <div className="mb-4 mt-2 space-y-1.5">
-                <div className="flex justify-between gap-4">
-                  {/* Left Input Field */}
-                  <div className="w-1/2">
-                    <Typography
-                      as="label"
-                      htmlFor="text1"
-                      type="small"
-                      color="default"
-                      className="font-semibold"
-                    >
-                      Venue Name
-                    </Typography>
-                    <div className=" bg-[#e0dfe4]  border border-slate-400 rounded-lg ">
-                      <Input
-                        id="text1"
-                        type="text"
-                        value={venueName}
-                        placeholder="eg: national theater"
-                        className=" bg-transparent border-none focus:ring-0 focus:outline-none text-black  hover:border-none"
-                        onChange={(e) => setVenueName(e.target.value)}
-                      />
-                    </div>
-                  </div>
-
-                  {/* Right Input Field */}
-                  <div className="w-1/2">
-                    <Typography
-                      as="label"
-                      htmlFor="text2"
-                      type="small"
-                      color="default"
-                      className="font-semibold"
-                    >
-                      Capacity
-                    </Typography>
-
-                    <div className=" bg-[#e0dfe4]  border border-slate-300 rounded-lg ">
-                      <Input
-                        id="text2"
-                        type="number"
-                        value={venueCapacity}
-                        placeholder="eg: 300"
-                        className="w-full bg-transparent border-none focus:ring-0 focus:outline-none text-black  hover:border-none"
-                        onChange={(e) => setVenueCapacity(e.target.value)}
-                      />
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <div className="mb-4 space-y-1.5">
-                <Typography
-                  as="label"
-                  htmlFor="text3"
-                  type="small"
-                  color="default"
-                  className="font-semibold"
-                >
-                  Address
-                </Typography>
-                <div className=" bg-[#e0dfe4]  border border-slate-300 rounded-lg ">
-                  <Input
-                    id="text3"
-                    type="text"
-                    value={venueAddress}
-                    onChange={(e) => setVenueAddress(e.target.value)}
-                    placeholder="98 Giffard Rd, East Cantoments, Accra"
-                    className="placeholder:italic placeholder:text-slate-400 bg-transparent border-none focus:ring-0 focus:outline-none text-black  hover:border-none"
-                  />
-                </div>
-              </div>
-
-              {/* <div className="mb-4 space-y-1.5">
-                <Typography
-                  as="label"
-                  htmlFor="file"
-                  type="small"
-                  color="default"
-                  className="font-semibold"
-                >
-                  Add Venue Image
-                </Typography>
+              <option value="" disabled>Select venue</option>
+              <option value="Accra mall">Accra mall</option>
+              <option value="Achimota Mall">Achimota Mall</option>
+              <option value="West Hills Mall">West Hills Mall</option>
+            </select>
+            <div className="absolute inset-y-0 right-0 flex items-center px-2 pointer-events-none">
+              <svg className="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7"></path>
+              </svg>
+            </div>
+          </div>
+        </div>
+        
+        <div>
+          <label htmlFor="venueDescription" className="block text-sm font-medium mb-1">
+            Description
+          </label>
+          <textarea
+            id="venueDescription"
+            value={venueDescription}
+            onChange={(e) => setVenueDescription(e.target.value)}
+            placeholder="Describe the venue and event details"
+            className="w-full border border-gray-300 rounded-md p-2 h-24 resize-none"
+          />
+        </div>
+        
+        <div className="mt-4">
+          <div className="grid grid-cols-2 gap-x-8 gap-y-2">
+            {accessibilityOptions.map((feature) => (
+              <label
+                key={feature}
+                className="flex items-center space-x-2"
+              >
                 <input
-                  id="file"
-                  type="file"
-                  className="file-input file-input-primary w-full"
-                  required
-                  accept="image/jpeg, image/jpg"
-                  onChange={(e) => setVenueImage(e.target.files[0])}
+                  type="checkbox"
+                  className="rounded border-gray-300 text-blue-600"
+                  checked={accessibilityFeatures.includes(feature)}
+                  onChange={() => handleAccessibilityChange(feature)}
                 />
-              </div> */}
-
-              <div className="mb-4 space-y-1.5">
-                <Typography
-                  as="label"
-                  htmlFor="text3"
-                  type="small"
-                  color="default"
-                  className="font-semibold"
-                >
-                  Description
-                </Typography>
-                <div className="bg-[#e0dfe4] border border-slate-300 rounded-lg p-2">
-                  <textarea
-                    id="text3"
-                    value={venueDescription}
-                    onChange={(e) => setVenueDescription(e.target.value)}
-                    placeholder="typing.."
-                    className="placeholder:italic placeholder:text-slate-400 h-24 w-full bg-transparent border-none focus:ring-0 focus:outline-none text-black resize-none"
-                  />
-                </div>
-              </div>
-
-              <div className="mt-6">
-                <h4 className="text-lg font-semibold">
-                  Accessibility Features
-                </h4>
-                <div className="grid grid-cols-2 gap-2 mt-2">
-                  {accessibilityOptions.map((feature) => (
-                    <label
-                      key={feature}
-                      className="flex items-center space-x-2"
-                    >
-                      <input
-                        type="checkbox"
-                        className="checkbox"
-                        checked={accessibilityFeatures.includes(feature)}
-                        onChange={() => handleAccessibilityChange(feature)}
-                      />
-                      <span>{feature}</span>
-                    </label>
-                  ))}
-                </div>
-              </div>
-              <div className="mb-1 flex items-center mt-3 justify-end gap-2">
-                <Dialog.DismissTrigger
-                  as={Button}
-                  variant="ghost"
-                  color="error"
-                >
-                  Cancel
-                </Dialog.DismissTrigger>
-                <Button type="submit">Add Event</Button>
-              </div>
-            </form>
-          </Dialog.Content>
-        </Dialog.Overlay>
-      </Dialog>
+                <span className="text-sm">{feature}</span>
+              </label>
+            ))}
+          </div>
+        </div>
+        
+        <div className="flex justify-end space-x-2 pt-4 border-t mt-4">
+          <button
+            type="button"
+            onClick={onCancel}
+            className="px-4 py-2 bg-white border border-gray-300 rounded-md text-gray-700 hover:bg-gray-50"
+          >
+            Cancel
+          </button>
+          <button
+            type="submit"
+            className="px-4 py-2 bg-black border border-black rounded-md text-white hover:bg-gray-800"
+          >
+            {isEditing ? "Save Changes" : "Add Event"}
+          </button>
+        </div>
+      </form>
     </div>
   );
 };

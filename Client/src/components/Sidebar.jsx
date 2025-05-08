@@ -1,121 +1,150 @@
-import * as React from "react";
-import {
-  Card,
-  List,
-  Typography,
-  Chip,
-  Collapse,
-  Button,
-  Input,
-  IconButton,
-  Drawer,
-} from "@material-tailwind/react";
-import {
-  Archive,
-  EmptyPage,
-  Folder,
-  LogOut,
-  Mail,
-  Menu,
-  MoreHorizCircle,
-  NavArrowRight,
-  Pin,
-  Search,
-  SelectFace3d,
-  SendDiagonal,
-  Bin,
-  UserXmark,
-  Xmark,
-} from "iconoir-react";
-import { FaCircleUser } from "react-icons/fa6";
-const Links = [
-  {
-    icon: SendDiagonal,
-    title: "Dashboard",
-    href: "#",
-  },
-  {
-    icon: EmptyPage,
-    title: "Venues",
-    href: "#",
-  },
-  {
-    icon: Pin,
-    title: "Accessibility",
-    href: "#",
-  },
-];
+import React, { useContext, useState } from 'react';
+import { Link } from 'react-router-dom';
+import { TbPentagonFilled } from "react-icons/tb";
+import { FiHome, FiSettings } from "react-icons/fi";
+import { CgMenuBoxed } from "react-icons/cg";
+import { Pin } from "iconoir-react"; // Using the Pin icon from iconoir
+import { MdOutlinePersonOutline } from "react-icons/md";
+import { UserContext } from "../context/UserContext";
+import { ProfileSection, EditProfileModal } from "./ProfileSection"; // Import the new components
 
-export default function SidebarWithBurgerMenu() {
-  const [isOpen, setIsOpen] = React.useState(false);
+const Sidebar = ({ activePage }) => {
+  const { user, userDetails } = useContext(UserContext);
+  const [showProfileSection, setShowProfileSection] = useState(false);
+  const [showEditProfile, setShowEditProfile] = useState(false);
+
+  // Profile data for the form
+  const profileData = {
+    fullName: userDetails ? `${userDetails.firstname} ${userDetails.lastname}` : "User",
+    email: userDetails?.email || "john.mahama@example.com",
+    phone: userDetails?.phone || "+233 24647544",
+    organization: userDetails?.organization || "AccessPro Events",
+    bio: userDetails?.bio || "Event organizer with 5+ years of experience in creating accessible venues for all attendees.",
+    profileImage: userDetails?.profileInfo || null
+  };
+
+  const handleProfileSave = (formData) => {
+    // Here you would typically save the data to your backend
+    console.log("Saving profile data:", formData);
+    
+    // Close the edit modal and show the profile section again
+    setShowEditProfile(false);
+    setShowProfileSection(true);
+  };
+
+  const sideBarLinks = [
+    {
+      icon: FiHome,
+      title: "Dashboard",
+      href: "/organizer/dashboard",
+      active: activePage === 'dashboard'
+    },
+    {
+      icon: Pin, // Using the Pin icon from iconoir
+      title: "Accessibility",
+      href: "/organizer/accessibility",
+      active: activePage === 'accessibility'
+    },
+    {
+      icon: CgMenuBoxed,
+      title: "Events",
+      href: "/organizer/events",
+      active: activePage === 'events'
+    },
+    {
+      icon: FiSettings,
+      title: "Settings",
+      href: "/organizer/settings",
+      active: activePage === 'settings'
+    },
+  ];
 
   return (
     <>
-      <Drawer>
-        <Drawer.Trigger className="group">
-          <IconButton className="bg-zinc-400 rounded-none border-transparent hover:bg-zinc-400">
-            <Xmark className="hidden h-4 w-4 stroke-2 group-data-[open=true]:block" />
-            <Menu className="hidden h-4 w-4 stroke-2 group-data-[open=false]:block" />
-          </IconButton>
-        </Drawer.Trigger>
-        <Drawer.Overlay>
-          <Drawer.Panel placement="left" className="p-0">
-            <div className="flex items-center justify-between gap-4">
-              <Drawer.DismissTrigger
-                as={IconButton}
-                size="sm"
-                variant="ghost"
-                color="secondary"
-                className="absolute right-2 top-2"
-                isCircular
-              >
-                <Xmark className="h-5 w-5" />
-              </Drawer.DismissTrigger>
+      <div className="w-[250px] bg-[#1A1A1A] text-white fixed left-0 top-0 bottom-0 flex flex-col overflow-y-auto">
+        <div className="flex flex-col h-full">
+          {/* Logo */}
+          <div className="flex items-center space-x-2 p-4 mb-6">
+            <div className="relative inline-block">
+              <TbPentagonFilled className="text-5xl text-blue-700" />
+              <span className="absolute inset-0 flex items-center justify-center text-white text-xl font-bold">
+                V
+              </span>
             </div>
-            <Card className="grid h-full border-none shadow-none">
-              <div>
-                <Card.Header className="mx-3 mb-0 mt-3 flex h-max items-center gap-2">
-                  <FaCircleUser className="size-8" />
-                  <div>
-                    <Typography className="text-sm">Name</Typography>
-                    <Typography className="font-sm font-medium">
-                      Email
-                    </Typography>
-                  </div>
-                </Card.Header>
-                <hr className="-mx-3 mt-5 border-secondary" />
-                <Card.Body className="p-3">
-                  <List className="">
-                    {Links.map(({ icon: Icon, title, href, badge }) => (
-                      <List.Item key={title} href={href}>
-                        <List.ItemStart>
-                          <Icon className="h-[18px] w-[18px]" />
-                        </List.ItemStart>
-                        {title}
-                        {badge && (
-                          <List.ItemEnd>
-                            <Chip size="sm" variant="ghost">
-                              <Chip.Label>{badge}</Chip.Label>
-                            </Chip>
-                          </List.ItemEnd>
-                        )}
-                      </List.Item>
-                    ))}
-
-                    <hr className="-mx-3 my-3 border-secondary" />
-                    <List.Item className="text-error hover:bg-error/10 hover:text-error focus:bg-error/10 focus:text-error">
-                      <List.ItemStart>
-                        <LogOut className="h-[18px] w-[18px]" />
-                      </List.ItemStart>
-                      Logout
-                    </List.Item>
-                  </List>
-                </Card.Body>
+            <h2 className="text-xl font-semibold">VenueHubs</h2>
+          </div>
+          
+          {/* Navigation */}
+          <div className="px-4 flex-grow">
+            <h2 className="text-gray-400 text-sm font-medium mb-2 px-4">Main</h2>
+            <nav>
+              {sideBarLinks.map(({ icon: Icon, title, href, active }) => (
+                <Link
+                  key={title}
+                  to={href}
+                  className={`flex items-center gap-3 px-4 py-3 rounded-lg mb-1 ${active ? 'bg-blue-600' : 'hover:bg-gray-800'}`}
+                >
+                  <Icon className="text-lg" />
+                  <span>{title}</span>
+                </Link>
+              ))}
+            </nav>
+          </div>
+          
+          {/* User Profile */}
+          <div className="p-4 mt-auto">
+            <div 
+              className="bg-[#3b3b3b] rounded-lg flex items-center p-3 gap-3 cursor-pointer hover:bg-[#4a4a4a]"
+              onClick={() => setShowProfileSection(true)}
+            >
+              {userDetails && userDetails.profileInfo ? (
+                <img
+                  src={userDetails.profileInfo}
+                  alt="Profile"
+                  className="w-10 h-10 rounded-full"
+                />
+              ) : (
+                <div className="bg-gray-500 rounded-full w-10 h-10 flex items-center justify-center">
+                  <MdOutlinePersonOutline className="text-white text-xl" />
+                </div>
+              )}
+              <div className="flex-grow">
+                <h4 className="text-sm text-white">
+                  {userDetails ? `${userDetails.firstname} ${userDetails.lastname}` : "User"}
+                </h4>
+                <h4 className="text-xs text-gray-400">
+                  {userDetails && userDetails.role === "ADMIN" ? "EVENT ORGANIZER" : "USER"}
+                </h4>
               </div>
-            </Card>
-          </Drawer.Panel>
-        </Drawer.Overlay>
-      </Drawer>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* Profile Section Modal */}
+      {showProfileSection && (
+        <ProfileSection 
+          onClose={() => setShowProfileSection(false)}
+          onEditClick={() => {
+            setShowProfileSection(false);
+            setShowEditProfile(true);
+          }}
+        />
+      )}
+
+      {/* Edit Profile Modal */}
+      {showEditProfile && (
+        <EditProfileModal 
+          onClose={() => {
+            setShowEditProfile(false);
+            setShowProfileSection(true);
+          }} 
+          onSave={handleProfileSave}
+          initialData={profileData}
+        />
+      )}
     </>
   );
-}
+};
+
+export default Sidebar;

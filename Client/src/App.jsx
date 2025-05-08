@@ -13,6 +13,10 @@ import Login from "./pages/Login";
 import Signup from "./pages/Signup";
 import RootLayout from "./layout/RootLayout";
 import EventOrganizerDashboard from "./pages/EventOrganizerDashboard";
+import Accessibility from "./pages/Accessibility";
+import EventsSection from "./pages/EventsSection";
+import SettingsSection from "./pages/SettingsSection";
+import { NotificationProvider } from './components/NotificationSystem';
 import { Toaster } from "react-hot-toast";
 
 function App() {
@@ -31,18 +35,20 @@ function App() {
         />
         <Route
           path="/organizer/accessibility"
-          element={<div>Accessibility Page</div>}
+          element={<Accessibility/>}
         />
-        <Route path="/organizer/venue" element={<div>Venue Page</div>} />
-        <Route path="/organizer/settings" element={<div>Settings Page</div>} />
+        <Route path="/organizer/events" element={<EventsSection/>} />
+        <Route path="/organizer/settings" element={<SettingsSection/>} />
       </Route>
     )
   );
   return (
+    <NotificationProvider>
     <>
       <Toaster position="top-center" reverseOrder={false} />
-      <RouterProvider router={router} />;
+      <RouterProvider router={router} />
     </>
+    </NotificationProvider>
   )
 }
 
