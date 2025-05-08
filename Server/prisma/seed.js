@@ -25,14 +25,21 @@ async function main() {
   }
 
   for (const venue of venues) {
+    // Find feature IDs based on the feature names
     const featureRecords = await Promise.all(
-      venue.accessibilityFeatures.map(async (category) => {
-        return await prisma.accessibilityFeature.findFirst({
-          where: { category },
+      venue.accessibilityFeatures.map(async (featureName) => {
+        const feature = await prisma.accessibilityFeature.findUnique({
+          where: { category: featureName },
           select: { id: true },
         });
+        return feature ? feature.id : null;
       })
     );
+
+    // Filter out null values in case some features don't exist
+    const featureIds = featureRecords.filter((id) => id !== null);
+
+    // Create the venue and connect the accessibility features
     const createdVenue = await prisma.venue.create({
       data: {
         name: venue.name,
@@ -44,9 +51,7 @@ async function main() {
         routeDirection: venue.routeDirection,
         createdAt: new Date(venue.createdAt),
         accessibilityFeatures: {
-          connect: featureRecords.map((feature) => ({
-            id: feature?.id, 
-          })),
+          connect: featureIds.map((id) => ({ id })),
         },
       },
     });
@@ -54,6 +59,7 @@ async function main() {
     console.log(`Created venue: ${createdVenue.name}`);
   }
 }
+  
 
 main()
   .then(() => {

@@ -35,7 +35,7 @@ model Venue {
   photos                String[]              @default([])
   routeDirection        String?
   createdAt             DateTime              @default(now())
-  accessibilityFeatures AccessibilityFeature[]
+  accessibilityFeatures AccessibilityFeature[] @relation("VenueFeatures")
   reviews               Review[]
 }
 
@@ -59,8 +59,7 @@ model AccessibilityFeature {
   category           String @unique
   description        String?
   availabilityStatus Boolean @default(true)
-  venueId            String?
-  venue              Venue?  @relation(fields: [venueId], references: [id])
+  venue              Venue[]  @relation("VenueFeatures")
 }
 
 model Review {

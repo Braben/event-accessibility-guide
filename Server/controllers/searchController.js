@@ -6,10 +6,6 @@ const searchVenues = async (req, res) => {
   try {
     const { query, location, accessibility } = req.query; 
     console.log("Received query params:", req.query);
-
-    if (!query && !location) {
-      return res.status(400).json({ message: "Please provide a search query." });
-    }
     let filters = [];
 
     // Split query into individual words
