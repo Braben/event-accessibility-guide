@@ -4,6 +4,7 @@ import { FaStar } from "react-icons/fa";
 import { CiLocationOn } from "react-icons/ci";
 import { MdOutlineEventNote } from "react-icons/md";
 import { IoTimeOutline } from "react-icons/io5";
+import Venuedetails1 from "../pages/Venuedetails1";
 
 const VenueCard = ({ venue }) => {
   const navigate = useNavigate();
@@ -81,7 +82,11 @@ const VenueCard = ({ venue }) => {
         </div>
 
         <button
-          onClick={() => navigate(`/venues/${venue.id}`)}
+          // onClick={() => navigate(`/venues/${venue.id}`)}
+          onClick={() =>
+            navigate(`/venues/${venue.name}`, { state: { venue } })
+          }
+          // onClick={() => navigate("/venues/venuedetails1")} // Navigates to VenueDetails1 page
           className="mt-auto bg-black text-white text-sm py-3 rounded-lg w-full hover:bg-gray-900 transition"
         >
           View Details
