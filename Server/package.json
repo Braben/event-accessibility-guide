@@ -6,7 +6,8 @@
   "license": "MIT",
   "author": "",
   "scripts": {
-    "start": "node server.js"
+    "start": "node server.js",
+    "dev": "nodemon server.js"
   },
   "dependencies": {
     "@prisma/client": "^6.5.0",
@@ -18,14 +19,12 @@
     "express-validator": "^7.2.1",
     "firebase-admin": "^13.2.0",
     "jsonwebtoken": "^9.0.2",
+    "nodemon": "^3.1.9",
     "pg": "^8.14.1",
     "prisma": "^6.7.0",
     "zod": "^3.24.2"
   },
   "prisma": {
     "seed": "node prisma/seed.js"
-  },
-  "devDependencies": {
-    "nodemon": "^3.1.10"
   }
 }
