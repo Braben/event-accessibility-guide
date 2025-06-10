@@ -64,7 +64,7 @@ const Home = () => {
       id: 1,
       name: "Michael T",
       image:
-        "https://s3-alpha-sig.figma.com/img/3648/41f4/9f905d165f939cc17d81d06275561278?Expires=1743379200&Key-Pair-Id=APKAQ4GOSFWCW27IBOMQ&Signature=kjcR6o-WUgss7~ejIxLum3eA5kUs9ZrQF~cTOGEYKtWGAzIQWVQh-wPMz9MAeLYQ5qDKY4PTW080iR2ckuxjHRpoQ5YKJhzaXiCvxuIsrNKQB5ac3ZFSWaqjJhpwYHNk3I8QCihxQWVudjisAe9FWmolZP65EzK~S0ujsQJV4qoAe9biBtrWPz~2G78KBxaJB2B0OOynGvTiPPfTW2Ph16BEnMUnLf7-e8~ZaoI7fkT2286wCOHhh-6ZtMoq5xXYCoFsjV2Aa7t-8mnM8r83jUb8IxwTc3Ei9aMqmS9EAKFPBwT7d4jFXBQYRI0wf7cwBrmYrIC0dshExJJcJXnYdw__",
+        "/Grouppic3.jpg",
       rating: 5,
       review:
         "The venue itself is such an iconic part of London and easy to get too. The rooms we hired were amazing spaces.",
@@ -212,13 +212,13 @@ const Home = () => {
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-8 md:mb-16">
           <div className="flex justify-center">
             <img
-              src="https://s3-alpha-sig.figma.com/img/e1b3/bb7e/57199d0be70210ec773da038040535f2?Expires=1743379200&Key-Pair-Id=APKAQ4GOSFWCW27IBOMQ&Signature=pX3f5M3lRSvR3c8dWGkb1IU44HcIfhjwBnusIIUHBSqlHm98lyNRp3eeLlhe-CWN8MYKgi8-tl-VZ8QOXo67YKixDyNKwghx3RR6qaPRZrwNV0tmYj6je~bY59QA8Gn3Iy3d3KJI~M-1FmkaEwXU2dyn1duf-EndNB6JqeWTvKTQiO7Z6XsjaR83Q3h5TOcEtLYrSxzhc8tBFQnNLnONvjSGiJuHsPbw47T32yybu0C~nfpXPYpIJCik~g1BiXIK4QL0NIDyw0l9i6WFkWDAy1G2ItLQnygb8g1au0ijScquW5Ab43Yq0iZYRAvpQv8WOduaAZdlU08rAMjRuUXhhg__"
+              src="/Grouppic1.jpg"
               alt="Group picture"
               className="h-auto w-full max-w-[568px] object-cover rounded-lg"
             />
           </div>
           <div className="flex-col">
-            <h3 className="text-xl md:text-2xl font-bold mb-4 text-[#1E4B9D] bg-[#D2DBEB] h-11 w-35 p-1 pl-4 rounded-3xl inline-block">
+            <h3 className="text-xl md:text-2xl font-bold mb-4 text-[#1E4B9D] bg-[#D2DBEB] h-11 w-39 p-2 pl-2 rounded-3xl inline-block">
               About Us
             </h3>
             <h1 className="text-xl md:text-2xl font-bold">
@@ -364,7 +364,7 @@ const Home = () => {
           </div>
           <div className="order-1 md:order-2 flex justify-center">
             <img
-              src="https://s3-alpha-sig.figma.com/img/bb8c/1e37/ec1aa836b2735296a80f3b866ddc97c5?Expires=1743379200&Key-Pair-Id=APKAQ4GOSFWCW27IBOMQ&Signature=T0OnKoGd2xNDZkcrQaqyaYB5od2ggaKpUtgSHnwZlEy2DTdsbpkuHZ~0g7OOG571~3SOT2FVV8LA8tuoZRPPer-0wVP-EV4KQTxWjmLJL1~ew1TCqTr53Yhc7gVnOAH-1yDwLNWli4a3OIBXY2sbfKoR9GMoYYPCeyBkA4TKKtCo5kuZZWgK1BWDhMxR1ZB3hqtIfKd2jAM6IPEXQZvKVTjvzsmt6PN7hzq7cwp0TUcDwB2P9zMHTiBcD1vJaCguQLXQx46Lw2v7PppaC26SrRpbuw9RdQhugEInJa1UHawmBwQ9YUZJDD0BiGZuyJtdirTRiEmtqg0EbmPlvwiwuA__"
+              src="/Grouppic2.jpg"
               alt="Times Square"
               className="h-auto w-full max-w-[335px] object-cover rounded-lg"
             />
