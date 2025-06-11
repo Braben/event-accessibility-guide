@@ -26,12 +26,11 @@ const Venues = () => {
       setSearchVenues([]);
     }
   }, [searchQuery]);
-  
 
   const fetchVenues = async () => {
     try {
       const response = await fetch(
-        "https://event-accessibility-guide-production.up.railway.app/venues"
+        "https://event-accessibility-guide.onrender.com/venues"
       );
       if (!response.ok) throw new Error("Failed to fetch venues");
       const data = await response.json();
@@ -64,7 +63,7 @@ const Venues = () => {
       queryParams += `&distance=${appliedFilters.distance}`;
 
       const response = await fetch(
-        `https://event-accessibility-guide-production.up.railway.app/api/venues/search?${queryParams}`
+        `https://event-accessibility-guide.onrender.com/api/venues/search?${queryParams}`
       );
       const data = await response.json();
       setSearchVenues(data);
@@ -75,42 +74,47 @@ const Venues = () => {
 
   const applyFilters = async (filters) => {
     setAppliedFilters(filters);
-  
+
     try {
       let queryParams = [];
 
       if (searchQuery.trim()) {
         queryParams.push(`query=${searchQuery.trim()}`);
       }
-  
+
       if (filters.accessibility.length > 0) {
         const normalizedAccessibility = filters.accessibility.map((item) =>
           item.trim()
         );
-        queryParams.push(`accessibility=${filters.accessibility.map(encodeURIComponent).join(",")}`);
-      }      
-  
+        queryParams.push(
+          `accessibility=${filters.accessibility
+            .map(encodeURIComponent)
+            .join(",")}`
+        );
+      }
+
       // if (filters.venueTypes.length > 0) {
       //   queryParams.push(
       //     `venueTypes=${filters.venueTypes.map(encodeURIComponent).join(",")}`
       //   );
       // }
-  
+
       // queryParams.push(`distance=${filters.distance}`);
-  
+
       const response = await fetch(
-        `https://event-accessibility-guide-production.up.railway.app/api/venues/search?${queryParams.join("&")}`
+        `https://event-accessibility-guide.onrender.com/api/venues/search?${queryParams.join(
+          "&"
+        )}`
       );
-  
+
       if (!response.ok) throw new Error("Failed to fetch filtered venues");
-  
+
       const data = await response.json();
       setSearchVenues(data);
     } catch (err) {
       console.error("Apply filters error:", err);
     }
   };
-  
 
   const clearAllFilters = () => {
     setAppliedFilters({ accessibility: [], venueTypes: [], distance: 32 });
@@ -212,14 +216,13 @@ const Venues = () => {
       )}
       {error && <div className="text-center text-red-500">Error: {error}</div>}
 
-      {(searchVenues.length > 0 ||
-        appliedFilters.accessibility.length > 0 ||
-        appliedFilters.venueTypes.length > 0) ? (
+      {searchVenues.length > 0 ||
+      appliedFilters.accessibility.length > 0 ||
+      appliedFilters.venueTypes.length > 0 ? (
         <div>{`Showing ${displayedVenues.length} out of ${venues.length} venues`}</div>
       ) : (
         <div>{`Showing ${venues.length} venues`}</div>
       )}
-
 
       {/* Venue Cards Grid */}
       {!loading && displayedVenues.length > 0 ? (

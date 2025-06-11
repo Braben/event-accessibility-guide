@@ -18,22 +18,26 @@ import {
 import { GrSettingsOption } from "react-icons/gr";
 import { IoCheckmarkSharp } from "react-icons/io5";
 import { useNavigate } from "react-router-dom";
-import { getCurrentUser, getUserProfile, signInWithEmail } from "../services/authService";
+import {
+  getCurrentUser,
+  getUserProfile,
+  signInWithEmail,
+} from "../services/authService";
 import axios from "axios";
 import { UserContext } from "../context/UserContext";
 import toast from "react-hot-toast";
+import { Link } from "lucide-react";
 
-const API_BASE_URL =
-  "https://event-accessibility-guide-production.up.railway.app";
+const API_BASE_URL = "https://event-accessibility-guide.onrender.com";
 
-export default function OnboardingModal({password}) {
+function OnboardingModal({ password, open, setOpen }) {
   const { user, userDetails, setUserDetails } = useContext(UserContext);
   const [step, setStep] = useState(1);
   const [userType, setUserType] = useState("");
   const [selected, setSelected] = useState("");
   const [selectedPreferences, setSelectedPreferences] = useState([]);
   const [error, setError] = useState("");
-  const [open, setOpen] = useState(false);
+  // const [open, setOpen] = useState(false);
 
   const totalSteps = 4;
   const progressWidth = `${(step / totalSteps) * 100}%`;
@@ -65,30 +69,70 @@ export default function OnboardingModal({password}) {
   };
 
   const navigate = useNavigate();
+  // const handleComplete = async () => {
+  //   console.log(user);
+  //   const role = selected === "user" ? "USER" : "ADMIN";
+  //   const updatedUser = {
+  //     role,
+  //   };
+  //   try {
+  //     const updatedRoleUser = await axios.patch(
+  //       `${API_BASE_URL}/users/${user.uid}`,
+  //       updatedUser
+  //     );
+  //     console.log(updatedRoleUser);
+  //     const updatedUserDetails = await getUserProfile(user.uid);
+  //     setUserDetails(updatedUserDetails);
+  //     if (updatedRoleUser) {
+  //       // Display a success message
+  //       toast.success("Account created successfully!");
+  //       setOpen(false);
+  //     }
+  //     await signInWithEmail(user.email, password);
+  //     if (role === "USER") {
+  //       navigate("/venues"); // Navigate to Event Listing Page
+  //     } else {
+  //       navigate("/organizer/dashboard"); // Navigate to Admin Dashboard
+  //     }
+  //   } catch (error) {
+  //     console.error("Navigation failed:", error);
+  //   }
+  // };
+
   const handleComplete = async () => {
-    console.log(user)
     const role = selected === "user" ? "USER" : "ADMIN";
-    const updatedUser = {
-      role,
-    }
+
     try {
-      const updatedRoleUser = await axios.patch(`${API_BASE_URL}/users/${user.uid}`, updatedUser)
-      console.log(updatedRoleUser)
+      const updatedUser = { role };
+      await axios.patch(`${API_BASE_URL}/users/${user.uid}`, updatedUser);
+
       const updatedUserDetails = await getUserProfile(user.uid);
       setUserDetails(updatedUserDetails);
-      if (updatedRoleUser) {
-         // Display a success message
-        toast.success("Account created successfully!");
-        setOpen(false);
-      } await signInWithEmail(user.email, password)
-      if (role === "USER") {
-        navigate("/venues"); // Navigate to Event Listing Page
-      } else {
-        navigate("/organizer/dashboard"); // Navigate to Admin Dashboard
-      }
+
+      toast.success("Account created successfully!");
+
+      // Optional re-login to refresh session
+      await signInWithEmail(user.email, password);
+
+      // Close modal
+      setOpen(false);
+
+      // Redirect after modal closes
+      setTimeout(() => {
+        if (role === "USER") {
+          window.location.href = "/venues";
+        } else {
+          window.location.href = "/organizer/dashboard";
+        }
+      }, 300);
     } catch (error) {
       console.error("Navigation failed:", error);
+      toast.error("Something went wrong. Please try again.");
     }
+    // if (!user?.uid || !password) {
+    //   toast.error("Missing user data. Try logging in again.");
+    //   return;
+    // }
   };
 
   const roles = [
@@ -119,7 +163,11 @@ export default function OnboardingModal({password}) {
   ];
   return (
     <Dialog open={open} handler={setOpen}>
-      <Dialog.Trigger onClick={() => setOpen(true)} className="mt-2 font-bold  w-full" as={Button}>
+      <Dialog.Trigger
+        onClick={() => setOpen(true)}
+        className="mt-2 font-bold  w-full"
+        as={Button}
+      >
         Create an Account
       </Dialog.Trigger>
       <Dialog.Overlay>
@@ -523,3 +571,5 @@ export default function OnboardingModal({password}) {
     </Dialog>
   );
 }
+
+export default OnboardingModal;

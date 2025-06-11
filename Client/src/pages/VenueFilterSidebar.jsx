@@ -2,7 +2,12 @@ import { useEffect, useState } from "react";
 import { CheckCircle, Circle, X } from "lucide-react";
 // import { FaCheckCircle, FaCircle } from "react-icons/fa";
 
-const VenueFilterSidebar = ({ isOpen, onClose, onApplyFilters, initialFilters }) => {
+const VenueFilterSidebar = ({
+  isOpen,
+  onClose,
+  onApplyFilters,
+  initialFilters,
+}) => {
   // State to track selected filters
   const [selectedFilters, setSelectedFilters] = useState({
     accessibility: [],
@@ -15,7 +20,7 @@ const VenueFilterSidebar = ({ isOpen, onClose, onApplyFilters, initialFilters })
     const fetchAccessibilityFeatures = async () => {
       try {
         const res = await fetch(
-          "https://event-accessibility-guide-production.up.railway.app/features"
+          "https://event-accessibility-guide.onrender.com/features"
         );
         const data = await res.json();
         setAccessibilityFeatures(data);
@@ -75,7 +80,9 @@ const VenueFilterSidebar = ({ isOpen, onClose, onApplyFilters, initialFilters })
               return (
                 <button
                   key={feature.id}
-                  onClick={() => toggleFilter("accessibility", feature.category)}
+                  onClick={() =>
+                    toggleFilter("accessibility", feature.category)
+                  }
                   className={`bg-[#E0E0E4] p-2 rounded flex items-center space-x-2 w-full ${
                     selectedFilters.accessibility.includes(category)
                       ? "border-blue-600 bg-blue-100"
@@ -89,7 +96,8 @@ const VenueFilterSidebar = ({ isOpen, onClose, onApplyFilters, initialFilters })
                   )}
                   <span>{category}</span>
                 </button>
-            )})}
+              );
+            })}
           </div>
 
           {/* Venue Types */}
@@ -146,10 +154,13 @@ const VenueFilterSidebar = ({ isOpen, onClose, onApplyFilters, initialFilters })
           >
             Reset Filters
           </button>
-          <button className="w-full bg-blue-600 text-white py-2 rounded" onClick={() => {
-            onApplyFilters(selectedFilters);
-            onClose();
-          }}>
+          <button
+            className="w-full bg-blue-600 text-white py-2 rounded"
+            onClick={() => {
+              onApplyFilters(selectedFilters);
+              onClose();
+            }}
+          >
             Apply Filters
           </button>
         </div>

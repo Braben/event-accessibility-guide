@@ -29,6 +29,7 @@ const Signup = () => {
     password: "",
   });
   const [newUser, setNewUser] = useState(null);
+  const [onboardingOpen, setOnboardingOpen] = useState(false);
 
   const handleChange = (e) => {
     // Update the formData state with the new value
@@ -40,13 +41,14 @@ const Signup = () => {
     e.preventDefault();
     const { firstname, lastname, email, password } = formData;
     const newUser = await signUpWithEmail(firstname, lastname, email, password);
-    setNewUser(newUser)
-    
+    setNewUser(newUser);
+    setOnboardingOpen(true); // ✅ open modal
+
     //save user to database
 
     // // Display a success message
     // alert("Account created successfully!");
-    console.log(formData)
+    console.log(formData);
     // Reset form data after successful signup
     // setFormData({
     //   firstname: "",
@@ -147,7 +149,7 @@ const Signup = () => {
                     id="email"
                     type="email"
                     name="email"
-                    autoComplete="off" 
+                    autoComplete="off"
                     value={formData.email}
                     placeholder="johndoe@example.com"
                     className="w-full placeholder-italic placeholder-gray-500 dark:placeholder-gray-400 bg-transparent border-none focus:ring-0 focus:outline-none text-gray-900 dark:text-white"
@@ -170,7 +172,7 @@ const Signup = () => {
                     id="password"
                     type={showPassword ? "text" : "password"}
                     name="password"
-                    autoComplete="new-password" 
+                    autoComplete="new-password"
                     value={formData.password}
                     placeholder="Enter password"
                     className="w-full placeholder-gray-500 dark:placeholder-gray-400 bg-transparent border-none focus:ring-0 focus:outline-none text-gray-900 dark:text-white"
@@ -189,8 +191,14 @@ const Signup = () => {
                   </button>
                 </div>
               </div>
-              
-              <OnboardingModal password={formData.password} user={user} />
+
+              {/* <OnboardingModal password={formData.password} user={user} /> */}
+              <OnboardingModal
+                password={formData.password}
+                open={onboardingOpen}
+                setOpen={setOnboardingOpen}
+                user={user}
+              />
 
               <div className="flex items-center w-full my-4">
                 <div className="flex-1 border-t border-gray-400 dark:border-gray-600"></div>

@@ -38,9 +38,9 @@ const Login = () => {
     if (user) {
       toast.success("Signed in successfully!");
       console.log(user);
-      if ( user.user?.role === "USER") {
+      if (user.user?.role === "USER") {
         navigate("/venues");
-      } else if ( user.user?.role === "ADMIN") {
+      } else if (user.user?.role === "ADMIN") {
         navigate("/organizer/dashboard");
       }
       setFormData({
@@ -128,7 +128,10 @@ const Login = () => {
                 </button>
               </div>
             </div>
-            <Button className="mt-2 font-bold w-full dark:bg-gray-700 dark:hover:bg-gray-600 dark:text-white">
+            <Button
+              onClick={handleSubmit}
+              className="mt-2 font-bold w-full dark:bg-gray-700 dark:hover:bg-gray-600 dark:text-white"
+            >
               Login
             </Button>
           </form>
