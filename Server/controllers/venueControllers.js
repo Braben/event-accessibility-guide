@@ -75,17 +75,17 @@ const createVenue = async (req, res) => {
         description,
         photos: photos || [],
         accessibilityFeatures: {
-          connect:Ids
+          connect: Ids,
         },
         venueCapacity,
         routeDirection,
       },
       include: {
-        accessibilityFeatures: true, 
+        accessibilityFeatures: true,
       },
     });
     res.status(201).json(newVenue);
-    console.log(newVenue)
+    console.log(newVenue);
   } catch (error) {
     console.error("Error creating new venue:", error);
     res.status(500).json({ error: "Internal Server Error" });
@@ -104,7 +104,7 @@ const updateVenue = async (req, res) => {
     if (accessibilityFeatures && Array.isArray(accessibilityFeatures)) {
       const features = await prisma.accessibilityFeature.findMany({
         where: {
-          category: { in: accessibilityFeatures }, 
+          category: { in: accessibilityFeatures },
         },
       });
 
@@ -129,19 +129,19 @@ const deleteVenue = async (req, res) => {
   try {
     const venue = await prisma.venue.findUnique({
       where: { id: venueId },
-      include: { accessibilityFeatures: true }, 
+      include: { accessibilityFeatures: true },
     });
-    await prisma.venue.delete({ where: {
-      id: venueId,
-    
-      } });
+    await prisma.venue.delete({
+      where: {
+        id: venueId,
+      },
+    });
     res.status(200).json({ message: "Venue deleted successfully" });
   } catch (error) {
     console.error("Error deleting venue:", error);
     res.status(500).json({ error: "Internal Server Error" });
   }
 };
-
 
 module.exports = {
   createVenue,
