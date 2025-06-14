@@ -208,7 +208,7 @@ const Home = () => {
       </section>
 
       {/* About Section */}
-      <section className="w-full max-w-5xl px-4 py-8 md:py-16">
+      <section id="about"  className="w-full max-w-5xl px-4 py-8 md:py-16">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-8 md:mb-16">
           <div className="flex justify-center">
             <img
@@ -373,7 +373,7 @@ const Home = () => {
       </section>
 
       {/* FAQ Section */}
-      <section className="w-full max-w-3xl px-4 py-8 md:py-16">
+      <section id="faqs" className="w-full max-w-3xl px-4 py-8 md:py-16">
         <div className="flex justify-center">
           <h1 className="text-lg md:text-xl text-[#1E4B9D] h-auto w-auto p-1 px-4 rounded-full bg-[#D2DBEB] font-bold text-center">
             FAQs
@@ -485,7 +485,7 @@ const Home = () => {
       </section>
 
       {/* Contact Section */}
-      <div className="w-full max-w-4xl mx-auto p-4 md:p-6 mt-8 md:mt-16">
+      <div id="contact" className="w-full max-w-4xl mx-auto p-4 md:p-6 mt-8 md:mt-16">
         <div className="flex justify-center">
           <h1 className="text-base md:text-lg text-[#1E4B9D] font-bold h-auto w-auto p-1 px-4 rounded-full bg-[#D2DBEB] text-center">
             Contact Us

@@ -38,6 +38,39 @@ const NavBar2 = () => {
     };
   }, [open]);
 
+   // Function to handle smooth scrolling to sections
+  const scrollToSection = (sectionId) => {
+    // Check if we're on the homepage
+    if (location.pathname !== "/") {
+      // Navigate to homepage first, then scroll
+      navigate("/");
+      // Wait for navigation to complete, then scroll
+      setTimeout(() => {
+        const element = document.getElementById(sectionId);
+        if (element) {
+          element.scrollIntoView({
+            behavior: "smooth",
+            block: "start",
+            inline: "nearest"
+          });
+        }
+      }, 100);
+    } else {
+      // We're already on homepage, just scroll
+      const element = document.getElementById(sectionId);
+      if (element) {
+        element.scrollIntoView({
+          behavior: "smooth",
+          block: "start",
+          inline: "nearest"
+        });
+      }
+    }
+    setOpen(false); // Close mobile menu if open
+    
+  };
+
+
   return (
     <nav className="px-6 md:px-8 h-16 flex items-center justify-between sticky top-0 z-50 bg-white dark:bg-gray-900 bg-opacity-80 backdrop-blur-2xl backdrop-saturate-200 max-w-full border-b border-gray-200 dark:border-gray-700 drop-shadow-sm">
       {/* Logo Section */}
@@ -81,19 +114,19 @@ const NavBar2 = () => {
           </li>
           <li
             className="cursor-pointer hover:text-blue-700 dark:hover:text-blue-400"
-            onClick={() => navigate("/about")}
+            onClick={() => scrollToSection("about")}
           >
             About
           </li>
           <li
             className="cursor-pointer hover:text-blue-700 dark:hover:text-blue-400"
-            onClick={() => navigate("/faqs")}
+           onClick={() => scrollToSection("faqs")}
           >
             FAQs
           </li>
           <li
             className="cursor-pointer hover:text-blue-700 dark:hover:text-blue-400"
-            onClick={() => navigate("/contact")}
+          onClick={() => scrollToSection("contact")}
           >
             Contact
           </li>
