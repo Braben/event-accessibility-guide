@@ -142,9 +142,6 @@ export const logoutUser = async (accessToken) => {
     if (!accessToken) {
       throw new Error("Access token is missing");
     }
-    //logout from firebase
-    await signOut(getAuth());
-    localStorage.removeItem("user");
 
     //logout request to backend
     const response = await fetch(`${API_BASE_URL}/user/logout`, {
@@ -157,8 +154,15 @@ export const logoutUser = async (accessToken) => {
     });
 
     if (!response.ok) {
+      const errorbody = await response.text();
+      console.error("server response error: ", response.status, errorbody);
       throw new Error("Error logging out from server");
     }
+    //logout from firebase
+    await signOut(getAuth());
+    //clear local storage
+    localStorage.removeItem("user");
+
     return { message: "logged out successfully" };
   } catch (error) {
     console.error("Error logging out:", error.message);

@@ -3,8 +3,13 @@ import { getAuth, onAuthStateChanged } from "firebase/auth";
 import { getUserProfile } from "../services/authService";
 // import { getDbIdFromFirebase } from "../services/firebaseService";
 
-export const UserContext = createContext();
-
+export const UserContext = createContext({
+  user: null,
+  accessToken: null,
+  userDetails: null,
+  loading: true,
+  setUserDetails: () => {},
+});
 export const UserProvider = ({ children }) => {
   const [user, setUser] = useState(null);
   const [accessToken, setAccessToken] = useState(null);
