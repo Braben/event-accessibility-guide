@@ -45,18 +45,18 @@ app.use(cookieParser());
 app.use(express.json());
 
 // Connect to routes
-app.use("/venues", venueRoutes);
-app.use("/reviews", reviewRoutes);
-app.use("/api", searchRoutes);
+app.use("/api/v1/venues", venueRoutes);
+app.use("/api/v1/reviews", reviewRoutes);
+app.use("/api/v1", searchRoutes);
 // app.use(userRoutes);
-app.use("/users", userRoute);
-app.use("/user", loginRoute);
-app.use("/profile", profileRoute);
-app.use("/features", accessibilityFeaturesRoutes);
+app.use("api/v1/users", userRoute);
+app.use("/api/v1/user", loginRoute);
+app.use("/api/1/profile", profileRoute);
+app.use("api/v1/features", accessibilityFeaturesRoutes);
 // app.use("/auth", loginRoute);
 
 //for firebase
-app.use("/", firebaseAuthRoutes);
+app.use("/api/v1/", firebaseAuthRoutes);
 
 // Start server
 const PORT = process.env.PORT || 5000;
