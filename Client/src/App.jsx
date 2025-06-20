@@ -15,6 +15,7 @@ import RootLayout from "./layout/RootLayout";
 import EventOrganizerDashboard from "./pages/EventOrganizerDashboard";
 import Accessibility from "./pages/Accessibility";
 import EventsSection from "./pages/EventsSection";
+import EventSection from "./pages/EventSection";
 import SettingsSection from "./pages/SettingsSection";
 import { NotificationProvider } from "./components/NotificationSystem";
 import { Toaster } from "react-hot-toast";
@@ -43,6 +44,7 @@ function App() {
         />
         <Route path="/organizer/accessibility" element={<Accessibility />} />
         <Route path="/organizer/events" element={<EventsSection />} />
+        <Route path="/organizer/event" element={<EventSection />} />
         <Route path="/organizer/settings" element={<SettingsSection />} />
       </Route>
     )

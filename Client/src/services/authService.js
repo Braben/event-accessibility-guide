@@ -144,20 +144,20 @@ export const logoutUser = async (accessToken) => {
     }
 
     //logout request to backend
-    const response = await fetch(`${API_BASE_URL}/user/logout`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${accessToken}`,
-      },
-      credentials: "include",
-    });
+    // const response = await fetch(`${API_BASE_URL}/user/logout`, {
+    //   method: "POST",
+    //   headers: {
+    //     "Content-Type": "application/json",
+    //     Authorization: `Bearer ${accessToken}`,
+    //   },
+    //   credentials: "include",
+    // });
 
-    if (!response.ok) {
-      const errorbody = await response.text();
-      console.error("server response error: ", response.status, errorbody);
-      throw new Error("Error logging out from server");
-    }
+    // if (!response.ok) {
+    //   const errorbody = await response.text();
+    //   console.error("server response error: ", response.status, errorbody);
+    //   throw new Error("Error logging out from server");
+    // }
     //logout from firebase
     await signOut(getAuth());
     //clear local storage

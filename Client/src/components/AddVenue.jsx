@@ -8,10 +8,10 @@ const AddVenue = ({ venue = null, isEditing = false, onCancel }) => {
   const [venueAddress, setVenueAddress] = useState("");
   const [venueDescription, setVenueDescription] = useState("");
   const [accessibilityFeatures, setAccessibilityFeatures] = useState([]);
-  
+
   const dispatch = useDispatch();
   const venues = useSelector((state) => state.venues.venues);
-  
+
   // Initialize form with venue data if editing
   useEffect(() => {
     if (isEditing && venue) {
@@ -30,7 +30,7 @@ const AddVenue = ({ venue = null, isEditing = false, onCancel }) => {
     "Wheelchair Ramps",
     "Elevators",
     "Accessible Restrooms",
-    "Hearing Loops"
+    "Hearing Loops",
   ];
 
   const handleAccessibilityChange = (option) => {
@@ -42,7 +42,7 @@ const AddVenue = ({ venue = null, isEditing = false, onCancel }) => {
       return updated;
     });
   };
-  
+
   // const handleSubmit = async (e) => {
   //   e.preventDefault();
 
@@ -108,7 +108,9 @@ const AddVenue = ({ venue = null, isEditing = false, onCancel }) => {
         venueAddress,
         venueDescription,
         accessibilityFeatures,
-        accessibility: Math.round((accessibilityFeatures.length / accessibilityOptions.length) * 100),
+        accessibility: Math.round(
+          (accessibilityFeatures.length / accessibilityOptions.length) * 100
+        ),
       };
       dispatch(createVenue(newVenue));
     }
@@ -124,12 +126,16 @@ const AddVenue = ({ venue = null, isEditing = false, onCancel }) => {
   return (
     <div className="bg-white p-6 rounded-lg shadow">
       <div className="border-b pb-4 mb-4">
-        <h2 className="text-xl font-bold">{isEditing ? "Edit Event" : "Add Event"}</h2>
+        <h2 className="text-xl font-bold">
+          {isEditing ? "Edit Event" : "Add Event"}
+        </h2>
         <p className="text-gray-600 text-sm">
-          {isEditing ? "Manage and refresh your event details" : "Create a new accessible event venue"}
+          {isEditing
+            ? "Manage and refresh your event details"
+            : "Create a new accessible event venue"}
         </p>
       </div>
-        
+
       <form onSubmit={handleSubmit} className="space-y-4">
         <div>
           <label htmlFor="venueName" className="block text-sm font-medium mb-1">
@@ -145,9 +151,12 @@ const AddVenue = ({ venue = null, isEditing = false, onCancel }) => {
             required
           />
         </div>
-        
+
         <div>
-          <label htmlFor="venueAddress" className="block text-sm font-medium mb-1">
+          <label
+            htmlFor="venueAddress"
+            className="block text-sm font-medium mb-1"
+          >
             Venue
           </label>
           <div className="relative">
@@ -158,21 +167,37 @@ const AddVenue = ({ venue = null, isEditing = false, onCancel }) => {
               className="w-full border border-gray-300 rounded-md p-2 pr-8 appearance-none"
               required
             >
-              <option value="" disabled>Select venue</option>
+              <option value="" disabled>
+                Select venue
+              </option>
               <option value="Accra mall">Accra mall</option>
               <option value="Achimota Mall">Achimota Mall</option>
               <option value="West Hills Mall">West Hills Mall</option>
             </select>
             <div className="absolute inset-y-0 right-0 flex items-center px-2 pointer-events-none">
-              <svg className="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7"></path>
+              <svg
+                className="w-4 h-4 text-gray-400"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth="2"
+                  d="M19 9l-7 7-7-7"
+                ></path>
               </svg>
             </div>
           </div>
         </div>
-        
+
         <div>
-          <label htmlFor="venueDescription" className="block text-sm font-medium mb-1">
+          <label
+            htmlFor="venueDescription"
+            className="block text-sm font-medium mb-1"
+          >
             Description
           </label>
           <textarea
@@ -183,14 +208,11 @@ const AddVenue = ({ venue = null, isEditing = false, onCancel }) => {
             className="w-full border border-gray-300 rounded-md p-2 h-24 resize-none"
           />
         </div>
-        
+
         <div className="mt-4">
           <div className="grid grid-cols-2 gap-x-8 gap-y-2">
             {accessibilityOptions.map((feature) => (
-              <label
-                key={feature}
-                className="flex items-center space-x-2"
-              >
+              <label key={feature} className="flex items-center space-x-2">
                 <input
                   type="checkbox"
                   className="rounded border-gray-300 text-blue-600"
@@ -202,7 +224,7 @@ const AddVenue = ({ venue = null, isEditing = false, onCancel }) => {
             ))}
           </div>
         </div>
-        
+
         <div className="flex justify-end space-x-2 pt-4 border-t mt-4">
           <button
             type="button"

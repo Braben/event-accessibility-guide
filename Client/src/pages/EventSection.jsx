@@ -2,17 +2,20 @@ import React, { useState, useContext } from "react";
 import { IoNotificationsOutline } from "react-icons/io5";
 import { GoDotFill } from "react-icons/go";
 import { Search } from "lucide-react";
-import AddVenue from "../components/AddVenue";
-import VenueLists from "../components/VenueLists";
+import AddEvents from "../components/AddEvents";
+// import VenueLists from "../components/VenueLists";
+import EventList from "../components/EventList";
 import { UserContext } from "../context/UserContext";
 import Sidebar from "../components/Sidebar"; // Import the shared sidebar component
 
-const EventsSection = () => {
+const EventSection = () => {
   const [expandedAccordion, setExpandedAccordion] = useState(null);
   const [selectedVisibility, setSelectedVisibility] = useState("Public");
   const [showDropdown, setShowDropdown] = useState(false);
   const [currentView, setCurrentView] = useState("list"); // 'list', 'add', 'edit'
   const [selectedVenue, setSelectedVenue] = useState(null);
+
+  const [editingEvent, setEditingEvent] = useState(null);
 
   // Get user details from context
   const { user, userDetails, loading } = useContext(UserContext);
@@ -57,13 +60,13 @@ const EventsSection = () => {
   return (
     <div className="flex h-screen bg-gray-100">
       {/* Use the shared sidebar component */}
-      <Sidebar activePage="events" />
+      <Sidebar activePage="event" />
 
       {/* Main Content */}
       <div className="flex-1 ml-[250px]">
         {/* Header */}
         <div className="flex justify-between bg-white p-5 shadow-sm">
-          <h2 className="text-2xl font-bold">Events</h2>
+          <h2 className="text-2xl font-bold">My Events</h2>
           <div className="relative">
             <IoNotificationsOutline className="size-6" />
             <GoDotFill className="absolute -top-1 right-0 text-red-600 text-bold" />
@@ -76,7 +79,7 @@ const EventsSection = () => {
             <div className="bg-white p-6 rounded-lg shadow">
               <div className="flex justify-between items-center mb-4">
                 <div>
-                  <h2 className="text-xl font-bold">Events</h2>
+                  <h2 className="text-xl font-bold">My Events</h2>
                   <p className="text-gray-600 text-sm">
                     Manage your accessible events
                   </p>
@@ -103,17 +106,23 @@ const EventsSection = () => {
               </div>
 
               {/* Venue List */}
-              <VenueLists onEditVenue={handleEditVenue} />
+              {/* <VenueLists onEditVenue={handleEditVenue} /> */}
+              <EventList onEdit={(event) => setEditingEvent(event)} />
             </div>
           )}
 
-          {currentView === "add" && <AddVenue onCancel={handleBackToList} />}
+          {currentView === "add" && <AddEvents onCancel={handleBackToList} />}
 
           {currentView === "edit" && selectedVenue && (
-            <AddVenue
-              venue={selectedVenue}
-              isEditing={true}
-              onCancel={handleBackToList}
+            // <AddEvents
+            //   venue={selectedVenue}
+            //   isEditing={true}
+            //   onCancel={handleBackToList}
+            // />
+            <AddEvent
+              event={editingEvent}
+              isEditing={!!editingEvent}
+              onCancel={() => setEditingEvent(null)}
             />
           )}
         </div>
@@ -122,4 +131,4 @@ const EventsSection = () => {
   );
 };
 
-export default EventsSection;
+export default EventSection;

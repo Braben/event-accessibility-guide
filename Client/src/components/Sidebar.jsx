@@ -1,5 +1,5 @@
-import React, { useContext, useState } from 'react';
-import { Link } from 'react-router-dom';
+import React, { useContext, useState } from "react";
+import { Link } from "react-router-dom";
 import { TbPentagonFilled } from "react-icons/tb";
 import { FiHome, FiSettings } from "react-icons/fi";
 import { CgMenuBoxed } from "react-icons/cg";
@@ -15,18 +15,22 @@ const Sidebar = ({ activePage }) => {
 
   // Profile data for the form
   const profileData = {
-    fullName: userDetails ? `${userDetails.firstname} ${userDetails.lastname}` : "User",
+    fullName: userDetails
+      ? `${userDetails.firstname} ${userDetails.lastname}`
+      : "User",
     email: userDetails?.email || "john.mahama@example.com",
     phone: userDetails?.phone || "+233 24647544",
     organization: userDetails?.organization || "AccessPro Events",
-    bio: userDetails?.bio || "Event organizer with 5+ years of experience in creating accessible venues for all attendees.",
-    profileImage: userDetails?.profileInfo || null
+    bio:
+      userDetails?.bio ||
+      "Event organizer with 5+ years of experience in creating accessible venues for all attendees.",
+    profileImage: userDetails?.profileInfo || null,
   };
 
   const handleProfileSave = (formData) => {
     // Here you would typically save the data to your backend
     console.log("Saving profile data:", formData);
-    
+
     // Close the edit modal and show the profile section again
     setShowEditProfile(false);
     setShowProfileSection(true);
@@ -36,26 +40,32 @@ const Sidebar = ({ activePage }) => {
     {
       icon: FiHome,
       title: "Dashboard",
-      href: "/organizer/dashboard",
-      active: activePage === 'dashboard'
+      href: "/organizer-dashboard",
+      active: activePage === "dashboard",
     },
     {
       icon: Pin, // Using the Pin icon from iconoir
       title: "Accessibility",
       href: "/organizer/accessibility",
-      active: activePage === 'accessibility'
+      active: activePage === "accessibility",
     },
+    // {
+    //   icon: CgMenuBoxed,
+    //   title: "Events",
+    //   href: "/organizer/events",
+    //   active: activePage === "events",
+    // },
     {
       icon: CgMenuBoxed,
       title: "Events",
-      href: "/organizer/events",
-      active: activePage === 'events'
+      href: "/organizer/event",
+      active: activePage === "event",
     },
     {
       icon: FiSettings,
       title: "Settings",
       href: "/organizer/settings",
-      active: activePage === 'settings'
+      active: activePage === "settings",
     },
   ];
 
@@ -73,16 +83,20 @@ const Sidebar = ({ activePage }) => {
             </div>
             <h2 className="text-xl font-semibold">VenueHubs</h2>
           </div>
-          
+
           {/* Navigation */}
           <div className="px-4 flex-grow">
-            <h2 className="text-gray-400 text-sm font-medium mb-2 px-4">Main</h2>
+            <h2 className="text-gray-400 text-sm font-medium mb-2 px-4">
+              Main
+            </h2>
             <nav>
               {sideBarLinks.map(({ icon: Icon, title, href, active }) => (
                 <Link
                   key={title}
                   to={href}
-                  className={`flex items-center gap-3 px-4 py-3 rounded-lg mb-1 ${active ? 'bg-blue-600' : 'hover:bg-gray-800'}`}
+                  className={`flex items-center gap-3 px-4 py-3 rounded-lg mb-1 ${
+                    active ? "bg-blue-600" : "hover:bg-gray-800"
+                  }`}
                 >
                   <Icon className="text-lg" />
                   <span>{title}</span>
@@ -90,10 +104,10 @@ const Sidebar = ({ activePage }) => {
               ))}
             </nav>
           </div>
-          
+
           {/* User Profile */}
           <div className="p-4 mt-auto">
-            <div 
+            <div
               className="bg-[#3b3b3b] rounded-lg flex items-center p-3 gap-3 cursor-pointer hover:bg-[#4a4a4a]"
               onClick={() => setShowProfileSection(true)}
             >
@@ -110,10 +124,14 @@ const Sidebar = ({ activePage }) => {
               )}
               <div className="flex-grow">
                 <h4 className="text-sm text-white">
-                  {userDetails ? `${userDetails.firstname} ${userDetails.lastname}` : "User"}
+                  {userDetails
+                    ? `${userDetails.firstname} ${userDetails.lastname}`
+                    : "User"}
                 </h4>
                 <h4 className="text-xs text-gray-400">
-                  {userDetails && userDetails.role === "ADMIN" ? "EVENT ORGANIZER" : "USER"}
+                  {userDetails && userDetails.role === "ADMIN"
+                    ? "EVENT ORGANIZER"
+                    : "USER"}
                 </h4>
               </div>
             </div>
@@ -123,7 +141,7 @@ const Sidebar = ({ activePage }) => {
 
       {/* Profile Section Modal */}
       {showProfileSection && (
-        <ProfileSection 
+        <ProfileSection
           onClose={() => setShowProfileSection(false)}
           onEditClick={() => {
             setShowProfileSection(false);
@@ -134,11 +152,11 @@ const Sidebar = ({ activePage }) => {
 
       {/* Edit Profile Modal */}
       {showEditProfile && (
-        <EditProfileModal 
+        <EditProfileModal
           onClose={() => {
             setShowEditProfile(false);
             setShowProfileSection(true);
-          }} 
+          }}
           onSave={handleProfileSave}
           initialData={profileData}
         />
