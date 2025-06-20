@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import { v4 as uuidv4 } from "uuid";
 import { createEvent, updateEvent } from "../slicers/eventSlicer";
 
@@ -29,7 +29,7 @@ const AddEvent = ({ event = null, isEditing = false, onCancel }) => {
     const fetchVenues = async () => {
       try {
         const response = await fetch(
-          "https://event-accessibility-guide.onrender.com/venues"
+          "https://event-accessibility-guide.onrender.com/api/v1/venues"
         );
         const data = await response.json();
         // console.log("Fetched venues data:", data); // ✅ add this
