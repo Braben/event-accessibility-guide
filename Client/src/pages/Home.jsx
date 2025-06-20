@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { TbWheelchair } from "react-icons/tb";
 import { LuBath } from "react-icons/lu";
 import { FaElevator } from "react-icons/fa6";
@@ -10,6 +11,7 @@ import { FaLongArrowAltRight, FaChevronDown, FaStar } from "react-icons/fa";
 import { FaChevronLeft, FaChevronRight } from "react-icons/fa6";
 
 const Home = () => {
+  const navigate = useNavigate();
   const [searchTerm, setSearchTerm] = useState("");
   const [faqOpen, setFaqOpen] = useState(null);
   const [currentIndex, setCurrentIndex] = useState(0);
@@ -63,8 +65,7 @@ const Home = () => {
     {
       id: 1,
       name: "Michael T",
-      image:
-        "/Grouppic3.jpg",
+      image: "/Grouppic3.jpg",
       rating: 5,
       review:
         "The venue itself is such an iconic part of London and easy to get too. The rooms we hired were amazing spaces.",
@@ -180,7 +181,10 @@ const Home = () => {
           </button>
         </div>
 
-        <button className="flex justify-center items-center gap-4 h-12 md:h-[59px] w-full md:w-[401px] text-white bg-[#1E4B9D] px-4 py-2 rounded-full mt-6 md:mt-10 hover:bg-indigo-700 mx-4">
+        <button
+          onClick={() => navigate("/venues")}
+          className="flex justify-center items-center gap-4 h-12 md:h-[59px] w-full md:w-[401px] text-white bg-[#1E4B9D] px-4 py-2 rounded-full mt-6 md:mt-10 hover:bg-indigo-700 mx-4"
+        >
           <p className="text-base md:text-lg font-bold">Explore more Venues </p>
           <FaLongArrowAltRight className="text-white w-5 md:w-6" />
         </button>
@@ -208,7 +212,7 @@ const Home = () => {
       </section>
 
       {/* About Section */}
-      <section id="about"  className="w-full max-w-5xl px-4 py-8 md:py-16">
+      <section id="about" className="w-full max-w-5xl px-4 py-8 md:py-16">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-8 md:mb-16">
           <div className="flex justify-center">
             <img
@@ -485,7 +489,10 @@ const Home = () => {
       </section>
 
       {/* Contact Section */}
-      <div id="contact" className="w-full max-w-4xl mx-auto p-4 md:p-6 mt-8 md:mt-16">
+      <div
+        id="contact"
+        className="w-full max-w-4xl mx-auto p-4 md:p-6 mt-8 md:mt-16"
+      >
         <div className="flex justify-center">
           <h1 className="text-base md:text-lg text-[#1E4B9D] font-bold h-auto w-auto p-1 px-4 rounded-full bg-[#D2DBEB] text-center">
             Contact Us

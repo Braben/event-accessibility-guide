@@ -119,7 +119,7 @@ const EventSection = () => {
             //   isEditing={true}
             //   onCancel={handleBackToList}
             // />
-            <AddEvent
+            <AddEvents
               event={editingEvent}
               isEditing={!!editingEvent}
               onCancel={() => setEditingEvent(null)}
