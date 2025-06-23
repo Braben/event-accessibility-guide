@@ -1,17 +1,40 @@
 import React from "react";
+import { useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { deleteEvent } from "../slicers/eventSlicer";
+import { deleteEvent, fetchEvents } from "../slicers/eventSlicer";
 import { Pencil, Trash2 } from "lucide-react"; // Optional: Icon set
 
 const EventList = ({ onEdit }) => {
   const dispatch = useDispatch();
   const events = useSelector((state) => state.events.events);
 
-  const handleDelete = (id) => {
+  const handleDelete = async (id) => {
     if (window.confirm("Are you sure you want to delete this event?")) {
-      dispatch(deleteEvent(id));
+      try {
+        const response = await fetch(
+          `https://event-accessibility-guide.onrender.com/events/${id}`,
+          {
+            method: "DELETE",
+          }
+        );
+
+        if (!response.ok) {
+          const errorData = await response.json();
+          console.error("Failed to delete event:", errorData.message);
+          return;
+        }
+
+        // If successful, update the Redux state
+        dispatch(deleteEvent(id));
+      } catch (err) {
+        console.error("Error deleting event:", err);
+      }
     }
   };
+
+  useEffect(() => {
+    dispatch(fetchEvents());
+  }, [dispatch]);
 
   return (
     <div className="p-4">

@@ -41,7 +41,7 @@ const Login = () => {
       if (user.user?.role === "USER") {
         navigate("/venues");
       } else if (user.user?.role === "ADMIN") {
-        navigate("/organizer-dashboard");
+        navigate("/organizer/dashboard");
       }
       setFormData({
         email: "",

@@ -1,9 +1,12 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import { useDispatch } from "react-redux";
 import { v4 as uuidv4 } from "uuid";
+import { UserContext } from "../context/UserContext";
+
 import { createEvent, updateEvent } from "../slicers/eventSlicer";
 
 const AddEvent = ({ event = null, isEditing = false, onCancel }) => {
+  const { userDetails } = useContext(UserContext);
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
   const [startDate, setStartDate] = useState("");
@@ -41,38 +44,63 @@ const AddEvent = ({ event = null, isEditing = false, onCancel }) => {
 
     fetchVenues();
   }, []);
-  // console.log("Fetched venues:", fetchedVenues); // ✅ add this
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
+
     const eventData = {
-      id: isEditing ? event.id : uuidv4(),
       title,
       description,
       startDate,
       endDate,
-      photos,
       venueId,
-      venue: fetchedVenues.find((v) => v.id === venueId),
-      user: event?.user || {}, // optional: populate with logged-in user
+      photos,
+      createdBy: userDetails?.id, // make sure you include this
     };
 
-    console.log("Event Data:", eventData); // ✅ add this
+    try {
+      let response;
+      if (isEditing) {
+        // 🔁 Update existing event
+        response = await fetch(
+          `https://event-accessibility-guide.onrender.com/events/${event.id}`,
+          {
+            method: "PUT",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({ ...eventData, id: event.id }),
+          }
+        );
+      } else {
+        // ➕ Create new event
+        response = await fetch(
+          "https://event-accessibility-guide.onrender.com/events",
+          {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify(eventData),
+          }
+        );
+      }
 
-    if (isEditing) {
-      dispatch(updateEvent(eventData));
-    } else {
-      dispatch(createEvent(eventData));
+      const data = await response.json();
+
+      if (response.ok) {
+        if (isEditing) {
+          dispatch(updateEvent(data));
+        } else {
+          dispatch(createEvent(data));
+        }
+        onCancel(); // close form
+      } else {
+        console.error("Error from server:", data.message);
+      }
+    } catch (err) {
+      console.error("Submit error:", err);
     }
-
-    // Clear and close
-    setTitle("");
-    setDescription("");
-    setStartDate("");
-    setEndDate("");
-    setVenueId("");
-    setPhotos([]);
-    onCancel();
   };
 
   return (
@@ -124,11 +152,7 @@ const AddEvent = ({ event = null, isEditing = false, onCancel }) => {
               Select Venue
             </option>
             {fetchedVenues.map((venue) => (
-              <option
-                className="bg-slate-500 w-4/6"
-                key={venue.id}
-                value={venue.id}
-              >
+              <option className=" w-4/6" key={venue.id} value={venue.id}>
                 {venue.name || venue.venueName}
               </option>
             ))}
