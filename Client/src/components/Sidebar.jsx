@@ -40,7 +40,7 @@ const Sidebar = ({ activePage }) => {
     {
       icon: FiHome,
       title: "Dashboard",
-      href: "/organizer-dashboard",
+      href: "/organizer/dashboard",
       active: activePage === "dashboard",
     },
     {

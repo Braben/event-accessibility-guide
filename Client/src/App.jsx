@@ -39,7 +39,7 @@ function App() {
         <Route path="/venuedetails3" element={<Venuedetails3 />} />
         <Route path="/venuedetails4" element={<Venuedetails4 />} />
         <Route
-          path="/organizer-dashboard"
+          path="/organizer/dashboard"
           element={<EventOrganizerDashboard />}
         />
         <Route path="/organizer/accessibility" element={<Accessibility />} />
