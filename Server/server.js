@@ -13,6 +13,7 @@ const searchRoutes = require("./routes/searchRoutes");
 const loginRoute = require("./routes/loginRoutes");
 const profileRoute = require("./routes/profileRoutes");
 const accessibilityFeaturesRoutes = require("./routes/accessibilityFeaturesRoutes");
+const eventRoutes = require("./routes/eventRoutes");
 const cookieParser = require("cookie-parser");
 // const prisma = require("./prisma");
 
@@ -54,6 +55,7 @@ app.use("/user", loginRoute);
 app.use("/profile", profileRoute);
 app.use("/features", accessibilityFeaturesRoutes);
 // app.use("/auth", loginRoute);
+app.use("/events", eventRoutes);
 
 //for firebase
 app.use("/api", firebaseAuthRoutes);
