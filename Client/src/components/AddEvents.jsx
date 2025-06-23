@@ -29,7 +29,7 @@ const AddEvent = ({ event = null, isEditing = false, onCancel }) => {
     const fetchVenues = async () => {
       try {
         const response = await fetch(
-          "https://event-accessibility-guide.onrender.com/api/v1/venues"
+          "https://event-accessibility-guide.onrender.com/venues"
         );
         const data = await response.json();
         // console.log("Fetched venues data:", data); // ✅ add this
@@ -114,22 +114,33 @@ const AddEvent = ({ event = null, isEditing = false, onCancel }) => {
             required
           />
         </div>
-
-        <select
-          value={venueId}
-          onChange={(e) => setVenueId(e.target.value)}
-          className="w-full border p-2 rounded"
-        >
-          <option value="">Select Venue</option>
-          {fetchedVenues.map((venue) => (
-            <option key={venue.id} value={venue.id}>
-              {venue.name || venue.venueName}
+        <div className="flex justify-between items-center space-x-4">
+          <select
+            value={venueId}
+            onChange={(e) => setVenueId(e.target.value)}
+            className="w-full md:w-[250px] border border-gray-300 p-2 rounded-md bg-white shadow-sm text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+          >
+            <option className="w-[100px] " value="">
+              Select Venue
             </option>
-          ))}
-        </select>
+            {fetchedVenues.map((venue) => (
+              <option
+                className="bg-slate-500 w-4/6"
+                key={venue.id}
+                value={venue.id}
+              >
+                {venue.name || venue.venueName}
+              </option>
+            ))}
+          </select>
 
-        {/* Future: Add file upload for photos */}
-        {/* <input type="file" multiple onChange={(e) => setPhotos([...e.target.files])} /> */}
+          {/* Future: Add file upload for photos */}
+          <input
+            type="file"
+            multiple
+            onChange={(e) => setPhotos([...e.target.files])}
+          />
+        </div>
 
         <div className="flex justify-end space-x-2 pt-4 border-t mt-4">
           <button

@@ -9,42 +9,20 @@ import { UserContext } from "../context/UserContext";
 import Sidebar from "../components/Sidebar"; // Import the shared sidebar component
 
 const EventSection = () => {
-  const [expandedAccordion, setExpandedAccordion] = useState(null);
-  const [selectedVisibility, setSelectedVisibility] = useState("Public");
-  const [showDropdown, setShowDropdown] = useState(false);
   const [currentView, setCurrentView] = useState("list"); // 'list', 'add', 'edit'
-  const [selectedVenue, setSelectedVenue] = useState(null);
 
   const [editingEvent, setEditingEvent] = useState(null);
 
   // Get user details from context
   const { user, userDetails, loading } = useContext(UserContext);
 
-  const toggleAccordion = (section) => {
-    if (expandedAccordion === section) {
-      setExpandedAccordion(null);
-    } else {
-      setExpandedAccordion(section);
-    }
-  };
-
-  const handleVisibilitySelect = (option) => {
-    setSelectedVisibility(option);
-    setShowDropdown(false);
-  };
-
-  const handleEditVenue = (venue) => {
-    setSelectedVenue(venue);
-    setCurrentView("edit");
-  };
-
-  const handleAddVenue = () => {
+  const handleAddEvent = () => {
     setCurrentView("add");
   };
 
   const handleBackToList = () => {
     setCurrentView("list");
-    setSelectedVenue(null);
+    setEditingEvent(null); // ✅ Clear editing state too
   };
 
   // Show loading state if data is still loading
@@ -85,7 +63,7 @@ const EventSection = () => {
                   </p>
                 </div>
                 <button
-                  onClick={handleAddVenue}
+                  onClick={handleAddEvent}
                   className="bg-black text-white w-[160px] px-8 py-2 rounded-md flex items-center gap-1 hover:bg-gray-800"
                 >
                   <span>+</span> Add Event
@@ -105,24 +83,22 @@ const EventSection = () => {
                 />
               </div>
 
-              {/* Venue List */}
-              {/* <VenueLists onEditVenue={handleEditVenue} /> */}
-              <EventList onEdit={(event) => setEditingEvent(event)} />
+              <EventList
+                onEdit={(event) => {
+                  setEditingEvent(event);
+                  setCurrentView("edit");
+                }}
+              />
             </div>
           )}
 
           {currentView === "add" && <AddEvents onCancel={handleBackToList} />}
 
-          {currentView === "edit" && selectedVenue && (
-            // <AddEvents
-            //   venue={selectedVenue}
-            //   isEditing={true}
-            //   onCancel={handleBackToList}
-            // />
+          {currentView === "edit" && editingEvent && (
             <AddEvents
               event={editingEvent}
-              isEditing={!!editingEvent}
-              onCancel={() => setEditingEvent(null)}
+              isEditing={true}
+              onCancel={handleBackToList}
             />
           )}
         </div>

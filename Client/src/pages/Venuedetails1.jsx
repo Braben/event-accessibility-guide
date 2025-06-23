@@ -318,7 +318,7 @@ const Venuedetails1 = () => {
       {/* Back Button */}
       <div className="mt-6">
         <Link
-          to="/venue"
+          to="/venues"
           className="flex items-center text-blue-800 font-medium"
         >
           <IoIosArrowBack className="mr-1" /> Back to Venue
