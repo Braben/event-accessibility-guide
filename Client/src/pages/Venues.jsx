@@ -30,7 +30,7 @@ const Venues = () => {
   const fetchVenues = async () => {
     try {
       const response = await fetch(
-        "https://event-accessibility-guide.onrender.com/api/v1/venues"
+        "https://event-accessibility-guide.onrender.com/venues"
       );
       if (!response.ok) throw new Error("Failed to fetch venues");
       const data = await response.json();
@@ -63,7 +63,7 @@ const Venues = () => {
       queryParams += `&distance=${appliedFilters.distance}`;
 
       const response = await fetch(
-        `https://event-accessibility-guide.onrender.com/api/v1/venues/search?${queryParams}`
+        `https://event-accessibility-guide.onrender.com/venues/search?${queryParams}`
       );
       const data = await response.json();
       setSearchVenues(data);
@@ -102,7 +102,7 @@ const Venues = () => {
       // queryParams.push(`distance=${filters.distance}`);
 
       const response = await fetch(
-        `https://event-accessibility-guide.onrender.com/api/v1/venues/search?${queryParams.join(
+        `https://event-accessibility-guide.onrender.com/venues/search?${queryParams.join(
           "&"
         )}`
       );

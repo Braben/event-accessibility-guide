@@ -10,7 +10,7 @@ import axios from "axios";
 
 // import { getAuth } from "firebase/auth";
 
-const API_BASE_URL = "https://event-accessibility-guide.onrender.com/api/v1";
+const API_BASE_URL = "https://event-accessibility-guide.onrender.com";
 
 // ✅ Signup with Email & Password
 export const signUpWithEmail = async (firstname, lastname, email, password) => {

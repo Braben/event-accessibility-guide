@@ -21,7 +21,7 @@ const VenueFilterSidebar = ({
       try {
         const res = await fetch(
           // "https://event-accessibility-guide.onrender.com/features"
-          "https://event-accessibility-guide.onrender.com/api/v1/features"
+          "https://event-accessibility-guide.onrender.com/features"
         );
         const data = await res.json();
         setAccessibilityFeatures(data);
