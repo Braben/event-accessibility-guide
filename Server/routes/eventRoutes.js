@@ -9,8 +9,9 @@ const {
 const router = express.Router();
 
 router.get("/", getEvents);
+router.get("/:id", getEvents);
 
-router.get("/:id", getEventById);
+// router.get("/:id", getEventById);
 
 router.post("/", createEvent);
 
