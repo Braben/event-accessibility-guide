@@ -2,8 +2,9 @@ import React, { useState, useContext } from "react";
 import { IoNotificationsOutline } from "react-icons/io5";
 import { GoDotFill } from "react-icons/go";
 import { Search } from "lucide-react";
-import AddVenue from "../components/AddVenue";
-import VenueLists from "../components/VenueLists";
+import AddEvents from "../components/AddEvents";
+// import VenueLists from "../components/VenueLists";
+import EventList_X from "../components/EventList_X";
 import { UserContext } from "../context/UserContext";
 import Sidebar from "../components/Sidebar"; // Import the shared sidebar component
 

@@ -1,96 +1,183 @@
-import React from "react";
-import { useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { deleteEvent, fetchEvents } from "../slicers/eventSlicer";
-import { Pencil, Trash2 } from "lucide-react"; // Optional: Icon set
 
-const EventList = ({ onEdit }) => {
+import { fetchEvents, deleteEvent } from "../slicers/eventSlicer";
+import { Edit, Trash } from "lucide-react";
+
+const EventLists = ({ onEdit }) => {
   const dispatch = useDispatch();
-  const events = useSelector((state) => state.events.events);
+  const events = useSelector((state) => state.events.events) || [];
+  const [showDeleteModal, setShowDeleteModal] = useState(false);
+  const [eventToDelete, setEventToDelete] = useState(null);
 
-  const handleDelete = async (id) => {
-    if (window.confirm("Are you sure you want to delete this event?")) {
-      try {
-        const response = await fetch(
-          `https://event-accessibility-guide.onrender.com/events/${id}`,
-          {
-            method: "DELETE",
-          }
-        );
+  // Function to get accessibility color
+  const getAccessibilityColor = (score) => {
+    if (score >= 80) return "bg-green-500";
+    if (score >= 60) return "bg-yellow-400";
+    return "bg-red-500";
+  };
 
-        if (!response.ok) {
-          const errorData = await response.json();
-          console.error("Failed to delete event:", errorData.message);
-          return;
-        }
+  // Format features for display
+  const formatFeatures = (features) => {
+    if (!features || features.length === 0) return [];
 
-        // If successful, update the Redux state
-        dispatch(deleteEvent(id));
-      } catch (err) {
-        console.error("Error deleting event:", err);
-      }
+    const mainFeatures = features.slice(0, 2);
+    const remaining = features.length - 2;
+
+    if (remaining > 0) {
+      return [...mainFeatures, `+${remaining} more`];
+    }
+    return mainFeatures;
+  };
+
+  // Handle delete confirmation
+  const handleConfirmDelete = () => {
+    if (eventToDelete) {
+      dispatch(deleteEvent(eventToDelete.id));
+      setShowDeleteModal(false);
+      setEventToDelete(null);
     }
   };
 
+  // Open delete modal
+  const handleDeleteClick = (event) => {
+    setEventToDelete(event);
+    setShowDeleteModal(true);
+  };
+
+  // Delete modal component
+  const DeleteModal = () => (
+    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+      <div className="bg-white rounded-lg p-6 w-full max-w-md">
+        <h3 className="text-lg font-bold mb-4">Delete Event</h3>
+        <p className="mb-6">
+          Are you sure you want to delete "
+          {eventToDelete?.title || eventToDelete?.title}"? This action cannot be
+          undone.
+        </p>
+        <div className="flex justify-end space-x-2">
+          <button
+            onClick={() => setShowDeleteModal(false)}
+            className="px-4 py-2 bg-gray-200 rounded-md hover:bg-gray-300"
+          >
+            Cancel
+          </button>
+          <button
+            onClick={handleConfirmDelete}
+            className="px-4 py-2 bg-red-600 text-white rounded-md hover:bg-red-700"
+          >
+            Delete
+          </button>
+        </div>
+      </div>
+    </div>
+  );
   useEffect(() => {
     dispatch(fetchEvents());
   }, [dispatch]);
 
   return (
-    <div className="p-4">
-      <h2 className="text-xl font-bold mb-4">Event List</h2>
+    <div>
+      <table className="w-full">
+        <thead>
+          <tr className="bg-gray-100">
+            <th className="text-left py-3 px-4 font-medium text-gray-700">
+              Name
+            </th>
+            <th className="text-left py-3 px-4 font-medium text-gray-700">
+              Venue
+            </th>
+            <th className="text-left py-3 px-4 font-medium text-gray-700">
+              Accessibility
+            </th>
+            <th className="text-left py-3 px-4 font-medium text-gray-700">
+              Features
+            </th>
+            <th className="text-left py-3 px-4 font-medium text-gray-700">
+              Actions
+            </th>
+          </tr>
+        </thead>
 
-      {events.length === 0 ? (
-        <p className="text-gray-500">No events created yet.</p>
-      ) : (
-        <div className="grid-1 gap-4 sm:grid-cols-2 md:grid-cols-3">
-          {events.map((event) => (
-            <div
-              key={event.id}
-              className="bg-white rounded-lg shadow p-4 flex flex-col justify-between"
-            >
-              <div className="">
-                <div className="bg-slate-200">
-                  <h3 className="text-lg font-semibold text-black">
-                    {event.title}
-                  </h3>
-                  <p className="text-sm text-gray-600">{event.description}</p>
-                </div>
-                <div className="flex justify-between items-center mt-4">
-                  <p className="text-sm text-gray-500 mt-2 w-2/5 bg-gray-300 rounded-full py-2 px-3">
-                    <strong>Venue:</strong> {event.venue?.venueName || "N/A"}
-                  </p>
-                  <p className="text-sm text-gray-500 w-1.5/5 bg-gray-300 rounded-full py-2 px-3">
-                    <strong>Start:</strong> {event.startDate}
-                  </p>
-                  <p className="text-sm text-gray-500 w-1.5/5 bg-gray-300 rounded-full py-2 px-3">
-                    <strong>End:</strong> {event.endDate}
-                  </p>
-                </div>
-              </div>
+        <tbody className="divide-y divide-gray-200">
+          {Array.isArray(events) && events.length === 0 ? (
+            <tr>
+              <td
+                colSpan="5"
+                className="text-center py-8 bg-gray-50 rounded-md"
+              >
+                <p className="text-gray-500">No events available</p>
+              </td>
+            </tr>
+          ) : (
+            events.map((event) => {
+              const accessibilityScore =
+                event.accessibility ||
+                Math.round(
+                  ((event.accessibilityFeatures?.length || 0) / 8) * 100
+                );
 
-              <div className="flex justify-end mt-4 space-x-2">
-                <button
-                  onClick={() => onEdit(event)}
-                  className="text-blue-600 hover:text-blue-800 p-1"
-                  title="Edit"
-                >
-                  <Pencil size={18} />
-                </button>
-                <button
-                  onClick={() => handleDelete(event.id)}
-                  className="text-red-600 hover:text-red-800 p-1"
-                  title="Delete"
-                >
-                  <Trash2 size={18} />
-                </button>
-              </div>
-            </div>
-          ))}
-        </div>
-      )}
+              const features = formatFeatures(event.accessibilityFeatures);
+
+              return (
+                <tr key={event.id} className="hover:bg-gray-50">
+                  <td className="py-4 px-4 text-sm">{event.title}</td>
+                  <td className="py-4 px-4 text-sm">
+                    {event.venue?.venueName || "N/A"}
+                  </td>
+                  <td className="py-4 px-4">
+                    <div className="flex items-center gap-2">
+                      <div className="w-24 bg-gray-200 rounded-full h-2">
+                        <div
+                          className={`h-2 rounded-full ${getAccessibilityColor(
+                            accessibilityScore
+                          )}`}
+                          style={{ width: `${accessibilityScore}%` }}
+                        ></div>
+                      </div>
+                      <span className="text-xs font-medium">
+                        {accessibilityScore}%
+                      </span>
+                    </div>
+                  </td>
+                  <td className="py-4 px-4">
+                    <div className="flex flex-col space-y-1">
+                      {features.map((feature, index) => (
+                        <span key={index} className="text-sm">
+                          {feature}
+                        </span>
+                      ))}
+                    </div>
+                  </td>
+                  <td className="py-4 px-4">
+                    <div className="flex space-x-2">
+                      <button
+                        className="p-1 text-blue-600 hover:text-blue-800"
+                        onClick={() => onEdit(event)}
+                        aria-label="Edit Event"
+                      >
+                        <Edit size={18} />
+                      </button>
+                      <button
+                        className="p-1 text-red-600 hover:text-red-800"
+                        onClick={() => handleDeleteClick(event)}
+                        aria-label="Delete Event"
+                      >
+                        <Trash size={18} />
+                      </button>
+                    </div>
+                  </td>
+                </tr>
+              );
+            })
+          )}
+        </tbody>
+      </table>
+
+      {/* Delete confirmation modal */}
+      {showDeleteModal && <DeleteModal />}
     </div>
   );
 };
 
-export default EventList;
+export default EventLists;

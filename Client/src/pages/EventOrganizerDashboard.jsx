@@ -1,22 +1,22 @@
 import React, { useContext } from "react";
 import { Input } from "@material-tailwind/react";
 import { IoSearchSharp } from "react-icons/io5";
-import { NotificationBell } from '../components/NotificationSystem';
-import VenueLists from "../components/VenueLists";
+import { NotificationBell } from "../components/NotificationSystem";
+import EventLists from "../components/EventList";
 import { UserContext } from "../context/UserContext";
-import Sidebar from '../components/Sidebar'; // Import the shared sidebar component
+import Sidebar from "../components/Sidebar"; // Import the shared sidebar component
 
 const EventOrganizerDashboard = () => {
   const { user, userDetails, loading } = useContext(UserContext);
-  
+
   if (loading) {
     return <div>Loading...</div>; // or a spinner
   }
-  
+
   if (!user || !userDetails) {
-    return <div>Please log in to view your dashboard.</div>; 
+    return <div>Please log in to view your dashboard.</div>;
   }
-  
+
   return (
     <div className="flex h-screen">
       {/* Use the shared sidebar component with dashboard as active */}
@@ -43,7 +43,7 @@ const EventOrganizerDashboard = () => {
               reviews this <br /> week.
             </p>
           </div>
-          
+
           <div className="flex flex-col md:flex-row gap-4 mt-6">
             <div className="w-full md:w-1/2 bg-white rounded-xl p-4 flex flex-col">
               <p className="text-sm">Total Venues</p>
@@ -63,13 +63,11 @@ const EventOrganizerDashboard = () => {
                   Manage your venue accessibility information
                 </p>
               </div>
-              <div id="button">
-                {/* Button placeholder if needed */}
-              </div>
+              <div id="button">{/* Button placeholder if needed */}</div>
             </div>
-            
+
             <hr className="-mx-3 my-3 border-secondary" />
-            
+
             <div>
               <div className="w-1/2 bg-white border border-slate-400 rounded-lg flex">
                 <Input
@@ -87,10 +85,10 @@ const EventOrganizerDashboard = () => {
                 </Input>
               </div>
             </div>
-            
+
             <hr className="-mx-3 my-3 border-secondary" />
-            
-            <VenueLists />
+
+            <EventLists />
           </div>
         </div>
       </div>

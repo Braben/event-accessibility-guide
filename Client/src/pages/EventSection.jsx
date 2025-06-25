@@ -1,10 +1,9 @@
-import React, { useState, useContext } from "react";
+import { useState, useContext } from "react";
 import { IoNotificationsOutline } from "react-icons/io5";
 import { GoDotFill } from "react-icons/go";
 import { Search } from "lucide-react";
 import AddEvents from "../components/AddEvents";
-// import VenueLists from "../components/VenueLists";
-import EventList from "../components/EventList";
+import EventLists from "../components/EventList";
 import { UserContext } from "../context/UserContext";
 import Sidebar from "../components/Sidebar"; // Import the shared sidebar component
 
@@ -83,7 +82,7 @@ const EventSection = () => {
                 />
               </div>
 
-              <EventList
+              <EventLists
                 onEdit={(event) => {
                   setEditingEvent(event);
                   setCurrentView("edit");
