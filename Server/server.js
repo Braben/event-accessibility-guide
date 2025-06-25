@@ -47,7 +47,7 @@ app.use(express.json());
 // Connect to routes
 app.use("/venues", venueRoutes);
 app.use("/reviews", reviewRoutes);
-app.use("/api", searchRoutes);
+app.use("/api/venues", searchRoutes);
 // app.use(userRoutes);
 app.use("/users", userRoute);
 app.use("/user", loginRoute);
