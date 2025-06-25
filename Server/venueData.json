@@ -7,15 +7,12 @@
     "venueCapacity": 300,
     "description": "A spacious hall suitable for weddings and conferences.",
     "photos": [
-      "https://example.com/photo1.jpg",
-      "https://example.com/photo2.jpg"
+      "https://www.royalkingeventcentre.com/wp-content/uploads/2023/08/PLATINUM-HALL-1.jpeg",
+      "https://www.tagvenue.com/resize/e8/c6/fit-900-600;64093-the-gold-hall-room.jpg"
     ],
     "routeDirection": "Located off Main Street near the central bank.",
     "createdAt": "2025-05-05T08:00:00Z",
-    "accessibilityFeatures": [
-      "Wheel chair access",
-      "Accessible Toilet"
-    ],
+    "accessibilityFeatures": ["Wheel chair access", "Accessible Toilet"],
     "reviews": []
   },
   {
@@ -26,13 +23,11 @@
     "venueCapacity": 150,
     "description": "An open-air garden perfect for parties and engagements.",
     "photos": [
-      "https://example.com/garden1.jpg"
+      "https://zarichinmobiliaria.com/wp-content/uploads/2024/05/CASA-CLUB-02.png"
     ],
     "routeDirection": "Next to Mango Market, off the ring road.",
     "createdAt": "2025-05-05T08:01:00Z",
-    "accessibilityFeatures": [
-      "Braille itinerary"
-    ],
+    "accessibilityFeatures": ["Braille itinerary"],
     "reviews": []
   },
   {
@@ -42,15 +37,10 @@
     "contactInformation": "+233 30 222 3344",
     "venueCapacity": 500,
     "description": "Modern conference space with advanced facilities.",
-    "photos": [
-      "https://example.com/conference.jpg"
-    ],
+    "photos": ["https://example.com/conference.jpg"],
     "routeDirection": "Opposite the Accra Mall on Ring Road.",
     "createdAt": "2025-05-05T08:02:00Z",
-    "accessibilityFeatures": [
-      "Elevator",
-      "Earing aids"
-    ],
+    "accessibilityFeatures": ["Elevator", "Earing aids"],
     "reviews": []
   },
   {
@@ -61,13 +51,11 @@
     "venueCapacity": 200,
     "description": "Lush park venue ideal for outdoor celebrations.",
     "photos": [
-      "https://example.com/park.jpg"
+      "https://www.wedgewoodweddings.com/hubfs/3.0%20Feature%20Images%201000%20x%20500%20px/Venues/SterlingHills-Location-JessicaSavagePhotography-2019-WedgewoodWeddings%20%285%29.png"
     ],
     "routeDirection": "5 mins from Koforidua Technical University.",
     "createdAt": "2025-05-05T08:03:00Z",
-    "accessibilityFeatures": [
-      "Close parking"
-    ],
+    "accessibilityFeatures": ["Close parking"],
     "reviews": []
   },
   {
@@ -78,14 +66,11 @@
     "venueCapacity": 350,
     "description": "Banquet hall with scenic views of the lake.",
     "photos": [
-      "https://example.com/lakehall.jpg"
+      "https://bookwedgo-prod.s3.amazonaws.com/Mandapam_Images/2157ea6e-7d4.webp"
     ],
     "routeDirection": "Near the old castle, behind Shell Station.",
     "createdAt": "2025-05-05T08:04:00Z",
-    "accessibilityFeatures": [
-      "Wheel chair access",
-      "Braille itinerary"
-    ],
+    "accessibilityFeatures": ["Wheel chair access", "Braille itinerary"],
     "reviews": []
   },
   {
@@ -95,16 +80,10 @@
     "contactInformation": "+233 27 112 3344",
     "venueCapacity": 1000,
     "description": "Large auditorium for concerts and church events.",
-    "photos": [
-      "https://example.com/dome.jpg"
-    ],
+    "photos": ["https://adw.org/wp-content/uploads/sites/2/2018/07/olov.png"],
     "routeDirection": "Located near American House, East Legon.",
     "createdAt": "2025-05-05T08:05:00Z",
-    "accessibilityFeatures": [
-      "Elevator",
-      "Earing aids",
-      "Close parking"
-    ],
+    "accessibilityFeatures": ["Elevator", "Earing aids", "Close parking"],
     "reviews": []
   },
   {
@@ -115,13 +94,11 @@
     "venueCapacity": 250,
     "description": "Calm and beautiful space for events and concerts.",
     "photos": [
-      "https://example.com/serenity.jpg"
+      "https://content.govdelivery.com/attachments/fancy_images/FLDEP/2022/03/5674251/4018224/microsoftteams-image_crop.png"
     ],
     "routeDirection": "Next to Community 25 Police Station.",
     "createdAt": "2025-05-05T08:06:00Z",
-    "accessibilityFeatures": [
-      "Wheel chair access"
-    ],
+    "accessibilityFeatures": ["Wheel chair access"],
     "reviews": []
   },
   {
@@ -132,14 +109,11 @@
     "venueCapacity": 180,
     "description": "Beachfront pavilion ideal for romantic events.",
     "photos": [
-      "https://example.com/pavilion.jpg"
+      "https://static.where-e.com/United_States/Florida/Brevard_County/Fox-Lake-Park_6bad4a7f9d8adf8669e7686113feb71c.jpg"
     ],
     "routeDirection": "Opposite Takoradi Beach Hotel.",
     "createdAt": "2025-05-05T08:07:00Z",
-    "accessibilityFeatures": [
-      "Braille itinerary",
-      "Accessible Toilet"
-    ],
+    "accessibilityFeatures": ["Braille itinerary", "Accessible Toilet"],
     "reviews": []
   },
   {
@@ -150,25 +124,22 @@
     "venueCapacity": 400,
     "description": "A top-tier venue with multiple event spaces.",
     "photos": [
-      "https://example.com/golden.jpg"
+      "https://goldenpalmsrehab.com/wp-content/uploads/2024/09/GoldenPalmsTX-June2024-w-24-1030x687.jpg"
     ],
     "routeDirection": "Opposite KFC, Spintex.",
     "createdAt": "2025-05-05T08:08:00Z",
-    "accessibilityFeatures": [
-      "Elevator",
-      "Accessible Toilet"
-    ],
+    "accessibilityFeatures": ["Elevator", "Accessible Toilet"],
     "reviews": []
   },
   {
     "id": "ckv1a1a000000010",
-    "name": "Freedom Square",
+    "name": "Independence Square",
     "address": "Independence Avenue, Accra",
     "contactInformation": "+233 21 888 0000",
     "venueCapacity": 2000,
     "description": "Iconic square used for national events and concerts.",
     "photos": [
-      "https://example.com/freedom.jpg"
+      "https://media.tacdn.com/media/attractions-splice-spp-360x240/09/a5/25/3d.jpg"
     ],
     "routeDirection": "Next to Independence Arch.",
     "createdAt": "2025-05-05T08:09:00Z",
