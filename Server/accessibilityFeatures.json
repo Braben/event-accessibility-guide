@@ -1,14 +1,44 @@
 [
-  { "category": "Balanced sound", "description": "Optimized audio levels for comfort" },
+  {
+    "category": "Balanced sound",
+    "description": "Optimized audio levels for comfort"
+  },
   { "category": "Earing aids", "description": "Support for hearing aid users" },
-  { "category": "Sign language translators", "description": "Translators available upon request" },
-  { "category": "Braille itinerary", "description": "Printed materials available in Braille" },
-  { "category": "Wheel chair access", "description": "Ramps and accessible pathways provided" },
+  {
+    "category": "Sign language translators",
+    "description": "Translators available upon request"
+  },
+  {
+    "category": "Braille itinerary",
+    "description": "Printed materials available in Braille"
+  },
+  {
+    "category": "Wheel chair access",
+    "description": "Ramps and accessible pathways provided"
+  },
   { "category": "Elevator", "description": "Elevator access to all floors" },
-  { "category": "Automatic doors", "description": "Doors open automatically for ease of entry" },
-  { "category": "Lighting considerations", "description": "Lighting suited for sensitive vision" },
-  { "category": "Close parking", "description": "Accessible parking spots near entrance" },
-  { "category": "Large prints", "description": "Information available in large text" },
-  { "category": "Service Animal Accommodation", "description": "Service animals welcome" },
-  { "category": "Accessible Toilet", "description": "Ease of accessible toilet for all" }
+  {
+    "category": "Automatic doors",
+    "description": "Doors open automatically for ease of entry"
+  },
+  {
+    "category": "Lighting considerations",
+    "description": "Lighting suited for sensitive vision"
+  },
+  {
+    "category": "Close parking",
+    "description": "Accessible parking spots near entrance"
+  },
+  {
+    "category": "Large prints",
+    "description": "Information available in large text"
+  },
+  {
+    "category": "Service Animal Accommodation",
+    "description": "Service animals welcome"
+  },
+  {
+    "category": "Accessible Toilet",
+    "description": "Ease of accessible toilet for all"
+  }
 ]

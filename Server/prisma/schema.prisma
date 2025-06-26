@@ -38,7 +38,7 @@ model Venue {
   createdAt             DateTime               @default(now())
   accessibilityFeatures AccessibilityFeature[] @relation("VenueFeatures")
   reviews               Review[]
-  User                  User?                  @relation(fields: [userId], references: [id])
+  user                  User?                  @relation(fields: [userId], references: [id])
   userId                String?
 }
 

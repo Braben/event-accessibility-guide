@@ -7,7 +7,6 @@
     "venueCapacity": 300,
     "description": "A spacious hall suitable for weddings and conferences.",
     "photos": [
-      "https://www.royalkingeventcentre.com/wp-content/uploads/2023/08/PLATINUM-HALL-1.jpeg",
       "https://www.tagvenue.com/resize/e8/c6/fit-900-600;64093-the-gold-hall-room.jpg"
     ],
     "routeDirection": "Located off Main Street near the central bank.",
@@ -37,7 +36,9 @@
     "contactInformation": "+233 30 222 3344",
     "venueCapacity": 500,
     "description": "Modern conference space with advanced facilities.",
-    "photos": ["https://example.com/conference.jpg"],
+    "photos": [
+      "https://thumbs.dreamstime.com/b/modern-conference-room-city-skyline-view-sunset-elegant-design-elements-modern-conference-room-city-skyline-view-381926318.jpg"
+    ],
     "routeDirection": "Opposite the Accra Mall on Ring Road.",
     "createdAt": "2025-05-05T08:02:00Z",
     "accessibilityFeatures": ["Elevator", "Earing aids"],
@@ -66,7 +67,7 @@
     "venueCapacity": 350,
     "description": "Banquet hall with scenic views of the lake.",
     "photos": [
-      "https://bookwedgo-prod.s3.amazonaws.com/Mandapam_Images/2157ea6e-7d4.webp"
+      "https://www.millenniumhotels.com/mhb-media/mena/09---united-arab-emirates/copthorne-lakeview-hd-pics/weddings/wedding-hero-shot-ballroom-3.jpg?h=767&w=1050&rev=8061237a075c49a9aaca6fc51d5603b2&hash=9738C796D7C3E4CF3E6A211C8BE83DAC"
     ],
     "routeDirection": "Near the old castle, behind Shell Station.",
     "createdAt": "2025-05-05T08:04:00Z",
