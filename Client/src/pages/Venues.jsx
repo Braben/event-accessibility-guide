@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import { IoSearchSharp } from "react-icons/io5";
 import { CiFilter } from "react-icons/ci";
 import VenueFilterSidebar from "./VenueFilterSidebar";
@@ -31,6 +31,7 @@ const Venues = () => {
     try {
       const response = await fetch(
         "https://event-accessibility-guide.onrender.com/venues"
+        // "http://localhost:5000/venues"
       );
       if (!response.ok) throw new Error("Failed to fetch venues");
       const data = await response.json();
@@ -63,7 +64,8 @@ const Venues = () => {
       queryParams += `&distance=${appliedFilters.distance}`;
 
       const response = await fetch(
-        `https://event-accessibility-guide.onrender.com/venues/search?${queryParams}`
+        `https://event-accessibility-guide.onrender.com/api/venues/search?${queryParams}`
+        // `http://localhost:5000/api/venues/search?${queryParams}`
       );
       const data = await response.json();
       setSearchVenues(data);
@@ -93,16 +95,17 @@ const Venues = () => {
         );
       }
 
-      // if (filters.venueTypes.length > 0) {
-      //   queryParams.push(
-      //     `venueTypes=${filters.venueTypes.map(encodeURIComponent).join(",")}`
-      //   );
-      // }
+      if (filters.venueTypes.length > 0) {
+        queryParams.push(
+          `venueTypes=${filters.venueTypes.map(encodeURIComponent).join(",")}`
+        );
+      }
 
-      // queryParams.push(`distance=${filters.distance}`);
+      queryParams.push(`distance=${filters.distance}`);
 
       const response = await fetch(
-        `https://event-accessibility-guide.onrender.com/venues/search?${queryParams.join(
+        // `http://localhost:5000/api/venues/search?${queryParams.join("&")}`
+        `https://event-accessibility-guide.onrender.com/api/venues/search?${queryParams.join(
           "&"
         )}`
       );

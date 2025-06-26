@@ -122,7 +122,7 @@ function OnboardingModal({ password, open, setOpen }) {
         if (role === "USER") {
           window.location.href = "/venues";
         } else {
-          window.location.href = "/organizer-dashboard";
+          window.location.href = "/organizer/dashboard";
         }
       }, 300);
     } catch (error) {

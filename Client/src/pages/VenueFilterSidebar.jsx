@@ -17,7 +17,7 @@ const VenueFilterSidebar = ({
   const [accessibilityFeatures, setAccessibilityFeatures] = useState([]);
 
   useEffect(() => {
-    const fetchAccessibilityFeatures = async () => {
+    async function fetchAccessibilityFeatures() {
       try {
         const res = await fetch(
           "https://event-accessibility-guide.onrender.com/features"
@@ -27,8 +27,7 @@ const VenueFilterSidebar = ({
       } catch (err) {
         console.error("Error fetching accessibility features:", err);
       }
-    };
-
+    }
     fetchAccessibilityFeatures();
   }, []);
 
