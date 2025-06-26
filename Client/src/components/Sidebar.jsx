@@ -49,12 +49,12 @@ const Sidebar = ({ activePage }) => {
       href: "/organizer/accessibility",
       active: activePage === "accessibility",
     },
-    {
-      icon: CgMenuBoxed,
-      title: "Event/Venue",
-      href: "/organizer/events",
-      active: activePage === "events",
-    },
+    // {
+    //   icon: CgMenuBoxed,
+    //   title: "Event/Venue",
+    //   href: "/organizer/events",
+    //   active: activePage === "events",
+    // },
     {
       icon: CgMenuBoxed,
       title: "Events",
