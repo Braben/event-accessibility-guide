@@ -2,13 +2,11 @@ import React, { useState, useEffect, useContext } from "react";
 import { v4 as uuidv4 } from "uuid";
 import { useSelector, useDispatch } from "react-redux";
 import { UserContext } from "../context/UserContext";
-
 import { createEvent, updateEvent } from "../slicers/eventSlicer";
 
 const AddEvents = ({ event = null, isEditing = false, onCancel }) => {
   const [accessibilityFeatures, setAccessibilityFeatures] = useState([]);
 
-  //events items
   const { userDetails } = useContext(UserContext);
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
@@ -19,7 +17,6 @@ const AddEvents = ({ event = null, isEditing = false, onCancel }) => {
   const [fetchedVenues, setFetchedVenues] = useState([]);
 
   const dispatch = useDispatch();
-  // dispatch(createEvent(eventData));
 
   useEffect(() => {
     if (isEditing && event) {
@@ -32,7 +29,6 @@ const AddEvents = ({ event = null, isEditing = false, onCancel }) => {
     }
   }, [isEditing, event]);
 
-  // Fetch venues from the server
   useEffect(() => {
     const fetchVenues = async () => {
       try {
@@ -40,7 +36,6 @@ const AddEvents = ({ event = null, isEditing = false, onCancel }) => {
           "https://event-accessibility-guide.onrender.com/venues"
         );
         const data = await response.json();
-        // console.log("Fetched venues data:", data); // ✅ add this
         setFetchedVenues(data || []);
       } catch (error) {
         console.error("Failed to fetch venues:", error);
@@ -50,7 +45,6 @@ const AddEvents = ({ event = null, isEditing = false, onCancel }) => {
     fetchVenues();
   }, []);
 
-  // Create a new event
   const handleSubmit = async (e) => {
     e.preventDefault();
 
@@ -66,7 +60,6 @@ const AddEvents = ({ event = null, isEditing = false, onCancel }) => {
 
     try {
       if (isEditing) {
-        // If editing, still use your manual PUT
         const response = await fetch(
           `https://event-accessibility-guide.onrender.com/events/${event.id}`,
           {
@@ -83,7 +76,6 @@ const AddEvents = ({ event = null, isEditing = false, onCancel }) => {
           console.error("Error from server:", data.message);
         }
       } else {
-        //  Use only Redux thunk to create new event
         await dispatch(createEvent(eventData));
         onCancel();
       }
@@ -104,34 +96,32 @@ const AddEvents = ({ event = null, isEditing = false, onCancel }) => {
   ];
 
   const handleAccessibilityChange = (option) => {
-    setAccessibilityFeatures((prev) => {
-      const updated = prev.includes(option)
-        ? prev.filter((item) => item !== option)
-        : [...prev, option];
-      console.log("Updated features:", updated); // ✅ add this
-      return updated;
-    });
+    setAccessibilityFeatures((prev) =>
+      prev.includes(option)
+        ? prev.filter((item) => item !== item)
+        : [...prev, option]
+    );
   };
 
   return (
-    <div className="bg-white p-6 rounded-lg shadow">
-      <div className="border-b pb-4 mb-4">
-        <h2 className="text-xl font-bold">
+    <div
+      className="bg-white p-4 sm:p-6 rounded-lg shadow max-w-2xl mx-auto min-h-0 max-h-[calc(100vh-100px)] overflow-y-auto"
+      style={{ maxHeight: "calc(100vh - 100px)" }}
+    >
+      <div className="border-b pb-3 sm:pb-4 mb-3 sm:mb-4">
+        <h2 className="text-lg sm:text-xl font-bold">
           {isEditing ? "Edit Event" : "Add Event"}
         </h2>
-        <p className="text-gray-600 text-sm">
+        <p className="text-gray-600 text-xs sm:text-sm">
           {isEditing
             ? "Manage and refresh your event details"
             : "Create a new accessible event venue"}
         </p>
       </div>
 
-      <form onSubmit={handleSubmit} className="space-y-4">
+      <form onSubmit={handleSubmit} className="space-y-3 sm:space-y-4">
         <div>
-          <label
-            htmlFor="eventTitle"
-            className="block text-sm font-medium mb-1"
-          >
+          <label htmlFor="eventTitle" className="block text-xs sm:text-sm font-medium mb-1">
             Event Name
           </label>
           <input
@@ -140,13 +130,13 @@ const AddEvents = ({ event = null, isEditing = false, onCancel }) => {
             value={title}
             onChange={(e) => setTitle(e.target.value)}
             placeholder="Enter event name"
-            className="w-full border border-gray-300 rounded-md p-2"
+            className="w-full border border-gray-300 rounded-md p-2 text-sm"
             required
           />
         </div>
 
         <div>
-          <label htmlFor="venue" className="block text-sm font-medium mb-1">
+          <label htmlFor="venue" className="block text-xs sm:text-sm font-medium mb-1">
             Venue
           </label>
           <div className="relative">
@@ -154,15 +144,15 @@ const AddEvents = ({ event = null, isEditing = false, onCancel }) => {
               id="venue"
               value={venueId}
               onChange={(e) => setVenueId(e.target.value)}
-              className="w-full border border-gray-300 rounded-md p-2 pr-8 appearance-none"
+              className="w-full border border-gray-300 rounded-md p-2 pr-8 appearance-none text-sm"
               required
             >
               <option value="" disabled>
                 Select venue
               </option>
               {fetchedVenues.map((venue) => (
-                <option className=" w-4/6" key={venue.id} value={venue.id}>
-                  {venue.name || venue.venueName}
+                <option key={venue.id} value={venue.id}>
+                  {venue.name || venue.venueName || "Unnamed Venue"}
                 </option>
               ))}
             </select>
@@ -186,10 +176,7 @@ const AddEvents = ({ event = null, isEditing = false, onCancel }) => {
         </div>
 
         <div>
-          <label
-            htmlFor="description"
-            className="block text-sm font-medium mb-1"
-          >
+          <label htmlFor="description" className="block text-xs sm:text-sm font-medium mb-1">
             Description
           </label>
           <textarea
@@ -197,55 +184,68 @@ const AddEvents = ({ event = null, isEditing = false, onCancel }) => {
             value={description}
             onChange={(e) => setDescription(e.target.value)}
             placeholder="Describe the venue and event details"
-            className="w-full border border-gray-300 rounded-md p-2 h-24 resize-none"
+            className="w-full border border-gray-300 rounded-md p-2 h-20 sm:h-24 resize-none text-sm"
           />
         </div>
 
-        {/* startdate and enddate */}
-        <div className="flex space-x-4">
-          <input
-            type="date"
-            value={startDate}
-            onChange={(e) => setStartDate(e.target.value)}
-            className="w-1/2 border p-2 rounded"
-            required
-          />
-          <input
-            type="date"
-            value={endDate}
-            onChange={(e) => setEndDate(e.target.value)}
-            className="w-1/2 border p-2 rounded"
-            required
-          />
+        <div className="flex flex-col sm:flex-row space-y-3 sm:space-y-0 sm:space-x-4">
+          <div className="w-full">
+            <label htmlFor="startDate" className="block text-xs sm:text-sm font-medium mb-1">
+              Start Date
+            </label>
+            <input
+              id="startDate"
+              type="date"
+              value={startDate}
+              onChange={(e) => setStartDate(e.target.value)}
+              className="w-full border p-2 rounded-md text-sm"
+              required
+            />
+          </div>
+          <div className="w-full">
+            <label htmlFor="endDate" className="block text-xs sm:text-sm font-medium mb-1">
+              End Date
+            </label>
+            <input
+              id="endDate"
+              type="date"
+              value={endDate}
+              onChange={(e) => setEndDate(e.target.value)}
+              className="w-full border p-2 rounded-md text-sm"
+              required
+            />
+          </div>
         </div>
 
-        <div className="mt-4">
-          <div className="grid grid-cols-2 gap-x-8 gap-y-2">
+        <div className="mt-3 sm:mt-4">
+          <h3 className="text-xs sm:text-sm font-medium mb-2">Accessibility Features</h3>
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 sm:gap-3">
             {accessibilityOptions.map((feature) => (
               <label key={feature} className="flex items-center space-x-2">
                 <input
                   type="checkbox"
-                  className="rounded border-gray-300 text-blue-600"
+                  className="h-5 w-5 rounded border-gray-300 text-blue-600 focus:ring-blue-500"
                   checked={accessibilityFeatures.includes(feature)}
                   onChange={() => handleAccessibilityChange(feature)}
+                  aria-label={feature}
                 />
-                <span className="text-sm">{feature}</span>
+                <span className="text-xs sm:text-sm">{feature}</span>
               </label>
             ))}
           </div>
         </div>
 
-        <div className="flex justify-end space-x-2 pt-4 border-t mt-4">
+        <div className="flex justify-end space-x-2 pt-3 sm:pt-4 border-t mt-3 sm:mt-4">
           <button
             type="button"
             onClick={onCancel}
-            className="px-4 py-2 bg-white border border-gray-300 rounded-md text-gray-700 hover:bg-gray-50"
+            className="px-3 sm:px-4 py-1 sm:py-2 bg-white border border-gray-300 rounded-md text-gray-700 hover:bg-gray-50 w-full sm:w-auto text-xs sm:text-sm"
           >
             Cancel
           </button>
           <button
             type="submit"
-            className="px-4 py-2 bg-black border border-black rounded-md text-white hover:bg-gray-800"
+            className="px-3 sm:px-4 py-1 sm:py-2 bg-black border border-black rounded-md text-white hover:bg-gray-800 w-full sm:w-auto text-xs sm:text-sm"
           >
             {isEditing ? "Save Changes" : "Add Event"}
           </button>

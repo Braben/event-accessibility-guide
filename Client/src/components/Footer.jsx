@@ -8,17 +8,16 @@ import { FaRegCopyright } from "react-icons/fa6";
 
 const Footer = () => {
   return (
-    <footer className="bg-[#1E1E1E] text-white py-13  h-[390px] mt-30">
-      <div className="max-w-7xl mx-auto px-4 flex flex-col  md:flex-row items-center justify-between">
-        {/* Logo */}
-
-        <div className="flex flex-col mt-4 md:mt-0 ">
+    <footer className="bg-[#1E1E1E] text-white pt-10 pb-6 mt-20">
+      <div className="max-w-7xl mx-auto px-4 flex flex-col md:flex-row md:items-start md:justify-between gap-y-10">
+        {/* Logo and Social */}
+        <div className="flex flex-col">
           <Link to="/" className="font-bold text-xl text-white">
             VenueHubs
           </Link>
-          <p className="mt-6"> Making the world accessible one</p>
+          <p className="mt-4">Making the world accessible one</p>
           <p>venue at a time</p>
-          <div className="flex gap-7 mt-3 md:mt-4 ">
+          <div className="flex gap-6 mt-4">
             <a
               href="https://twitter.com"
               target="_blank"
@@ -47,48 +46,44 @@ const Footer = () => {
         </div>
 
         {/* Navigation Links */}
-        <div className=" flex flex-col gap-4 mt-4 md:mt-0">
-          <h3 className="text-[23px]">Quick Links</h3>
-          <Link to="/" className="hover:text-indigo-600">
-            Home
-          </Link>
-          <Link to="/events" className="hover:text-indigo-600">
-            Events
-          </Link>
-          <Link to="/about" className="hover:text-indigo-600">
-            About Us
-          </Link>
-          <Link to="/contact" className="hover:text-indigo-600">
-            Contact Us
-          </Link>
+        <div className="flex flex-col gap-3">
+          <h3 className="text-lg font-semibold mb-2">Quick Links</h3>
+          <Link to="/" className="hover:text-indigo-400">Home</Link>
+          <Link to="/events" className="hover:text-indigo-400">Events</Link>
+          <Link to="/about" className="hover:text-indigo-400">About Us</Link>
+          <Link to="/contact" className="hover:text-indigo-400">Contact Us</Link>
         </div>
 
-        {/* Social Media Icons */}
-        <div className="flex flex-col gap-4 mt-4 md:mt-0">
-          <h3 className="text-[21px]">Contact</h3>
-          <p className="flex gap-2">
+        {/* Contact Section */}
+        <div className="flex flex-col gap-3">
+          <h3 className="text-lg font-semibold mb-2">Contact</h3>
+          <p className="flex items-start gap-2">
             <BsTelephone className="mt-1" />
             +233 245480345
           </p>
-          <div className="flex gap-2">
+          <div className="flex items-start gap-2">
             <RxEnvelopeClosed className="mt-1" />
             <a
-              href="Info@venuehubs.com"
-              className="text-white hover:text-blue-600 cursor-pointer"
+              href="mailto:Info@venuehubs.com"
+              className="hover:text-blue-400"
             >
               Info@venuehubs.com
             </a>
           </div>
-          <p className="flex gap-2 cursor-pointer">
-            <MdOutlineLocationOn className="mt-1 text-2xl " />
-            Accra,Ghana
+          <p className="flex items-start gap-2">
+            <MdOutlineLocationOn className="text-2xl" />
+            Accra, Ghana
           </p>
         </div>
       </div>
-      <div className="h-[1px] w-full bg-blue-500 mt-20 "></div>
-      <p className="flex gap-2  ml-10 mt-5">
-        <FaRegCopyright className="mt-1" />
-        2025 AccessMap.All rights reserved
+
+      {/* Divider Line */}
+      <div className="h-[1px] w-full bg-blue-500 mt-10"></div>
+
+      {/* Footer Bottom Text */}
+      <p className="flex items-center gap-2 mt-4 text-sm text-center justify-center">
+        <FaRegCopyright />
+        2025 AccessMap. All rights reserved.
       </p>
     </footer>
   );

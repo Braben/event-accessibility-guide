@@ -1,17 +1,18 @@
 import React, { useContext, useState } from "react";
 import { Link } from "react-router-dom";
 import { TbPentagonFilled } from "react-icons/tb";
-import { FiHome, FiSettings } from "react-icons/fi";
+import { FiHome, FiSettings, FiMenu, FiX } from "react-icons/fi";
 import { CgMenuBoxed } from "react-icons/cg";
-import { Pin } from "iconoir-react"; // Using the Pin icon from iconoir
+import { Pin } from "iconoir-react";
 import { MdOutlinePersonOutline } from "react-icons/md";
 import { UserContext } from "../context/UserContext";
-import { ProfileSection, EditProfileModal } from "./ProfileSection"; // Import the new components
+import { ProfileSection, EditProfileModal } from "./ProfileSection";
 
 const Sidebar = ({ activePage }) => {
   const { user, userDetails } = useContext(UserContext);
   const [showProfileSection, setShowProfileSection] = useState(false);
   const [showEditProfile, setShowEditProfile] = useState(false);
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
   // Profile data for the form
   const profileData = {
@@ -28,10 +29,7 @@ const Sidebar = ({ activePage }) => {
   };
 
   const handleProfileSave = (formData) => {
-    // Here you would typically save the data to your backend
     console.log("Saving profile data:", formData);
-
-    // Close the edit modal and show the profile section again
     setShowEditProfile(false);
     setShowProfileSection(true);
   };
@@ -44,7 +42,7 @@ const Sidebar = ({ activePage }) => {
       active: activePage === "dashboard",
     },
     {
-      icon: Pin, // Using the Pin icon from iconoir
+      icon: Pin,
       title: "Accessibility",
       href: "/organizer/accessibility",
       active: activePage === "accessibility",
@@ -69,9 +67,36 @@ const Sidebar = ({ activePage }) => {
     },
   ];
 
+  const closeMobileMenu = () => {
+    setIsMobileMenuOpen(false);
+  };
+
   return (
     <>
-      <div className="w-[250px] bg-[#1A1A1A] text-white fixed left-0 top-0 bottom-0 flex flex-col overflow-y-auto">
+      {/* Mobile Menu Button */}
+      <button
+        className="lg:hidden fixed top-4 left-4 z-50 bg-[#1A1A1A] text-white p-2 rounded-lg shadow-lg"
+        onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+      >
+        {isMobileMenuOpen ? <FiX className="text-xl" /> : <FiMenu className="text-xl" />}
+      </button>
+
+      {/* Mobile Overlay */}
+      {isMobileMenuOpen && (
+        <div
+          className="lg:hidden fixed inset-0 bg-black bg-opacity-50 z-40"
+          onClick={closeMobileMenu}
+        />
+      )}
+
+      {/* Sidebar */}
+      <div
+        className={`
+          w-[250px] bg-[#1A1A1A] text-white fixed left-0 top-0 bottom-0 flex flex-col overflow-y-auto z-50 transform transition-transform duration-300 ease-in-out
+          lg:translate-x-0
+          ${isMobileMenuOpen ? 'translate-x-0' : '-translate-x-full lg:translate-x-0'}
+        `}
+      >
         <div className="flex flex-col h-full">
           {/* Logo */}
           <div className="flex items-center space-x-2 p-4 mb-6">
@@ -97,6 +122,7 @@ const Sidebar = ({ activePage }) => {
                   className={`flex items-center gap-3 px-4 py-3 rounded-lg mb-1 ${
                     active ? "bg-blue-600" : "hover:bg-gray-800"
                   }`}
+                  onClick={closeMobileMenu} // Close mobile menu when link is clicked
                 >
                   <Icon className="text-lg" />
                   <span>{title}</span>
@@ -109,7 +135,10 @@ const Sidebar = ({ activePage }) => {
           <div className="p-4 mt-auto">
             <div
               className="bg-[#3b3b3b] rounded-lg flex items-center p-3 gap-3 cursor-pointer hover:bg-[#4a4a4a]"
-              onClick={() => setShowProfileSection(true)}
+              onClick={() => {
+                setShowProfileSection(true);
+                closeMobileMenu(); // Close mobile menu when profile is clicked
+              }}
             >
               {userDetails && userDetails.profileInfo ? (
                 <img
