@@ -5,8 +5,7 @@ import { UserContext } from "../context/UserContext";
 import { createEvent, updateEvent } from "../slicers/eventSlicer";
 
 const AddEvents = ({ event = null, isEditing = false, onCancel }) => {
-  const [accessibilityFeatures, setAccessibilityFeatures] = useState([]);
-
+  // const [accessibilityFeatures, setAccessibilityFeatures] = useState([]);
   const { userDetails } = useContext(UserContext);
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
@@ -15,6 +14,8 @@ const AddEvents = ({ event = null, isEditing = false, onCancel }) => {
   const [venueId, setVenueId] = useState("");
   const [photos, setPhotos] = useState([]);
   const [fetchedVenues, setFetchedVenues] = useState([]);
+  const [accessibilityOptions, setAccessibilityOptions] = useState([]);
+  const [selectedFeatures, setSelectedFeatures] = useState([]);
 
   const dispatch = useDispatch();
 
@@ -54,6 +55,7 @@ const AddEvents = ({ event = null, isEditing = false, onCancel }) => {
       startDate,
       endDate,
       venueId,
+      venue: fetchedVenues.find((venue) => venue.id === venueId),
       photos,
       createdBy: userDetails?.id,
     };
@@ -84,24 +86,49 @@ const AddEvents = ({ event = null, isEditing = false, onCancel }) => {
     }
   };
 
-  const accessibilityOptions = [
-    "Ground Level Entry",
-    "Wide Doorways",
-    "Service Animals Welcome",
-    "Reserved Accessible Seating",
-    "Wheelchair Ramps",
-    "Elevators",
-    "Accessible Restrooms",
-    "Hearing Loops",
-  ];
+  // const accessibilityOptions = [
+  //   "Ground Level Entry",
+  //   "Wide Doorways",
+  //   "Service Animals Welcome",
+  //   "Reserved Accessible Seating",
+  //   "Wheelchair Ramps",
+  //   "Elevators",
+  //   "Accessible Restrooms",
+  //   "Hearing Loops",
+  // ];
 
-  const handleAccessibilityChange = (option) => {
-    setAccessibilityFeatures((prev) =>
-      prev.includes(option)
-        ? prev.filter((item) => item !== item)
-        : [...prev, option]
+  useEffect(() => {
+    const accessibilityOptions = async () => {
+      try {
+        const response = await fetch(
+          "https://event-accessibility-guide.onrender.com/features"
+        );
+        const data = await response.json();
+        setAccessibilityOptions(data || []);
+      } catch (error) {
+        console.error("Failed to fetch venues:", error);
+      }
+    };
+
+    accessibilityOptions();
+  }, []);
+  console.log(accessibilityOptions);
+
+  const handleAccessibilityChange = (category) => {
+    setSelectedFeatures((prev) =>
+      prev.includes(category)
+        ? prev.filter((item) => item !== category)
+        : [...prev, category]
     );
   };
+
+  // const handleAccessibilityChange = (option) => {
+  //   setAccessibilityOptions((prev) =>
+  //     prev.includes(option)
+  //       ? prev.filter((item) => item !== item)
+  //       : [...prev, option]
+  //   );
+  // };
 
   return (
     <div
@@ -121,7 +148,10 @@ const AddEvents = ({ event = null, isEditing = false, onCancel }) => {
 
       <form onSubmit={handleSubmit} className="space-y-3 sm:space-y-4">
         <div>
-          <label htmlFor="eventTitle" className="block text-xs sm:text-sm font-medium mb-1">
+          <label
+            htmlFor="eventTitle"
+            className="block text-xs sm:text-sm font-medium mb-1"
+          >
             Event Name
           </label>
           <input
@@ -136,7 +166,10 @@ const AddEvents = ({ event = null, isEditing = false, onCancel }) => {
         </div>
 
         <div>
-          <label htmlFor="venue" className="block text-xs sm:text-sm font-medium mb-1">
+          <label
+            htmlFor="venue"
+            className="block text-xs sm:text-sm font-medium mb-1"
+          >
             Venue
           </label>
           <div className="relative">
@@ -156,6 +189,7 @@ const AddEvents = ({ event = null, isEditing = false, onCancel }) => {
                 </option>
               ))}
             </select>
+
             <div className="absolute inset-y-0 right-0 flex items-center px-2 pointer-events-none">
               <svg
                 className="w-4 h-4 text-gray-400"
@@ -176,7 +210,10 @@ const AddEvents = ({ event = null, isEditing = false, onCancel }) => {
         </div>
 
         <div>
-          <label htmlFor="description" className="block text-xs sm:text-sm font-medium mb-1">
+          <label
+            htmlFor="description"
+            className="block text-xs sm:text-sm font-medium mb-1"
+          >
             Description
           </label>
           <textarea
@@ -190,7 +227,10 @@ const AddEvents = ({ event = null, isEditing = false, onCancel }) => {
 
         <div className="flex flex-col sm:flex-row space-y-3 sm:space-y-0 sm:space-x-4">
           <div className="w-full">
-            <label htmlFor="startDate" className="block text-xs sm:text-sm font-medium mb-1">
+            <label
+              htmlFor="startDate"
+              className="block text-xs sm:text-sm font-medium mb-1"
+            >
               Start Date
             </label>
             <input
@@ -203,7 +243,10 @@ const AddEvents = ({ event = null, isEditing = false, onCancel }) => {
             />
           </div>
           <div className="w-full">
-            <label htmlFor="endDate" className="block text-xs sm:text-sm font-medium mb-1">
+            <label
+              htmlFor="endDate"
+              className="block text-xs sm:text-sm font-medium mb-1"
+            >
               End Date
             </label>
             <input
@@ -216,20 +259,24 @@ const AddEvents = ({ event = null, isEditing = false, onCancel }) => {
             />
           </div>
         </div>
-
+        {/* accsessibility */}
         <div className="mt-3 sm:mt-4">
-          <h3 className="text-xs sm:text-sm font-medium mb-2">Accessibility Features</h3>
+          <h3 className="text-xs sm:text-sm font-medium mb-2">
+            Accessibility Features
+          </h3>
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 sm:gap-3">
             {accessibilityOptions.map((feature) => (
-              <label key={feature} className="flex items-center space-x-2">
+              <label key={feature.id} className="flex items-center space-x-2">
                 <input
                   type="checkbox"
                   className="h-5 w-5 rounded border-gray-300 text-blue-600 focus:ring-blue-500"
-                  checked={accessibilityFeatures.includes(feature)}
-                  onChange={() => handleAccessibilityChange(feature)}
-                  aria-label={feature}
+                  // checked={accessibilityOptions.includes(feature)}
+                  // onChange={() => handleAccessibilityChange(feature)}
+                  checked={selectedFeatures.includes(feature.category)}
+                  onChange={() => handleAccessibilityChange(feature.category)}
+                  aria-label={feature.category}
                 />
-                <span className="text-xs sm:text-sm">{feature}</span>
+                <span className="text-xs sm:text-sm">{feature.category}</span>
               </label>
             ))}
           </div>

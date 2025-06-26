@@ -1,4 +1,5 @@
 import React, { useContext } from "react";
+import { useSelector } from "react-redux";
 import { Input } from "@material-tailwind/react";
 import { IoSearchSharp } from "react-icons/io5";
 import { NotificationBell } from "../components/NotificationSystem";
@@ -8,6 +9,7 @@ import Sidebar from "../components/Sidebar"; // Import the shared sidebar compon
 
 const EventOrganizerDashboard = () => {
   const { user, userDetails, loading } = useContext(UserContext);
+  const events = useSelector((state) => state.events.events) || [];
 
   if (loading) {
     return <div>Loading...</div>; // or a spinner
@@ -26,7 +28,9 @@ const EventOrganizerDashboard = () => {
       <div className="flex-1 lg:ml-[250px] ml-0 flex flex-col bg-[#e0e0e4]">
         {/* Header */}
         <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center bg-white p-4 lg:p-5 shadow-sm gap-4 sm:gap-0">
-          <h2 className="text-xl lg:text-2xl font-bold mt-12 sm:mt-0 lg:mt-0">Dashboard</h2>
+          <h2 className="text-xl lg:text-2xl font-bold mt-12 sm:mt-0 lg:mt-0">
+            Dashboard
+          </h2>
           <div className="relative self-end sm:self-auto">
             <NotificationBell />
           </div>
@@ -49,11 +53,15 @@ const EventOrganizerDashboard = () => {
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mt-6">
             <div className="bg-white rounded-xl p-4 lg:p-6 flex flex-col">
               <p className="text-sm text-gray-600">Total Venues</p>
-              <p className="mt-2 lg:mt-3 text-2xl lg:text-3xl font-bold text-gray-900">12</p>
+              <p className="mt-2 lg:mt-3 text-2xl lg:text-3xl font-bold text-gray-900">
+                {events.length}
+              </p>
             </div>
             <div className="bg-white rounded-xl p-4 lg:p-6 flex flex-col">
               <p className="text-sm text-gray-600">Accessibility Score</p>
-              <p className="mt-2 lg:mt-3 text-2xl lg:text-3xl font-bold text-gray-900">87%</p>
+              <p className="mt-2 lg:mt-3 text-2xl lg:text-3xl font-bold text-gray-900">
+                87%
+              </p>
             </div>
           </div>
 

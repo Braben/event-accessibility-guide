@@ -3,6 +3,7 @@ import { IoSearchSharp } from "react-icons/io5";
 import { CiFilter } from "react-icons/ci";
 import VenueFilterSidebar from "./VenueFilterSidebar";
 import VenueCard from "../components/VenueCard";
+import toastify from "react-hot-toast";
 
 const Venues = () => {
   const [venues, setVenues] = useState([]);

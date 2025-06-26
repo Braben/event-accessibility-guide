@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { useSelector, useDispatch } from "react-redux";
 import { Link } from "react-router-dom";
 import { CiLocationOn } from "react-icons/ci";
 import { BsTelephone } from "react-icons/bs";
@@ -24,6 +25,10 @@ import { useLocation, useParams } from "react-router-dom";
 const Venuedetails1 = () => {
   const [activeTab, setActiveTab] = useState("overview");
   const [isReviewModalOpen, setIsReviewModalOpen] = useState(false);
+  const events = useSelector((state) => state.events.events) || [];
+  const dispatch = useDispatch();
+  console.log(events);
+  console.log(events.startDate);
 
   const location = useLocation();
   const { venue } = location.state || {};
@@ -37,6 +42,8 @@ const Venuedetails1 = () => {
     console.log("Review submitted:", reviewData);
   };
 
+  console.log(venue);
+
   const contentMap = {
     overview: (
       <div className="mt-4 my-5">
@@ -49,103 +56,33 @@ const Venuedetails1 = () => {
         </p>
         {/* accessibility features */}
         <h2 className="mt-8 font-bold text-lg">Accessibility Features</h2>
+
         <div className="grid grid-cols-1 md:grid-cols-2 gap-5 mt-6">
-          <div className="flex bg-gray-100 h-20 p-4 gap-4 rounded-lg">
-            <div className="bg-blue-200 rounded-full h-11 w-11 flex items-center justify-center">
-              <TbWheelchair className="text-blue-800 text-2xl" />
+          {venue.accessibilityFeatures.map((feature, index) => (
+            <div key={index} className="flex items-center mt-2">
+              <div className="bg-blue-200 rounded-full h-11 w-11 flex items-center justify-center">
+                <TbWheelchair className="text-blue-800 text-2xl" />
+              </div>
+              <div className="ml-4">
+                <h1 className="font-bold">{feature.category}</h1>
+                <p className="text-sm mt-1">{feature.description}</p>
+              </div>
             </div>
-            <div>
-              <h1 className="font-bold">Wheelchair Accessible</h1>
-              <p className="text-sm mt-1">
-                Ramps and wide doorways throughout venue
-              </p>
-            </div>
-          </div>
-
-          <div className="flex bg-gray-100 h-20 p-4 gap-4 rounded-lg">
-            <div className="bg-blue-200 rounded-full h-11 w-11 flex items-center justify-center">
-              <BiBath className="text-blue-800 text-2xl" />
-            </div>
-            <div>
-              <h1 className="font-bold">Accessible restrooms</h1>
-              <p className="text-sm mt-1">
-                ADA-compliant restrooms on all floors
-              </p>
-            </div>
-          </div>
-
-          <div className="flex bg-gray-100 h-20 p-4 gap-4 rounded-lg">
-            <div className="bg-blue-200 rounded-full h-11 w-11 flex items-center justify-center">
-              <FaElevator className="text-blue-800 text-2xl" />
-            </div>
-            <div>
-              <h1 className="font-bold">Elevator access</h1>
-              <p className="text-sm mt-1">
-                Elevators to all levels of the venue
-              </p>
-            </div>
-          </div>
-
-          <div className="flex bg-gray-100 h-20 p-4 gap-4 rounded-lg">
-            <div className="bg-blue-200 rounded-full h-11 w-11 flex items-center justify-center">
-              <LuSquareParking className="text-blue-800 text-2xl" />
-            </div>
-            <div>
-              <h1 className="font-bold">Accessible parking</h1>
-              <p className="text-sm mt-1">
-                Designated accessible spaces near entrance
-              </p>
-            </div>
-          </div>
-
-          <div className="flex bg-gray-100 h-20 p-4 gap-4 rounded-lg">
-            <div className="bg-blue-200 rounded-full h-11 w-11 flex items-center justify-center">
-              <SlEye className="text-blue-800 text-2xl" />
-            </div>
-            <div>
-              <h1 className="font-bold">Visual accessibility</h1>
-              <p className="text-sm mt-1">
-                Braille signage and high contrast displays
-              </p>
-            </div>
-          </div>
-
-          <div className="flex bg-gray-100 h-20 p-4 gap-4 rounded-lg">
-            <div className="bg-blue-200 rounded-full h-11 w-11 flex items-center justify-center">
-              <IoEarSharp className="text-blue-800 text-2xl" />
-            </div>
-            <div>
-              <h1 className="font-bold">Hearing accessibility</h1>
-              <p className="text-sm mt-1">
-                Hearing loop system in main theater
-              </p>
-            </div>
-          </div>
+          ))}
         </div>
         {/* photos */}
         <div className="mt-8">
           <h3 className="text-lg font-semibold mb-4">Photos</h3>
+
           <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
-            <img
-              src="https://s3-alpha-sig.figma.com/img/ccbf/82d5/cabd6c9a588eab6defc16b42629343ca?Expires=1744588800&Key-Pair-Id=APKAQ4GOSFWCW27IBOMQ&Signature=j5aE28KVS9R2yqVW88XoJVIfT3JBXve0jqURuXbgnvRY~WXodIREAJv5RNxm~oG-nO78p1XoICCKNbSkzc~Tk0485fn2UQJn-jqACWGZnMKvQ6mr13BtcmothMv6xQg6zT37wrIZJuKi1449ruHqMei6SMvn9ZmBlO7wWo65u2n7Jg2GvWM2M0TUaHc-uwQ7xoF3~RKSoCohLdfvlPD2ubRwyLMnTwivxTwFW96GLlACryiwThX08GbL1RvIu9ZB4v6xnVRKGMRBUFflQY8S5y~FPynwx-2M4xQhavJBLOGrOvvVAg3u6puWYVmoOb3JTyndpiv1Piazf6Zd7opihQ__"
-              alt="Venue photo"
-              className="h-48 w-full object-cover rounded-lg"
-            />
-            <img
-              src="https://s3-alpha-sig.figma.com/img/5276/eca0/6af7d90d974fedbe1f75dc7ad3f5eb9c?Expires=1744588800&Key-Pair-Id=APKAQ4GOSFWCW27IBOMQ&Signature=MZ2-AKk-ayx7jjiu5OtbLsAAHEarob2JLxpnoh1LU5QVg4cJBFKWd5k53fY4hMdAuYkHToMZvMZ3HWjO0eaC1VuiD4TzyaFsC9qgCCihqFnphP6ZO28T5sue3DygLPUh2GHLBzWt2n8J18MU8~TG99Le8tnluVbmN7XAUjXN9DcwXvM3uiz5Eqim8pktxmsfnT4zzNmU2osf1do9YOHNu-cY8bfGRQgQMdcNPyqLH9htnN0w1yc33m2NKwZT7H~GYyF5aNwuCX658Terbja4kaQMKHGA5qLzMth19MHrUijOyg1pX01fce3sc0~KOh6C7QXcH8vRT6T9iFsbRviDhQ__"
-              alt="Venue photo"
-              className="h-48 w-full object-cover rounded-lg"
-            />
-            <img
-              src="https://s3-alpha-sig.figma.com/img/27f1/09eb/fdbc3d53b10d4a60a2d481488cc45da1?Expires=1744588800&Key-Pair-Id=APKAQ4GOSFWCW27IBOMQ&Signature=jkFJ4t-LyVBy-fmea1cjX5DIU6-jDgNTObVytIyKzejlIVatvKvACsoSmLEajZMyHzOn5pA4d4y7oYTjm42Uh50IhH~~sHR4u1n9BG55oZbxdNq7mXkLJVxSw1oCttRctqVAmzhIf~llK~FpclcSpqF-uR92dqr7WFkvtUW5KiJlKTYsJ70kQcc14zMW~AxXwgs2ATWmHjUUkJCd09EuRZVWDZWQxNncyb2jLjxYkiA-~a3Fug~p~CW~DIf5xIRPrgdHR1bAwUA0EdyM4JBml2cGrZkkiRCw4ytGUWtpb3r-~DQ46InEM3KgMi4vnvXPXF3QTbyBBpEFTS-RkNUiUg__"
-              alt="Venue photo"
-              className="h-48 w-full object-cover rounded-lg"
-            />
-            <img
-              src="https://s3-alpha-sig.figma.com/img/63bd/214c/b1c35e0a970cef386ec3e14b4fcb7e16?Expires=1744588800&Key-Pair-Id=APKAQ4GOSFWCW27IBOMQ&Signature=QfCXbg7xE1UZ~L97rcx7dSHZ7UQ03Y9SxgkggvNW2xNRO6oW~bTh-f5uWw5oaIC1g9X9wX~hsic6JluNGyPWdjcm6NQiVXxR-jhJzQQCBl9Y1UAgEcWjdqDF1O0qVkfmoN3EP6zo3WnNR2fW-PyG6KZ3yBWPrjfzqcyfWCodeysdpcidqyHpKbDACNewbVLCbOEksSUB06QoC~mZki0CA2kzf43u1jBo6w6LtHnw7rPe6AajuJXvKHUPMv1LkuEHxGFos9U1s-zdj3Q1FD7NCudiZm0xGP0DF24C74YFkf5f8X2ahgr-qhU009lfzWEYVqvQ12qjwaiMF5-M-TFXBw__"
-              alt="Venue photo"
-              className="h-48 w-full object-cover rounded-lg"
-            />
+            {venue.photos.map((photo, index) => (
+              <img
+                key={index}
+                src={photo}
+                alt={`Photo ${index + 1}`}
+                className="h-48 w-full object-cover rounded-lg"
+              />
+            ))}
           </div>
         </div>
       </div>
@@ -223,85 +160,30 @@ const Venuedetails1 = () => {
         <h2 className="text-xl font-bold mb-4">Upcoming Events</h2>
 
         <div className="grid gap-4">
-          <div className="border rounded p-4 hover:shadow-md transition-shadow">
-            <div className="flex justify-between items-start">
-              <div>
-                <h3 className="font-semibold text-lg">
-                  Abstract Art Exhibition
-                </h3>
-                <div className="flex gap-2 mt-1">
-                  <CiClock2 className="text-blue-700 mt-[2px]" />
-                  <p className="text-sm ">
-                    Mon -Fri : 9am-9pm ,Sat -Sun : 10am-8pm
-                  </p>
-                </div>
-                <div className="flex gap-2 mt-1">
-                  <SlCalender className="text-blue-700" />
-                  <p className="text-sm ">Upcoming events : 4</p>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <div className="border rounded p-4 hover:shadow-md transition-shadow">
-            <div className="flex justify-between items-start">
-              <div>
-                <h3 className="font-semibold text-lg">
-                  Community Theater Performance
-                </h3>
-                <div className="flex gap-2 mt-1">
-                  <CiClock2 className="text-blue-700 mt-[2px]" />
-                  <p className="text-sm ">
-                    Mon -Fri : 9am-9pm ,Sat -Sun : 10am-8pm
-                  </p>
-                </div>
-                <div className="flex gap-2 mt-1">
-                  <SlCalender className="text-blue-700" />
-                  <p className="text-sm ">Upcoming events : 4</p>
+          {/* Event  */}
+          {events.map((event) => (
+            <div
+              key={event.id}
+              className="border rounded p-4 hover:shadow-md transition-shadow"
+            >
+              <div className="flex justify-between items-start">
+                <div>
+                  <h3 className="font-semibold text-lg">{event.title}</h3>
+                  <div className="flex gap-2 mt-1">
+                    <CiClock2 className="text-blue-700 mt-[2px]" />
+                    <p className="text-sm ">
+                      {/* Mon -Fri : 9am-9pm ,Sat -Sun : 10am-8pm */}
+                      {event.startDate} - {event.endDate}
+                    </p>
+                  </div>
+                  <div className="flex gap-2 mt-1">
+                    <SlCalender className="text-blue-700" />
+                    <p className="text-sm ">Upcoming events : 4</p>
+                  </div>
                 </div>
               </div>
             </div>
-          </div>
-
-          <div className="border rounded p-4 hover:shadow-md transition-shadow">
-            <div className="flex justify-between items-start">
-              <div>
-                <h3 className="font-semibold text-lg">
-                  Abstract Art Exhibition
-                </h3>
-                <div className="flex gap-2 mt-1">
-                  <CiClock2 className="text-blue-700 mt-[2px]" />
-                  <p className="text-sm ">
-                    Mon -Fri : 9am-9pm ,Sat -Sun : 10am-8pm
-                  </p>
-                </div>
-                <div className="flex gap-2 mt-1">
-                  <SlCalender className="text-blue-700" />
-                  <p className="text-sm ">Upcoming events : 4</p>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <div className="border rounded p-4 hover:shadow-md transition-shadow">
-            <div className="flex justify-between items-start">
-              <div>
-                <h3 className="font-semibold text-lg">
-                  Abstract Art Exhibition
-                </h3>
-                <div className="flex gap-2 mt-1">
-                  <CiClock2 className="text-blue-700 mt-[2px]" />
-                  <p className="text-sm ">
-                    Mon -Fri : 9am-9pm ,Sat -Sun : 10am-8pm
-                  </p>
-                </div>
-                <div className="flex gap-2 mt-1">
-                  <SlCalender className="text-blue-700" />
-                  <p className="text-sm ">Upcoming events : 4</p>
-                </div>
-              </div>
-            </div>
-          </div>
+          ))}
         </div>
       </div>
     ),
@@ -440,11 +322,15 @@ const Venuedetails1 = () => {
             </div>
             <div className="flex items-center mt-3">
               <PiEnvelopeSimpleThin className="text-blue-700 mr-2" />
-              <p className="text-sm">info@venuehubs.com</p>
+              <p className="text-sm">
+                info@{venue.name.replace(/\s+/g, "").toLowerCase()}.com
+              </p>
             </div>
             <div className="flex items-center mt-3">
               <TfiWorld className="text-blue-700 mr-2" />
-              <p className="text-sm">www.savanna.org</p>
+              <p className="text-sm">
+                www.{venue.name.replace(/\s+/g, "").toLowerCase()}.com
+              </p>
             </div>
           </div>
 

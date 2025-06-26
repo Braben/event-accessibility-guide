@@ -125,7 +125,7 @@ const EventLists = ({ onEdit }) => {
                   <tr key={event.id} className="hover:bg-gray-50">
                     <td className="py-4 px-4 text-sm">{event.title}</td>
                     <td className="py-4 px-4 text-sm">
-                      {event.venue?.venueName || "N/A"}
+                      {event.venue?.name || "N/A"}
                     </td>
                     <td className="py-4 px-4">
                       <div className="flex items-center gap-2">
@@ -138,7 +138,7 @@ const EventLists = ({ onEdit }) => {
                           ></div>
                         </div>
                         <span className="text-xs font-medium">
-                          {accessibilityScore}%
+                          {accessibilityScore}%{event.description}
                         </span>
                       </div>
                     </td>
@@ -230,7 +230,9 @@ const EventLists = ({ onEdit }) => {
                   {/* Accessibility Score */}
                   <div className="mb-3">
                     <div className="flex items-center justify-between mb-1">
-                      <span className="text-xs text-gray-600">Accessibility</span>
+                      <span className="text-xs text-gray-600">
+                        Accessibility
+                      </span>
                       <span className="text-xs font-medium text-gray-900">
                         {accessibilityScore}%
                       </span>
