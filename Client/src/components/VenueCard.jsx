@@ -13,7 +13,7 @@ const VenueCard = ({ venue }) => {
     description,
     address,
     accessibilityOptions = [],
-    image,
+    photos,
     rating = 4.5,
     openingHours = "Mon-Fri: 9am-9pm, Sat-Sun: 10am-8pm",
   } = venue;
@@ -26,11 +26,11 @@ const VenueCard = ({ venue }) => {
       <div className="relative">
         <img
           src={
-            image ||
+            photos ||
             "https://s3-alpha-sig.figma.com/img/fb68/24e5/442ee0854ceb471149eea96ea69fea05?Expires=1745798400&Key-Pair-Id=APKAQ4GOSFWCW27IBOMQ&Signature=rgUajMIm1qLJR9fSFeN64DydRF0f6w~gvYKxMVfFmUs04h8tQe60X9hRQv0SQgp1A6gdeFaSaiOYn0N~r-84jsZr3ItERp6-NAe60Bdutgsg2XCtj2pimM0g~FP2ePS3TU4oC2p0kjINPSwxVYe~Mz5P1EYzF5kpo54DB~vZGEifpg~0dyf98c3laGtllWi8U3PzksCt08JXnCXN6kLuGmmEKJvhL1QAabgqH0Psr10K-WxZMY0kN3Kn3i~qpa0uc7sMpjVOz5YcZGtE2YUw-~sZ3SH-o7JeehIkp90KSi4yjbahVKwsLSL9zQml~r9arOYBXXhktHDNUGDMxLnnfg__"
           }
           alt={name}
-          className="w-[515px] h-[320px] object-cover"
+          className="w-[515px] h-[280px] object-cover"
         />
         <div className="absolute bottom-2 left-2 bg-white px-3 py-1 rounded-full flex items-center gap-1 text-sm font-medium shadow">
           <FaStar className="text-yellow-500" />
@@ -41,13 +41,13 @@ const VenueCard = ({ venue }) => {
       <div className="p-4 flex flex-col gap-2 flex-grow">
         <div>
           <h2 className="text-3xl font-semibold text-gray-800">{name}</h2>
-          <p className="text-gray-600 text-2xl font-normal mt-2">
+          <p className="text-gray-600 text-[20px] font-normal mt-2">
             {description}
           </p>
         </div>
 
         <div className="mt-4 space-y-2 text-sm text-gray-700">
-          <p className="flex text-xl font-normal items-start gap-2">
+          <p className="flex text-[20px] font-normal items-start gap-2">
             <CiLocationOn className="text-blue-800 text-lg mt-1" />
             {address}
           </p>
@@ -55,7 +55,7 @@ const VenueCard = ({ venue }) => {
             <MdOutlineEventNote className="text-blue-800 text-lg mt-1" />
             Upcoming events: 3
           </p>
-          <p className="flex text-xl font-normal items-start gap-2">
+          <p className="flex text-[20px] font-normal items-start gap-2">
             <IoTimeOutline className="text-blue-800 text-lg mt-1" />
             {openingHours}
           </p>

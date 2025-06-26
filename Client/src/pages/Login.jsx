@@ -2,7 +2,6 @@ import React from "react";
 import { useState } from "react";
 import { signInWithGoogle, signInWithEmail } from "../services/authService";
 import {
-  Dialog,
   Button,
   Input,
   Checkbox,
@@ -12,7 +11,6 @@ import {
 import { FiEye, FiEyeOff } from "react-icons/fi";
 import { Link } from "react-router-dom";
 import { FcGoogle } from "react-icons/fc";
-import wheelchairImage from "../Assets/side-view-woman-sitting-wheelchair_1048944-821772 1.png";
 import groupPlusWheel from "../Assets/side-view-portrait-big-african-american-family-with-person-wheelchair-welcoming-guests-sum_236854-44054 1.png";
 import { useNavigate } from "react-router-dom";
 import toast from "react-hot-toast";
@@ -55,9 +53,6 @@ const Login = () => {
     const user = await signInWithGoogle();
     console.log(user);
     alert("Signed in with Google successfully!");
-
-    // Redirect to another page or perform any other action
-    // window.location.href = "/"; // Example redirect
   };
 
   return (
