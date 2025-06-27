@@ -13,7 +13,7 @@ import { MdErrorOutline } from "react-icons/md";
 import { FaElevator } from "react-icons/fa6";
 import { SlEye } from "react-icons/sl";
 import { CiLocationArrow1 } from "react-icons/ci";
-import { BiBath } from "react-icons/bi";
+import { BiBath, BiBlanket } from "react-icons/bi";
 import { LuSquareParking } from "react-icons/lu";
 import { IoEarSharp } from "react-icons/io5";
 import { SlCalender } from "react-icons/sl";
@@ -28,8 +28,8 @@ const Venuedetails1 = () => {
   const [isReviewModalOpen, setIsReviewModalOpen] = useState(false);
   const events = useSelector((state) => state.events.events) || [];
   const dispatch = useDispatch();
-  console.log(events);
-  console.log(events.startDate);
+  // console.log(events);
+  // console.log(events.startDate);
 
   const location = useLocation();
   const { venue } = location.state || {};
@@ -43,7 +43,7 @@ const Venuedetails1 = () => {
     console.log("Review submitted:", reviewData);
   };
 
-  console.log(venue);
+  // console.log(venue);
 
   const contentMap = {
     overview: (
@@ -159,35 +159,40 @@ const Venuedetails1 = () => {
     events: (
       <div className="py-6">
         <h2 className="text-xl font-bold mb-4">Upcoming Events</h2>
-
-        <div className="grid gap-4">
-          {/* Event  */}
-          {events.map((event) => (
-            <div
-              key={event.id}
-              className="border rounded p-4 hover:shadow-md transition-shadow"
-            >
-              <div className="flex justify-between items-start">
-                <div>
-                  <h3 className="font-semibold text-lg">{event.title}</h3>
-                  <div className="flex gap-2 mt-1">
-                    <CiClock2 className="text-blue-700 mt-[2px]" />
-                    <p className="text-sm ">
-                      {/* Mon -Fri : 9am-9pm ,Sat -Sun : 10am-8pm */}
-                      {dayjs(event.startDate).format(
-                        "ddd, DD MMMM, YYYY"
-                      )} - {dayjs(event.endDate).format("ddd, DD MMMM, YYYY")}
-                    </p>
-                  </div>
-                  <div className="flex gap-2 mt-1">
-                    <SlCalender className="text-blue-700" />
-                    <p className="text-sm ">Upcoming events : 4</p>
+        {events.length === 0 ? (
+          "No events scheduled"
+        ) : (
+          <div className="grid gap-4">
+            {/* Event  */}
+            {events.map((event) => (
+              <div
+                key={event.id}
+                className="border rounded p-4 hover:shadow-md transition-shadow"
+              >
+                <div className="flex justify-between items-start">
+                  <div>
+                    <h3 className="font-semibold text-lg">{event.title}</h3>
+                    <div className="flex gap-2 mt-1">
+                      <CiClock2 className="text-blue-700 mt-[2px]" />
+                      <p className="text-sm ">
+                        {/* Mon -Fri : 9am-9pm ,Sat -Sun : 10am-8pm */}
+                        {dayjs(event.startDate).format(
+                          "ddd, DD MMMM, YYYY"
+                        )} - {dayjs(event.endDate).format("ddd, DD MMMM, YYYY")}
+                      </p>
+                    </div>
+                    <div className="flex gap-2 mt-1">
+                      <SlCalender className="text-blue-700" />
+                      <p className="text-sm ">
+                        Upcoming events : {event.length}
+                      </p>
+                    </div>
                   </div>
                 </div>
               </div>
-            </div>
-          ))}
-        </div>
+            ))}
+          </div>
+        )}
       </div>
     ),
   };
@@ -235,11 +240,35 @@ const Venuedetails1 = () => {
           </p>
         </div>
         <div className="flex gap-4">
-          <button className="flex items-center justify-center bg-blue-800 text-white px-3 w-[200px] py-2 rounded-full">
+          <button
+            className="flex items-center justify-center bg-blue-800 text-white px-3 w-[200px] py-2 rounded-full"
+            onClick={() => {
+              if (venue?.address) {
+                window.open(
+                  `https://www.google.com/maps/dir/?api=1&destination=${encodeURIComponent(
+                    venue.address
+                  )}`,
+                  "_blank"
+                );
+              } else {
+                alert("Address not available.");
+              }
+            }}
+          >
             <CiLocationArrow1 className="mr-2 text-2xl" /> Get Direction
           </button>
-          <button className="flex items-center justify-center border border-blue-800 text-blue-800 px-6 py-2 rounded-full">
-            <BsTelephone className="mr-2" /> Contact
+
+          <button
+            className="flex items-center justify-center border border-blue-800 text-blue-800 px-6 py-2 rounded-full"
+            onClick={() => {
+              window.location.href = `tel:${venue.contactInformation.replace(
+                /\s/g,
+                ""
+              )}`;
+            }}
+          >
+            <BsTelephone className="mr-2" />
+            Contact
           </button>
         </div>
       </div>
@@ -344,7 +373,21 @@ const Venuedetails1 = () => {
               <IoLocationOutline className="text-blue-800 text-5xl" />
             </div>
             <p className="text-sm mt-4 text-center">{venue.routeDirection}</p>
-            <button className="w-full bg-blue-800 text-white rounded-lg py-3 flex items-center justify-center mt-4">
+            <button
+              className="w-full bg-blue-800 text-white rounded-lg py-3 flex items-center justify-center mt-4"
+              onClick={() => {
+                if (venue?.address) {
+                  window.open(
+                    `https://www.google.com/maps/dir/?api=1&destination=${encodeURIComponent(
+                      venue.address
+                    )}`,
+                    "_blank"
+                  );
+                } else {
+                  alert("Address not available.");
+                }
+              }}
+            >
               <CiLocationArrow1 className="mr-2 text-2xl" /> Get Directions
             </button>
           </div>
