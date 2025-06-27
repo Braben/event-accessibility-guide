@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import dayjs from "dayjs";
 import { useSelector, useDispatch } from "react-redux";
 import { Link } from "react-router-dom";
 import { CiLocationOn } from "react-icons/ci";
@@ -173,7 +174,9 @@ const Venuedetails1 = () => {
                     <CiClock2 className="text-blue-700 mt-[2px]" />
                     <p className="text-sm ">
                       {/* Mon -Fri : 9am-9pm ,Sat -Sun : 10am-8pm */}
-                      {event.startDate} - {event.endDate}
+                      {dayjs(event.startDate).format(
+                        "ddd, DD MMMM, YYYY"
+                      )} - {dayjs(event.endDate).format("ddd, DD MMMM, YYYY")}
                     </p>
                   </div>
                   <div className="flex gap-2 mt-1">

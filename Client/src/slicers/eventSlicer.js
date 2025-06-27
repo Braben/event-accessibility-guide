@@ -70,7 +70,13 @@ const eventSlice = createSlice({
   extraReducers: (builder) => {
     builder
       .addCase(createEvent.fulfilled, (state, action) => {
+        if (!state.events) {
+          state.events = [];
+        }
         state.events.push(action.payload);
+      })
+      .addCase(createEvent.rejected, (state, action) => {
+        state.error = action.error.message;
       })
       .addCase(fetchEvents.fulfilled, (state, action) => {
         state.events = action.payload;

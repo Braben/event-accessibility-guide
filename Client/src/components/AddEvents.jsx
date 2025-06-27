@@ -1,4 +1,7 @@
 import React, { useState, useEffect, useContext } from "react";
+import DatePicker from "react-datepicker";
+import "react-datepicker/dist/react-datepicker.css";
+import dayjs from "dayjs";
 import { v4 as uuidv4 } from "uuid";
 import { useSelector, useDispatch } from "react-redux";
 import { UserContext } from "../context/UserContext";
@@ -9,8 +12,8 @@ const AddEvents = ({ event = null, isEditing = false, onCancel }) => {
   const { userDetails } = useContext(UserContext);
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
-  const [startDate, setStartDate] = useState("");
-  const [endDate, setEndDate] = useState("");
+  const [startDate, setStartDate] = useState(null);
+  const [endDate, setEndDate] = useState(null);
   const [venueId, setVenueId] = useState("");
   const [photos, setPhotos] = useState([]);
   const [fetchedVenues, setFetchedVenues] = useState([]);
@@ -18,13 +21,14 @@ const AddEvents = ({ event = null, isEditing = false, onCancel }) => {
   const [selectedFeatures, setSelectedFeatures] = useState([]);
 
   const dispatch = useDispatch();
+  const events = useSelector((state) => state.events.events) || [];
 
   useEffect(() => {
     if (isEditing && event) {
       setTitle(event.title || "");
       setDescription(event.description || "");
-      setStartDate(event.startDate?.slice(0, 10) || "");
-      setEndDate(event.endDate?.slice(0, 10) || "");
+      setStartDate(event.startDate ? new Date(event.startDate) : null);
+      setEndDate(event.endDate ? new Date(event.endDate) : null);
       setVenueId(event.venueId || "");
       setPhotos(event.photos || []);
     }
@@ -46,14 +50,89 @@ const AddEvents = ({ event = null, isEditing = false, onCancel }) => {
     fetchVenues();
   }, []);
 
+  // const accessibilityOptions = [
+  //   "Ground Level Entry",
+  //   "Wide Doorways",
+  //   "Service Animals Welcome",
+  //   "Reserved Accessible Seating",
+  //   "Wheelchair Ramps",
+  //   "Elevators",
+  //   "Accessible Restrooms",
+  //   "Hearing Loops",
+  // ];
+
+  //features to be added
+  useEffect(() => {
+    const accessibilityOptions = async () => {
+      try {
+        const response = await fetch(
+          "https://event-accessibility-guide.onrender.com/features"
+        );
+        const data = await response.json();
+        setAccessibilityOptions(data || []);
+      } catch (error) {
+        console.error("Failed to fetch venues:", error);
+      }
+    };
+
+    accessibilityOptions();
+  }, []);
+  console.log(accessibilityOptions);
+
+  // accessibility features
+  const handleAccessibilityChange = (category) => {
+    setSelectedFeatures((prev) =>
+      prev.includes(category)
+        ? prev.filter((item) => item !== category)
+        : [...prev, category]
+    );
+  };
+
+  // venue events date and time validation
+  const isOverlapping = (newStart, newEnd, events) => {
+    return events.some((event) => {
+      const start = new Date(event.startDate);
+      const end = new Date(event.endDate);
+      return (
+        event.venueId === venueId && // same venue
+        ((newStart >= start && newStart < end) || // starts in another event
+          (newEnd > start && newEnd <= end) || // ends in another event
+          (newStart <= start && newEnd >= end)) // completely overlaps
+      );
+    });
+  };
+
+  // form submit
   const handleSubmit = async (e) => {
     e.preventDefault();
+    if (!startDate || !endDate) {
+      alert("Please select both start and end date/time.");
+      return;
+    }
+    if (dayjs(endDate).isBefore(dayjs(startDate))) {
+      alert("End date must be after start date.");
+      return;
+    }
+    const newStart = new Date(startDate);
+    const newEnd = new Date(endDate);
+
+    const filteredEvents = isEditing
+      ? events.filter((e) => e.id !== event.id)
+      : events;
+
+    if (isOverlapping(newStart, newEnd, filteredEvents)) {
+      alert("This event overlaps with an existing event at the same venue.");
+      return;
+    }
+
+    const formattedStart = dayjs(startDate).format("YYYY-MM-DD HH:mm:ss");
+    const formattedEnd = dayjs(endDate).format("YYYY-MM-DD HH:mm:ss");
 
     const eventData = {
       title,
       description,
-      startDate,
-      endDate,
+      startDate: formattedStart,
+      endDate: formattedEnd,
       venueId,
       venue: fetchedVenues.find((venue) => venue.id === venueId),
       photos,
@@ -84,42 +163,6 @@ const AddEvents = ({ event = null, isEditing = false, onCancel }) => {
     } catch (err) {
       console.error("Submit error:", err);
     }
-  };
-
-  // const accessibilityOptions = [
-  //   "Ground Level Entry",
-  //   "Wide Doorways",
-  //   "Service Animals Welcome",
-  //   "Reserved Accessible Seating",
-  //   "Wheelchair Ramps",
-  //   "Elevators",
-  //   "Accessible Restrooms",
-  //   "Hearing Loops",
-  // ];
-
-  useEffect(() => {
-    const accessibilityOptions = async () => {
-      try {
-        const response = await fetch(
-          "https://event-accessibility-guide.onrender.com/features"
-        );
-        const data = await response.json();
-        setAccessibilityOptions(data || []);
-      } catch (error) {
-        console.error("Failed to fetch venues:", error);
-      }
-    };
-
-    accessibilityOptions();
-  }, []);
-  console.log(accessibilityOptions);
-
-  const handleAccessibilityChange = (category) => {
-    setSelectedFeatures((prev) =>
-      prev.includes(category)
-        ? prev.filter((item) => item !== category)
-        : [...prev, category]
-    );
   };
 
   // const handleAccessibilityChange = (option) => {
@@ -231,31 +274,64 @@ const AddEvents = ({ event = null, isEditing = false, onCancel }) => {
               htmlFor="startDate"
               className="block text-xs sm:text-sm font-medium mb-1"
             >
-              Start Date
+              Start Date & Time
             </label>
-            <input
+            {/* <input
               id="startDate"
               type="date"
               value={startDate}
               onChange={(e) => setStartDate(e.target.value)}
               className="w-full border p-2 rounded-md text-sm"
               required
-            />
+            /> */}
+            {/* <input
+              id="startDate"
+              type="date"
+              value={startDate}
+              onChange={(e) => setStartDate(e.target.value)}
+              className="w-full border p-2 rounded-md text-sm"
+              required
+            /> */}
+
+            <div>
+              <DatePicker
+                selected={startDate}
+                onChange={(date) => setStartDate(date)}
+                showTimeSelect
+                timeFormat="HH:mm"
+                timeIntervals={15}
+                dateFormat="yyyy-MM-dd h:mm aa"
+                minDate={new Date()}
+                className="w-full border p-2 rounded-md text-sm"
+                placeholderText="Select start date and time"
+              />
+            </div>
           </div>
           <div className="w-full">
             <label
               htmlFor="endDate"
               className="block text-xs sm:text-sm font-medium mb-1"
             >
-              End Date
+              End Date & Time
             </label>
-            <input
+            {/* <input
               id="endDate"
               type="date"
               value={endDate}
               onChange={(e) => setEndDate(e.target.value)}
               className="w-full border p-2 rounded-md text-sm"
               required
+            /> */}
+            <DatePicker
+              selected={endDate}
+              onChange={(date) => setEndDate(date)}
+              showTimeSelect
+              timeFormat="HH:mm"
+              timeIntervals={15}
+              dateFormat="yyyy-MM-dd h:mm aa"
+              minDate={startDate || new Date()}
+              className="w-full border p-2 rounded-md text-sm"
+              placeholderText="Select end date and time"
             />
           </div>
         </div>

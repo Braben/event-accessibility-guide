@@ -138,7 +138,8 @@ const EventLists = ({ onEdit }) => {
                           ></div>
                         </div>
                         <span className="text-xs font-medium">
-                          {accessibilityScore}%{event.description}
+                          {/* {accessibilityScore}% */}
+                          {event.description}
                         </span>
                       </div>
                     </td>
