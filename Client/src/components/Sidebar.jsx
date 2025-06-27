@@ -1,5 +1,6 @@
 import React, { useContext, useState } from "react";
 import { Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { TbPentagonFilled } from "react-icons/tb";
 import { FiHome, FiSettings, FiMenu, FiX } from "react-icons/fi";
 import { CgMenuBoxed } from "react-icons/cg";
@@ -13,6 +14,9 @@ const Sidebar = ({ activePage }) => {
   const [showProfileSection, setShowProfileSection] = useState(false);
   const [showEditProfile, setShowEditProfile] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  
+  // Add this line - you were missing this!
+  const navigate = useNavigate();
 
   // Profile data for the form
   const profileData = {
@@ -107,10 +111,15 @@ const Sidebar = ({ activePage }) => {
       >
         <div className="flex flex-col h-full">
           {/* Logo */}
-          <div className="flex items-center space-x-2 p-4 mb-6">
+          <div className="flex items-center space-x-2 p-4 mb-6 cursor-pointer" 
+               onClick={(e) => {
+                 e.preventDefault();
+                 e.stopPropagation();
+                 navigate("/");
+               }}>
             <div className="relative inline-block">
-              <TbPentagonFilled className="text-5xl text-blue-700" />
-              <span className="absolute inset-0 flex items-center justify-center text-white text-xl font-bold">
+              <TbPentagonFilled className="text-5xl text-blue-700 pointer-events-none" />
+              <span className="absolute inset-0 flex items-center justify-center text-white text-xl font-bold pointer-events-none">
                 V
               </span>
             </div>

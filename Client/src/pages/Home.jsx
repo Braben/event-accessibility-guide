@@ -177,7 +177,8 @@ const Home = () => {
   </div>
 
   {/* CTA Button */}
-  <button className="mt-6 h-11 px-6 rounded-full bg-[#1E4B9D] text-white text-sm sm:text-base font-semibold flex items-center gap-2 hover:bg-blue-800">
+  <button className="mt-6 h-11 px-6 rounded-full bg-[#1E4B9D] text-white text-sm sm:text-base font-semibold flex items-center gap-2 hover:bg-blue-800"
+  onClick={() => navigate("/Venues")}>
     Explore Accessible Venues
     <FaLongArrowAltRight className="text-white text-sm sm:text-base" />
   </button>

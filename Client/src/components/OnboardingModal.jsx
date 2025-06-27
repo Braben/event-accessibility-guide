@@ -26,7 +26,6 @@ import {
 import axios from "axios";
 import { UserContext } from "../context/UserContext";
 import toast from "react-hot-toast";
-import { Link } from "lucide-react";
 
 const API_BASE_URL = "https://event-accessibility-guide.onrender.com";
 
@@ -37,7 +36,6 @@ function OnboardingModal({ password, open, setOpen }) {
   const [selected, setSelected] = useState("");
   const [selectedPreferences, setSelectedPreferences] = useState([]);
   const [error, setError] = useState("");
-  // const [open, setOpen] = useState(false);
 
   const totalSteps = 4;
   const progressWidth = `${(step / totalSteps) * 100}%`;
@@ -47,11 +45,11 @@ function OnboardingModal({ password, open, setOpen }) {
   };
   const mandatoryNext = () => {
     if (!selected) {
-      setError("Please select a user type before proceeding."); // Show error
+      setError("Please select a user type before proceeding.");
       return;
     }
-    setError(""); // Clear error if valid
-    nextStep(); // Proceed to next step
+    setError("");
+    nextStep();
   };
   const prevStep = () => {
     if (step > 1) setStep((prev) => prev - 1);
@@ -69,35 +67,6 @@ function OnboardingModal({ password, open, setOpen }) {
   };
 
   const navigate = useNavigate();
-  // const handleComplete = async () => {
-  //   console.log(user);
-  //   const role = selected === "user" ? "USER" : "ADMIN";
-  //   const updatedUser = {
-  //     role,
-  //   };
-  //   try {
-  //     const updatedRoleUser = await axios.patch(
-  //       `${API_BASE_URL}/users/${user.uid}`,
-  //       updatedUser
-  //     );
-  //     console.log(updatedRoleUser);
-  //     const updatedUserDetails = await getUserProfile(user.uid);
-  //     setUserDetails(updatedUserDetails);
-  //     if (updatedRoleUser) {
-  //       // Display a success message
-  //       toast.success("Account created successfully!");
-  //       setOpen(false);
-  //     }
-  //     await signInWithEmail(user.email, password);
-  //     if (role === "USER") {
-  //       navigate("/venues"); // Navigate to Event Listing Page
-  //     } else {
-  //       navigate("/organizer/dashboard"); // Navigate to Admin Dashboard
-  //     }
-  //   } catch (error) {
-  //     console.error("Navigation failed:", error);
-  //   }
-  // };
 
   const handleComplete = async () => {
     const role = selected === "user" ? "USER" : "ADMIN";
@@ -111,13 +80,10 @@ function OnboardingModal({ password, open, setOpen }) {
 
       toast.success("Account created successfully!");
 
-      // Optional re-login to refresh session
       await signInWithEmail(user.email, password);
 
-      // Close modal
       setOpen(false);
 
-      // Redirect after modal closes
       setTimeout(() => {
         if (role === "USER") {
           window.location.href = "/venues";
@@ -129,10 +95,6 @@ function OnboardingModal({ password, open, setOpen }) {
       console.error("Navigation failed:", error);
       toast.error("Something went wrong. Please try again.");
     }
-    // if (!user?.uid || !password) {
-    //   toast.error("Missing user data. Try logging in again.");
-    //   return;
-    // }
   };
 
   const roles = [
@@ -161,26 +123,34 @@ function OnboardingModal({ password, open, setOpen }) {
         "Lets set up your profile to help you showcase your venue's accessibility features to potential visitors",
     },
   ];
+
   return (
     <Dialog open={open} handler={setOpen}>
       <Dialog.Trigger
         onClick={() => setOpen(true)}
-        className="mt-2 font-bold  w-full"
+        className="mt-2 font-bold w-full"
         as={Button}
       >
         Create an Account
       </Dialog.Trigger>
       <Dialog.Overlay>
-        <Dialog.Content className="h-[32rem] relative  ">
+        <Dialog.Content className="h-[32rem] relative">
+          <button
+            onClick={() => setOpen(false)}
+            className="absolute top-2 left-2 w-8 h-8 flex items-center justify-center text-gray-500 hover:text-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500 z-10 sm:w-10 sm:h-10"
+            aria-label="Close onboarding modal"
+          >
+            <TbX className="w-6 h-6" />
+          </button>
           <div
-            className="absolute top-0 left-0 h-1  bg-blue-700 transition-all duration-300"
+            className="absolute top-0 left-0 h-1 bg-blue-700 transition-all duration-300"
             style={{ width: progressWidth }}
           ></div>
 
           {step === 1 && (
-            <div>
+            <div className="relative">
               <div className="flex justify-center items-center mt-10">
-                <div class="flex justify-center items-center rounded-lg  bg-blue-700  h-12 w-12">
+                <div className="flex justify-center items-center rounded-lg bg-blue-700 h-12 w-12">
                   <SlLocationPin className="text-white size-6" />
                 </div>
               </div>
@@ -195,15 +165,13 @@ function OnboardingModal({ password, open, setOpen }) {
                 {roles.map((role) => (
                   <div
                     key={role.id}
-                    className={`border p-4 rounded-lg cursor-pointer transition-all duration-300 w-60 
-            ${
-              selected === role.id
-                ? `${role.bgColor} border-gray-700 shadow-lg`
-                : "bg-gray-200 border-gray-400"
-            }`}
+                    className={`border p-4 rounded-lg cursor-pointer transition-all duration-300 w-60 ${
+                      selected === role.id
+                        ? `${role.bgColor} border-gray-700 shadow-lg`
+                        : "bg-gray-200 border-gray-400"
+                    }`}
                     onClick={() => setSelected(role.id)}
                   >
-                    {/* Role Icon Section */}
                     <div className="flex justify-center items-center mt-2 mb-3">
                       <div
                         className={`flex justify-center items-center rounded-lg ${role.iconBg} h-10 w-10`}
@@ -211,8 +179,6 @@ function OnboardingModal({ password, open, setOpen }) {
                         {role.icon}
                       </div>
                     </div>
-
-                    {/* Role Title & Description */}
                     <h4 className="text-lg text-center font-semibold mb-2">
                       {role.title}
                     </h4>
@@ -235,13 +201,12 @@ function OnboardingModal({ password, open, setOpen }) {
             </div>
           )}
           {step === 2 && (
-            <div className="flex flex-col justify-between h-[30rem]">
+            <div className="relative flex flex-col justify-between h-[30rem]">
               <div className="flex justify-center items-center mt-10">
                 {roles
                   .filter((role) => role.id === selected)
                   .map((role) => (
                     <div key={role.id} className="flex flex-col items-center">
-                      {/* Centered Icon Container */}
                       <div className="flex justify-center">
                         <div
                           className={`flex justify-center items-center rounded-lg ${role.iconBg} h-12 w-12`}
@@ -249,20 +214,13 @@ function OnboardingModal({ password, open, setOpen }) {
                           {role.icon}
                         </div>
                       </div>
-
-                      {/* Text Section */}
                       <div className="text-center mt-5">
-                        <h3 className="text-xl font-bold">
-                          {role.step1Header}
-                        </h3>
+                        <h3 className="text-xl font-bold">{role.step1Header}</h3>
                         <p className="text-sm mx-16 mt-3">{role.step1para}</p>
                       </div>
                     </div>
                   ))}
               </div>
-
-              {/* Buttons Positioned at the Bottom */}
-              {/* Get the selected role outside the map */}
               {roles.some((role) => role.id === selected) && (
                 <div className="flex justify-between mb-2">
                   <Button
@@ -289,7 +247,7 @@ function OnboardingModal({ password, open, setOpen }) {
             </div>
           )}
           {step === 3 && (
-            <div className="flex flex-col justify-between h-[30rem]">
+            <div className="relative flex flex-col justify-between h-[30rem]">
               <div className="flex justify-center items-center mt-10">
                 <div
                   className={`flex justify-center items-center rounded-lg h-12 w-12 ${
@@ -315,15 +273,10 @@ function OnboardingModal({ password, open, setOpen }) {
                     : "Select the type of venues or events you organize or manage"}
                 </p>
               </div>
-
-              {/* If User is Selected, Show Accessibility Preferences */}
               {selected === "user" && (
                 <div className="flex flex-col gap-4 p-4">
                   <div>
-                    <h4 className="font-semibold mb-6">
-                      Mobility Accommodations
-                    </h4>
-
+                    <h4 className="font-semibold mb-6">Mobility Accommodations</h4>
                     <div className="grid grid-cols-3 gap-2">
                       {[
                         "No Steps Required",
@@ -348,12 +301,8 @@ function OnboardingModal({ password, open, setOpen }) {
                       ))}
                     </div>
                   </div>
-
                   <div>
-                    <h4 className="font-semibold mb-6">
-                      Visual Accommodations
-                    </h4>
-
+                    <h4 className="font-semibold mb-6">Visual Accommodations</h4>
                     <div className="grid grid-cols-3 gap-2">
                       {[
                         "Braille Signage",
@@ -364,7 +313,7 @@ function OnboardingModal({ password, open, setOpen }) {
                       ].map((item) => (
                         <div
                           key={item}
-                          className="bg-gray-200 p-[2px]  rounded-md flex items-center"
+                          className="bg-gray-200 p-[2px] rounded-md flex items-center"
                         >
                           <input
                             type="checkbox"
@@ -377,12 +326,8 @@ function OnboardingModal({ password, open, setOpen }) {
                       ))}
                     </div>
                   </div>
-
                   <div>
-                    <h4 className="font-semibold mb-6">
-                      Hearing Accommodations
-                    </h4>
-
+                    <h4 className="font-semibold mb-6">Hearing Accommodations</h4>
                     <div className="grid grid-cols-3 gap-2">
                       {[
                         "Hearing loops",
@@ -408,8 +353,6 @@ function OnboardingModal({ password, open, setOpen }) {
                   </div>
                 </div>
               )}
-
-              {/* If Organizer is Selected, Show Venue Types */}
               {selected === "organizer" && (
                 <div className="">
                   <div className="grid grid-cols-3 gap-4 p-4">
@@ -445,7 +388,6 @@ function OnboardingModal({ password, open, setOpen }) {
                     <h4 className="font-semibold text-center mb-6">
                       Accessibility Features
                     </h4>
-
                     <div className="grid grid-cols-3 gap-2">
                       {[
                         "Elevator access",
@@ -460,7 +402,7 @@ function OnboardingModal({ password, open, setOpen }) {
                       ].map((item) => (
                         <div
                           key={item}
-                          className="bg-gray-200 p-[2px]  rounded-md flex items-center"
+                          className="bg-gray-200 p-[2px] rounded-md flex items-center"
                         >
                           <input
                             type="checkbox"
@@ -475,8 +417,6 @@ function OnboardingModal({ password, open, setOpen }) {
                   </div>
                 </div>
               )}
-
-              {/* Buttons at the Bottom */}
               <div className="flex justify-between p-4">
                 <Button
                   className="font-bold text-blue-700"
@@ -498,9 +438,8 @@ function OnboardingModal({ password, open, setOpen }) {
             </div>
           )}
           {step === 4 && (
-            <div className="flex flex-col justify-between h-[30rem]">
+            <div className="relative flex flex-col justify-between h-[30rem]">
               <div className="flex flex-col items-center mt-10">
-                {/* Icon Section */}
                 <div
                   className={`flex justify-center items-center rounded-lg h-12 w-12 ${
                     selected === "user" ? "bg-blue-700" : "bg-orange-400"
@@ -508,14 +447,12 @@ function OnboardingModal({ password, open, setOpen }) {
                 >
                   <IoIosStarOutline className="text-white size-6" />
                 </div>
-
-                {/* Text Section */}
                 <div className="text-center mt-4 max-w-lg">
                   <h3 className="text-xl font-bold">Your Experience</h3>
                   <p className="text-sm mt-2">
                     {selected === "user"
                       ? "Tell us about your experience at venues and any accessibility challenges you've faced"
-                      : "Tell us  about your venue and any accessibility feedback you've received"}
+                      : "Tell us about your venue and any accessibility feedback you've received"}
                   </p>
                 </div>
                 <div>
@@ -524,7 +461,6 @@ function OnboardingModal({ password, open, setOpen }) {
                       ? "Have You Faced Accessibility Challenges at a Venue Before? "
                       : "Do you conduct accessibility assessments or audits for your venue?"}
                   </h4>
-
                   <div className="grid grid-cols-1 gap-2">
                     {["Yes", "No"].map((item) => (
                       <div
@@ -533,7 +469,7 @@ function OnboardingModal({ password, open, setOpen }) {
                       >
                         <input
                           type="radio"
-                          name="yesNo" // Ensures only one option can be selected
+                          name="yesNo"
                           value={item}
                           onChange={() => handleCheckboxChange(item)}
                           className="appearance-none w-5 h-5 border border-gray-500 rounded-full checked:bg-blue-600 checked:border-transparent focus:outline-none mr-2"
@@ -560,7 +496,7 @@ function OnboardingModal({ password, open, setOpen }) {
                   } font-bold border-none hover:bg-blue-800`}
                   onClick={handleComplete}
                 >
-                  complete
+                  Complete
                   <IoCheckmarkSharp className="ml-1 stroke-2" />
                 </Button>
               </div>
