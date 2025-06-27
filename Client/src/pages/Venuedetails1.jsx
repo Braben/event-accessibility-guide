@@ -1,6 +1,9 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import dayjs from "dayjs";
 import { useSelector, useDispatch } from "react-redux";
+import { fetchReviewsByVenue } from "../slicers/reviewSlicer"; // import thunk
+import { useEffect } from "react";
+
 import { Link } from "react-router-dom";
 import { CiLocationOn } from "react-icons/ci";
 import { BsTelephone } from "react-icons/bs";
@@ -20,30 +23,38 @@ import { SlCalender } from "react-icons/sl";
 import { IoIosArrowBack } from "react-icons/io";
 import { FaStar } from "react-icons/fa";
 import ReviewModal from "./ReviewModal";
+import { UserContext } from "../context/UserContext";
 
 import { useLocation, useParams } from "react-router-dom";
 
 const Venuedetails1 = () => {
+  const { userDetails } = useContext(UserContext);
+
   const [activeTab, setActiveTab] = useState("overview");
   const [isReviewModalOpen, setIsReviewModalOpen] = useState(false);
   const events = useSelector((state) => state.events.events) || [];
+  const reviews = useSelector((state) => state.reviews.reviews);
   const dispatch = useDispatch();
   // console.log(events);
   // console.log(events.startDate);
+
+  // Inside the component
 
   const location = useLocation();
   const { venue } = location.state || {};
   const { id } = useParams(); // Optional if you need the slug
 
+  useEffect(() => {
+    if (venue?.id) {
+      dispatch(fetchReviewsByVenue(venue.id));
+    }
+  }, [dispatch, venue?.id]);
+
+  console.log(venue.reviews);
+
   if (!venue) {
     return <div className="p-8 text-red-500 text-xl">Venue not found.</div>;
   }
-
-  const handleReviewSubmit = (reviewData) => {
-    console.log("Review submitted:", reviewData);
-  };
-
-  // console.log(venue);
 
   const contentMap = {
     overview: (
@@ -94,66 +105,44 @@ const Venuedetails1 = () => {
           <h2 className="text-xl font-bold">Customer Reviews</h2>
           <div className="flex items-center">
             <span className="text-yellow-500 mr-1">★★★★☆</span>
-            <span className="text-sm">(4.2 out of 5 based on 48 reviews)</span>
+            <span className="text-sm">
+              {console.log(venue.reviews.user)}
+              (4.2 out of 5 based on {venue.reviews.length} reviewssssss)
+            </span>
           </div>
         </div>
-
         {/* Sample reviews */}
-        {/* <div className="border rounded-lg p-4 mb-4">
-          <div className="flex justify-between">
-            <span className="font-semibold">Sarah Johnson</span>
-            <span className="text-yellow-500">★★★★★</span>
-          </div>
-          <p className="text-sm text-gray-600 mt-1">
-            Visited on March 12, 2025
+        {/* Map dynamic reviews */}
+        {console.log(reviews)}
+        {venue.reviews.length === 0 ? (
+          <p className="text-gray-600">
+            No reviews yet. Be the first to leave one!
           </p>
-          <p className="mt-2">
-            Amazing venue! The staff was extremely helpful and the space was
-            perfect for our company retreat. Would definitely book again.
-          </p>
-        </div>
+        ) : (
+          venue.reviews.map((review) => (
+            <div
+              key={review.id}
+              className="border rounded-lg p-4 mb-4 bg-white shadow-sm"
+            >
+              <div className="flex justify-between">
+                <span className="font-semibold">
+                  {review.user?.firstname
+                    ? `${review.user.firstname} ${review.user.lastname || ""}`
+                    : "Anonymous"}
+                </span>
 
-        <div className="border rounded-lg p-4 mb-4">
-          <div className="flex justify-between">
-            <span className="font-semibold">Michael Chen</span>
-            <span className="text-yellow-500">★★★☆☆</span>
-          </div>
-          <p className="text-sm text-gray-600 mt-1">
-            Visited on February 28, 2025
-          </p>
-          <p className="mt-2">
-            Good location but parking was a challenge. The venue itself was
-            clean and well-maintained. Sound system could use an upgrade.
-          </p>
-        </div>
-
-        <div className="border rounded-lg p-4 mb-4">
-          <div className="flex justify-between">
-            <span className="font-semibold">Sarah Johnson</span>
-            <span className="text-yellow-500">★★★★★</span>
-          </div>
-          <p className="text-sm text-gray-600 mt-1">
-            Visited on March 12, 2025
-          </p>
-          <p className="mt-2">
-            Amazing venue! The staff was extremely helpful and the space was
-            perfect for our company retreat. Would definitely book again.
-          </p>
-        </div>
-
-        <div className="border rounded-lg p-4 mb-4">
-          <div className="flex justify-between">
-            <span className="font-semibold">Michael Chen</span>
-            <span className="text-yellow-500">★★★☆☆</span>
-          </div>
-          <p className="text-sm text-gray-600 mt-1">
-            Visited on February 28, 2025
-          </p>
-          <p className="mt-2">
-            Good location but parking was a challenge. The venue itself was
-            clean and well-maintained. Sound system could use an upgrade.
-          </p>
-        </div> */}
+                <span className="text-yellow-500">
+                  {"★".repeat(review.rating)}
+                  {"☆".repeat(5 - review.rating)}
+                </span>
+              </div>
+              <p className="text-sm text-gray-600 mt-1">
+                Visited on {new Date(review.dateCreated).toLocaleDateString()}
+              </p>
+              <p className="mt-2">{review.comments}</p>
+            </div>
+          ))
+        )}
       </div>
     ),
     events: (
@@ -203,8 +192,12 @@ const Venuedetails1 = () => {
       <ReviewModal
         isOpen={isReviewModalOpen}
         onClose={() => setIsReviewModalOpen(false)}
-        onSubmit={handleReviewSubmit}
+        venueId={venue.id}
+        venue={venue}
+        userId={userDetails?.id} // From Redux or context
+        user={userDetails?.firstname}
       />
+
       {/* Back Button */}
       <div className="mt-6">
         <Link
@@ -214,7 +207,6 @@ const Venuedetails1 = () => {
           <IoIosArrowBack className="mr-1" /> Back to Venue
         </Link>
       </div>
-
       {/* Banner Image */}
       <div className="relative mt-4">
         <img
@@ -230,7 +222,6 @@ const Venuedetails1 = () => {
           </div>
         </div>
       </div>
-
       {/* Rating and Action Buttons */}
       <div className="flex flex-col md:flex-row md:justify-between items-center mt-6">
         <div className="flex bg-[#F9E9CC] px-4 py-2 gap-1 rounded-full mb-4 md:mb-0">
@@ -272,7 +263,6 @@ const Venuedetails1 = () => {
           </button>
         </div>
       </div>
-
       {/* Main Content */}
       <div className="flex flex-col md:flex-row mt-8">
         {/* Left Section - Tabs and Content */}

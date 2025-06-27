@@ -14,7 +14,7 @@ export const fetchReviewsByVenue = createAsyncThunk(
   "reviews/fetchByVenue",
   async (venueId, thunkAPI) => {
     try {
-      const response = await fetch(`${BASE_URL}/venues/${venueId}/reviews`);
+      const response = await fetch(`${BASE_URL}/venue/${venueId}/reviews`);
       if (!response.ok) throw new Error("Failed to fetch reviews by venue");
       return await response.json();
     } catch (error) {
