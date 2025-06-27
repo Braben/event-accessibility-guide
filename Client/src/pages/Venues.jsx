@@ -3,7 +3,7 @@ import { IoSearchSharp } from "react-icons/io5";
 import { CiFilter } from "react-icons/ci";
 import VenueFilterSidebar from "./VenueFilterSidebar";
 import VenueCard from "../components/VenueCard";
-import toastify from "react-hot-toast";
+import { toast } from "react-hot-toast";
 
 const Venues = () => {
   const [venues, setVenues] = useState([]);
@@ -32,7 +32,6 @@ const Venues = () => {
     try {
       const response = await fetch(
         "https://event-accessibility-guide.onrender.com/venues"
-        // "http://localhost:5000/venues"
       );
       if (!response.ok) throw new Error("Failed to fetch venues");
       const data = await response.json();
@@ -40,6 +39,7 @@ const Venues = () => {
       setVenues(data);
     } catch (error) {
       setError(error.message);
+      toast.error(error.message);
     } finally {
       setLoading(false);
     }
@@ -47,31 +47,37 @@ const Venues = () => {
 
   const handleSearch = async (e) => {
     e.preventDefault();
-    if (!searchQuery.trim()) return;
+    if (!searchQuery.trim()) {
+      toast.error("Please enter a search query");
+      return;
+    }
 
     try {
-      let queryParams = `query=${searchQuery.trim()}`;
+      let queryParams = `query=${encodeURIComponent(searchQuery.trim())}`;
 
       if (appliedFilters.accessibility.length > 0) {
-        queryParams += `&accessibility=${appliedFilters.accessibility.join(
-          ","
-        )}`;
+        queryParams += `&accessibility=${appliedFilters.accessibility
+          .map(encodeURIComponent)
+          .join(",")}`;
       }
 
       if (appliedFilters.venueTypes.length > 0) {
-        queryParams += `&venueTypes=${appliedFilters.venueTypes.join(",")}`;
+        queryParams += `&venueTypes=${appliedFilters.venueTypes
+          .map(encodeURIComponent)
+          .join(",")}`;
       }
 
       queryParams += `&distance=${appliedFilters.distance}`;
 
       const response = await fetch(
         `https://event-accessibility-guide.onrender.com/api/venues/search?${queryParams}`
-        // `http://localhost:5000/api/venues/search?${queryParams}`
       );
       const data = await response.json();
       setSearchVenues(data);
+      toast.success("Search completed successfully");
     } catch (err) {
       console.error("Search error:", err);
+      toast.error("Failed to search venues");
     }
   };
 
@@ -82,13 +88,10 @@ const Venues = () => {
       let queryParams = [];
 
       if (searchQuery.trim()) {
-        queryParams.push(`query=${searchQuery.trim()}`);
+        queryParams.push(`query=${encodeURIComponent(searchQuery.trim())}`);
       }
 
       if (filters.accessibility.length > 0) {
-        const normalizedAccessibility = filters.accessibility.map((item) =>
-          item.trim()
-        );
         queryParams.push(
           `accessibility=${filters.accessibility
             .map(encodeURIComponent)
@@ -105,7 +108,6 @@ const Venues = () => {
       queryParams.push(`distance=${filters.distance}`);
 
       const response = await fetch(
-        // `http://localhost:5000/api/venues/search?${queryParams.join("&")}`
         `https://event-accessibility-guide.onrender.com/api/venues/search?${queryParams.join(
           "&"
         )}`
@@ -115,8 +117,10 @@ const Venues = () => {
 
       const data = await response.json();
       setSearchVenues(data);
+      toast.success("Filters applied successfully");
     } catch (err) {
       console.error("Apply filters error:", err);
+      toast.error("Failed to apply filters");
     }
   };
 
@@ -124,24 +128,31 @@ const Venues = () => {
     setAppliedFilters({ accessibility: [], venueTypes: [], distance: 32 });
     setSearchVenues([]);
     setSearchQuery("");
+    toast.success("Filters cleared");
   };
 
   const displayedVenues = searchVenues.length > 0 ? searchVenues : venues;
 
   return (
-    <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-8">
-      <div className="mb-10 p-2 gap-2">
-        <h1 className="text-5xl font-bold text-black">Accessible Venues</h1>
-        <p className="text-xl text-black mt-2">
-          Find venues with accessibility features for your next event venues
+    <div className="container mx-auto px-4 py созд
+
+py-6 sm:px-6 lg:px-8">
+      {/* Adjusted padding for mobile */}
+      <div className="mb-8 p-2">
+        <h1 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-black">
+          Accessible Venues
+        </h1>
+        <p className="text-lg sm:text-xl text-black mt-2">
+          Find venues with accessibility features for your next event
         </p>
       </div>
 
-      <div className="flex flex-col md:flex-row items-center gap-4 justify-between mb-6">
-        <form onSubmit={handleSearch} className="relative w-10/12 ">
+      {/* Search and Filter Section */}
+      <div className="flex flex-col md:flex-row items-center gap-4 mb-6">
+        <form onSubmit={handleSearch} className="relative flex-1 md:min-w-0">
           <button
             type="submit"
-            className="absolute left-4 top-1/2 transform -translate-y-1/2 text-blue-700 text-xl"
+            className="absolute left-3 top-1/2 transform -translate-y-1/2 text-blue-700 text-lg sm:text-xl"
             aria-label="Search"
           >
             <IoSearchSharp />
@@ -151,25 +162,31 @@ const Venues = () => {
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
             placeholder="Search venues (restaurants, parks, hotels...)"
-            className="w-full pl-12 pr-4 py-3 rounded-lg border border-gray-300 shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+            className="w-full pl-10 pr-4 py-3 rounded-lg border border-gray-300 shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm sm:text-base"
           />
         </form>
 
         <button
           onClick={() => setIsFilterOpen(true)}
-          className="flex items-center gap-2 w-2/12 bg-blue-100 text-blue-700 px-5 py-3 rounded-lg shadow-sm border border-blue-300 hover:bg-blue-200 transition"
+          className="flex items-center justify-center gap-2 w-full md:w-32 lg:w-40 bg-blue-100 text-blue-700 px-4 py-3 rounded-lg shadow-sm border border-blue-300 hover:bg-blue-200 transition min-h-[44px]"
+          aria-label="Show Filters"
         >
-          <CiFilter className="text-xl" />
+          <CiFilter className="text-lg sm:text-xl" />
           {appliedFilters.accessibility.length > 0 ||
-          appliedFilters.venueTypes.length > 0
-            ? `Filters (${
-                appliedFilters.accessibility.length +
-                appliedFilters.venueTypes.length
-              })`
-            : "Show Filters"}
+          appliedFilters.venueTypes.length > 0 ? (
+            <span className="truncate">
+              Filters (
+              {appliedFilters.accessibility.length +
+                appliedFilters.venueTypes.length}
+              )
+            </span>
+          ) : (
+            "Show Filters"
+          )}
         </button>
       </div>
 
+      {/* Filter Sidebar */}
       <VenueFilterSidebar
         isOpen={isFilterOpen}
         onClose={() => setIsFilterOpen(false)}
@@ -180,16 +197,16 @@ const Venues = () => {
       {/* Applied Filters */}
       {(appliedFilters.accessibility.length > 0 ||
         appliedFilters.venueTypes.length > 0) && (
-        <div className="flex flex-wrap gap-3 mb-6">
+        <div className="flex flex-wrap gap-2 mb-6">
           {[...appliedFilters.accessibility, ...appliedFilters.venueTypes].map(
             (filter) => (
               <span
                 key={filter}
-                className="bg-blue-200 text-blue-800 px-4 py-1 rounded-full text-sm flex items-center gap-2"
+                className="bg-blue-200 text-blue-800 px-3 py-1 rounded-full text-xs sm:text-sm flex items-center gap-2"
               >
                 {filter}
                 <button
-                  className="font-bold"
+                  className="font-bold text-sm"
                   onClick={() => {
                     setAppliedFilters((prev) => ({
                       ...prev,
@@ -199,6 +216,7 @@ const Venues = () => {
                       venueTypes: prev.venueTypes.filter((f) => f !== filter),
                     }));
                   }}
+                  aria-label={`Remove ${filter} filter`}
                 >
                   ×
                 </button>
@@ -207,7 +225,8 @@ const Venues = () => {
           )}
           <button
             onClick={clearAllFilters}
-            className="text-sm text-red-500 underline ml-2"
+            className="text-xs sm:text-sm text-red-500 underline ml-2 min-h-[44px] flex items-center"
+            aria-label="Clear all filters"
           >
             Clear all
           </button>
@@ -216,22 +235,29 @@ const Venues = () => {
 
       {/* Loading and Error */}
       {loading && (
-        <div className="text-center text-gray-500">Loading venues...</div>
+        <div className="text-center text-gray-500 text-sm sm:text-base">
+          Loading venues...
+        </div>
       )}
-      {error && <div className="text-center text-red-500">Error: {error}</div>}
+      {error && (
+        <div className="text-center text-red-500 text-sm sm:text-base">
+          Error: {error}
+        </div>
+      )}
 
+      {/* Venue Count */}
       {searchVenues.length > 0 ||
       appliedFilters.accessibility.length > 0 ||
       appliedFilters.venueTypes.length > 0 ? (
-        <div>{`Showing ${displayedVenues.length} out of ${venues.length} venues`}</div>
+        <div className="text-sm sm:text-base mb-4">{`Showing ${displayedVenues.length} out of ${venues.length} venues`}</div>
       ) : (
-        <div>{`Showing ${venues.length} venues`}</div>
+        <div className="text-sm sm:text-base mb-4">{`Showing ${venues.length} venues`}</div>
       )}
 
       {/* Venue Cards Grid */}
       {!loading && displayedVenues.length > 0 ? (
         <div className="container mx-auto">
-          <div className=" container mx-auto grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-3 gap-6 mt-6">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-3 gap-4 sm:gap-6 mt-6">
             {displayedVenues.map((venue) => (
               <VenueCard key={venue.id} venue={venue} />
             ))}
@@ -239,7 +265,7 @@ const Venues = () => {
         </div>
       ) : (
         !loading && (
-          <div className="text-center text-gray-500 mt-16">
+          <div className="text-center text-gray-500 text-sm sm:text-base mt-16">
             No venues found.
           </div>
         )
@@ -247,5 +273,6 @@ const Venues = () => {
     </div>
   );
 };
+
 
 export default Venues;
