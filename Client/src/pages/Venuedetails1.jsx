@@ -99,7 +99,7 @@ const Venuedetails1 = () => {
         </div>
 
         {/* Sample reviews */}
-        <div className="border rounded-lg p-4 mb-4">
+        {/* <div className="border rounded-lg p-4 mb-4">
           <div className="flex justify-between">
             <span className="font-semibold">Sarah Johnson</span>
             <span className="text-yellow-500">★★★★★</span>
@@ -153,7 +153,7 @@ const Venuedetails1 = () => {
             Good location but parking was a challenge. The venue itself was
             clean and well-maintained. Sound system could use an upgrade.
           </p>
-        </div>
+        </div> */}
       </div>
     ),
     events: (
